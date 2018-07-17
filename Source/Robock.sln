@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2042
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Robock", "Robock\Robock.csproj", "{829FE68D-DA01-4FFA-9992-032CCEE00BEF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{829FE68D-DA01-4FFA-9992-032CCEE00BEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{829FE68D-DA01-4FFA-9992-032CCEE00BEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{829FE68D-DA01-4FFA-9992-032CCEE00BEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{829FE68D-DA01-4FFA-9992-032CCEE00BEF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6B7266E8-8B93-40A3-932A-422C318799BB}
+	EndGlobalSection
+EndGlobal
