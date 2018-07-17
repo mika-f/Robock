@@ -4,11 +4,12 @@
                    xmlns:actions="clr-namespace:Robock.Actions"
                    xmlns:chrome="http://schemes.grabacr.net/winfx/2014/chrome"
                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                   xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
                    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-                   xmlns:local="clr-namespace:Robock.Views"
                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                    xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
                    xmlns:prism="http://prismlibrary.com/"
+                   xmlns:tabs="clr-namespace:Robock.Views.Tabs"
                    xmlns:vm="clr-namespace:Robock.ViewModels"
                    Title="{Binding Title.Value, Mode=OneWay}"
                    Width="800"
@@ -57,7 +58,7 @@
                            Margin="3,0,0,0"
                            VerticalAlignment="Center"
                            FontFamily="Meiryo UI"
-                           FontSize="13"
+                           FontSize="16"
                            Foreground="{DynamicResource ForegroundBrushKey}"
                            Text="{Binding Title.Value}"
                            TextTrimming="CharacterEllipsis" />
@@ -68,6 +69,27 @@
                 </StackPanel>
             </Grid>
         </Border>
+        <TabControl Grid.Row="1"
+                    Background="{DynamicResource BackgroundBrushKey}"
+                    BorderThickness="0"
+            <TabControl.Resources>
+                <Style BasedOn="{StaticResource FlatStyleTabItem}"
+                       TargetType="TabItem" />
+                <Style BasedOn="{StaticResource HorizontalFlatStyleTabTextBlock}"
+                       TargetType="TextBlock" />
+            </TabControl.Resources>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock fa:Awesome.Inline=":Cogs: Settings" />
+                </TabItem.Header>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock fa:Awesome.Inline=":InfoCircle: About" />
+                </TabItem.Header>
+                <tabs:AboutTab Margin="10,10,0,0" />
+            </TabItem>
+        </TabControl>
         <Grid Grid.Row="2"
               Background="{DynamicResource AccentBrushKey}">
             <Grid.ColumnDefinitions>
