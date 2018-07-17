@@ -1,0 +1,3 @@
+[submodule "Source/PyxisControls"]
+	path = Source/PyxisControls
+	url = https://github.com/mika-f/PyxisControls.git
