@@ -10,6 +10,7 @@
                    xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
                    xmlns:prism="http://prismlibrary.com/"
                    xmlns:tabs="clr-namespace:Robock.Views.Tabs"
+                   xmlns:tvm="clr-namespace:Robock.ViewModels.Tabs"
                    xmlns:vm="clr-namespace:Robock.ViewModels"
                    Title="{Binding Title.Value, Mode=OneWay}"
                    Width="800"
@@ -72,12 +73,35 @@
         <TabControl Grid.Row="1"
                     Background="{DynamicResource BackgroundBrushKey}"
                     BorderThickness="0"
+                    ItemsSource="{Binding Tabs}">
             <TabControl.Resources>
-                <Style BasedOn="{StaticResource FlatStyleTabItem}"
-                       TargetType="TabItem" />
-                <Style BasedOn="{StaticResource HorizontalFlatStyleTabTextBlock}"
-                       TargetType="TextBlock" />
+                <DataTemplate DataType="{x:Type tvm:DesktopViewModel}">
+                    <TextBlock Text="aaaaa" />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type tvm:AboutTabViewModel}">
+                    <tabs:AboutTab Margin="10,10,0,0" />
+                </DataTemplate>
             </TabControl.Resources>
+            <TabControl.ItemContainerStyle>
+                <Style TargetType="TabItem">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="TabItem">
+                                <ContentPresenter Margin="10,5"
+                                                  ContentSource="Header">
+                                    <ContentPresenter.ContentTemplate>
+                                        <DataTemplate DataType="tvm:TabViewModel">
+                                            <TextBlock fa:Awesome.Inline="{Binding Title}"
+                                                       Style="{StaticResource HorizontalFlatStyleTabTextBlock}" />
+                                        </DataTemplate>
+                                    </ContentPresenter.ContentTemplate>
+                                </ContentPresenter>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TabControl.ItemContainerStyle>
+            <!--
             <TabItem>
                 <TabItem.Header>
                     <TextBlock fa:Awesome.Inline=":Cogs: Settings" />
@@ -89,6 +113,7 @@
                 </TabItem.Header>
                 <tabs:AboutTab Margin="10,10,0,0" />
             </TabItem>
+            -->
         </TabControl>
         <Grid Grid.Row="2"
               Background="{DynamicResource AccentBrushKey}">

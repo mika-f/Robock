@@ -3,11 +3,10 @@ using System.Collections.ObjectModel;
 using System.Linq;
 
 using Robock.Models;
-using Robock.Mvvm;
 
 namespace Robock.ViewModels.Tabs
 {
-    internal class AboutTabViewModel : ViewModel
+    internal class AboutTabViewModel : TabViewModel
     {
         public ReadOnlyCollection<LicenseViewModel> Libraries => ProductInfo.LicenseNotices.Select(w => new LicenseViewModel(w)).ToList().AsReadOnly();
 
@@ -18,5 +17,7 @@ namespace Robock.ViewModels.Tabs
         public string Copyright => ProductInfo.Copyright.Value;
 
         public string OsVersion => $"OsVersion = {Environment.OSVersion}";
+
+        public AboutTabViewModel() : base(":InfoCircle: About") { }
     }
 }
