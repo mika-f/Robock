@@ -76,7 +76,8 @@
                     ItemsSource="{Binding Tabs}">
             <TabControl.Resources>
                 <DataTemplate DataType="{x:Type tvm:DesktopViewModel}">
-                    <TextBlock Text="aaaaa" />
+                    <tabs:DesktopTab Margin="10,10,0,0"
+                                     DataContext="{Binding}" />
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type tvm:AboutTabViewModel}">
                     <tabs:AboutTab Margin="10,10,0,0" />

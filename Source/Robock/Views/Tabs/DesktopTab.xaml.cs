@@ -3,11 +3,11 @@
 namespace Robock.Views.Tabs
 {
     /// <summary>
-    ///     AboutTab.xaml の相互作用ロジック
+    ///     DesktopTab.xaml の相互作用ロジック
     /// </summary>
-    public partial class AboutTab : UserControl
+    public partial class DesktopTab : UserControl
     {
-        public AboutTab()
+        public DesktopTab()
         {
             InitializeComponent();
         }

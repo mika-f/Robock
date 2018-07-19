@@ -17,7 +17,7 @@
         <Grid.Resources>
             <Style TargetType="{x:Type TextBlock}">
                 <Setter Property="FontFamily" Value="Segoe UI" />
-                <Setter Property="Foreground" Value="{DynamicResource ActiveForegroundBrushKey}" />
+                <Setter Property="Foreground" Value="{DynamicResource ForegroundBrushKey}" />
             </Style>
         </Grid.Resources>
         <Grid.RowDefinitions>

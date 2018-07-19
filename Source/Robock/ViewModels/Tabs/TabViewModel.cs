@@ -6,7 +6,7 @@ namespace Robock.ViewModels.Tabs
     {
         public string Title { get; }
 
-        public TabViewModel(string title)
+        protected TabViewModel(string title)
         {
             Title = title;
         }
