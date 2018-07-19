@@ -6,6 +6,7 @@
                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                    xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
                    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                   xmlns:local="clr-namespace:Robock.Views"
                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                    xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
                    xmlns:prism="http://prismlibrary.com/"
@@ -76,8 +77,11 @@
                     ItemsSource="{Binding Tabs}">
             <TabControl.Resources>
                 <DataTemplate DataType="{x:Type tvm:DesktopViewModel}">
-                    <tabs:DesktopTab Margin="10,10,0,0"
-                                     DataContext="{Binding}" />
+                    <StackPanel Orientation="Vertical">
+                        <local:Monitors DataContext="{Binding DataContext.VirtualScreen, RelativeSource={RelativeSource AncestorType=metro:MetroWindow}}" />
+                        <tabs:DesktopTab Margin="10,10,0,0"
+                                         DataContext="{Binding}" />
+                    </StackPanel>
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type tvm:AboutTabViewModel}">
                     <tabs:AboutTab Margin="10,10,0,0" />

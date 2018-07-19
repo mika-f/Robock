@@ -12,6 +12,8 @@ namespace Robock.Models
         public int No { get; }
         public bool IsPrimary => _screen.Primary;
         public string MonitorName => _screen.DeviceName;
+        public double X => _screen.Bounds.X;
+        public double Y => _screen.Bounds.Y;
         public double Height => _screen.Bounds.Height;
         public double Width => _screen.Bounds.Width;
 

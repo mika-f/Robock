@@ -14,6 +14,7 @@ namespace Robock.ViewModels
     {
         public ReactiveProperty<string> Title { get; }
         public ReactiveCollection<TabViewModel> Tabs { get; }
+        public VirtualScreenViewModel VirtualScreen { get; }
 
         public AppShellViewModel()
         {
@@ -22,12 +23,17 @@ namespace Robock.ViewModels
             {
                 new AboutTabViewModel()
             };
+            VirtualScreen = new VirtualScreenViewModel();
 
             var desktopManager = new DesktopManager();
             desktopManager.Desktops.CollectionChangedAsObservable().Subscribe(w =>
             {
-                if (w.Action == NotifyCollectionChangedAction.Add && w.NewItems[0] is Desktop desktop)
-                    Tabs.Insert(desktop.No - 1, new DesktopViewModel(desktop));
+                if (w.Action != NotifyCollectionChangedAction.Add || !(w.NewItems[0] is Desktop desktop))
+                    return;
+
+                var viewModel = new DesktopViewModel(desktop);
+                Tabs.Insert(desktop.No - 1, viewModel);
+                VirtualScreen.Desktops.Insert(desktop.No - 1, viewModel);
             });
 
             desktopManager.Initialize();
