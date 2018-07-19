@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Reactive.Linq;
 using System.Windows;
 
 using Reactive.Bindings;
@@ -23,10 +24,8 @@ namespace Robock.ViewModels
         {
             Desktops = new ObservableCollection<DesktopViewModel>();
             SelectedIndex = new ReactiveProperty<int>(0);
-            SelectedIndex.Subscribe(w =>
+            SelectedIndex.Where(w => Desktops.Count > w && w >= 0).Subscribe(w =>
             {
-                if (w < 0 || w >= Desktops.Count)
-                    return;
                 foreach (var desktop in Desktops)
                     desktop.IsSelected.Value = false;
                 Desktops[w].IsSelected.Value = true;
