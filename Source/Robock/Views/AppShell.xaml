@@ -78,8 +78,11 @@
                     SelectedIndex="{Binding VirtualScreen.SelectedIndex.Value, Mode=OneWayToSource}">
             <TabControl.Resources>
                 <DataTemplate DataType="{x:Type tvm:DesktopViewModel}">
-                    <StackPanel Orientation="Vertical">
-                        <local:Monitors DataContext="{Binding DataContext.VirtualScreen, RelativeSource={RelativeSource AncestorType=metro:MetroWindow}}" />
+                    <StackPanel Margin="10,10"
+                                Orientation="Vertical">
+                        <local:Monitors Padding="0,0,0,5"
+                                        DataContext="{Binding DataContext.VirtualScreen, RelativeSource={RelativeSource AncestorType=metro:MetroWindow}}" />
+                        <Separator />
                         <tabs:DesktopTab Margin="10,10,0,0"
                                          DataContext="{Binding}" />
                     </StackPanel>

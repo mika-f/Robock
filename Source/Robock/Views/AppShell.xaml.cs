@@ -1,7 +1,4 @@
-﻿using System;
-using System.Windows;
-
-using MetroRadiance.UI.Controls;
+﻿using MetroRadiance.UI.Controls;
 
 namespace Robock.Views
 {
@@ -13,12 +10,6 @@ namespace Robock.Views
         public AppShell()
         {
             InitializeComponent();
-        }
-
-        protected override void OnClosed(EventArgs e)
-        {
-            base.OnClosed(e);
-            Application.Current.Shutdown();
         }
     }
 }
