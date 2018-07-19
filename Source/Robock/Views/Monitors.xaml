@@ -27,12 +27,33 @@
             <DataTemplate d:DataContext="{d:DesignInstance tvm:DesktopViewModel}">
                 <Border Width="{Binding VirtualScreenWidth}"
                         Height="{Binding VirtualScreenHeight}"
-                        Background="{DynamicResource InactiveBackgroundBrushKey}"
-                        BorderBrush="{DynamicResource BorderBrushKey}"
+                        Background="{DynamicResource BackgroundBrushKey}"
                         BorderThickness="5">
+                    <Border.Style>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrushKey}" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsSelected.Value, Mode=OneWay}"
+                                             Value="True">
+                                    <Setter Property="BorderBrush" Value="{DynamicResource AccentBrushKey}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
                     <StackPanel HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
+                        <StackPanel.Resources>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="Foreground" Value="{DynamicResource ForegroundBrushKey}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsSelected.Value, Mode=OneWay}"
+                                                 Value="True">
+                                        <Setter Property="Foreground" Value="{DynamicResource ActiveForegroundBrushKey}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Resources>
                         <TextBlock FontSize="18"
                                    Text="{Binding DesktopName}" />
                         <TextBlock HorizontalAlignment="Center"

@@ -74,7 +74,8 @@
         <TabControl Grid.Row="1"
                     Background="{DynamicResource BackgroundBrushKey}"
                     BorderThickness="0"
-                    ItemsSource="{Binding Tabs}">
+                    ItemsSource="{Binding Tabs}"
+                    SelectedIndex="{Binding VirtualScreen.SelectedIndex.Value, Mode=OneWayToSource}">
             <TabControl.Resources>
                 <DataTemplate DataType="{x:Type tvm:DesktopViewModel}">
                     <StackPanel Orientation="Vertical">

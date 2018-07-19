@@ -1,5 +1,7 @@
 ﻿using System.Windows;
 
+using Reactive.Bindings;
+
 using Robock.Models;
 
 namespace Robock.ViewModels.Tabs
@@ -11,6 +13,8 @@ namespace Robock.ViewModels.Tabs
         private readonly Desktop _desktop;
         private readonly double _offsetX;
         private readonly double _offsetY;
+
+        public ReactiveProperty<bool> IsSelected { get; }
 
         public string DesktopName => $"Desktop {_desktop.No}";
         public string Resolution => $"{_desktop.Width}x{_desktop.Height}";
@@ -28,6 +32,8 @@ namespace Robock.ViewModels.Tabs
             // 仮想スクリーン周りの計算
             _offsetX = (SystemParameters.VirtualScreenLeft < 0 ? -1 : 1) * SystemParameters.VirtualScreenLeft;
             _offsetY = (SystemParameters.VirtualScreenTop < 0 ? -1 : 1) * SystemParameters.VirtualScreenTop;
+
+            IsSelected = new ReactiveProperty<bool>(false);
         }
     }
 }
