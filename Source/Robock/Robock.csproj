@@ -177,6 +177,7 @@
     </Compile>
     <Compile Include="Win32\Native\DWM_THUMBNAIL_PROPERTIES.cs" />
     <Compile Include="Win32\Native\NativeMethods.cs" />
+    <Compile Include="Win32\Native\RECT.cs" />
     <Page Include="Styles\Controls.TabControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
