@@ -9,7 +9,7 @@ namespace Robock.Models
         /// </summary>
         /// <param name="height"></param>
         /// <param name="width"></param>
-        /// <returns>HxW</returns>
+        /// <returns>WxH</returns>
         public static string Calc(double height, double width)
         {
             // ReSharper disable once RedundantAssignment
@@ -19,7 +19,7 @@ namespace Robock.Models
                 remainder = a % b;
                 (a, b) = (b, remainder);
             } while (Math.Abs(remainder) > 0);
-            return $"{height / a}x{width / a}";
+            return $"{width / a}x{height / a}";
         }
     }
 }

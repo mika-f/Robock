@@ -63,15 +63,22 @@ namespace Robock.ViewModels.Tabs
             observer.Subscribe(w => Render());
 
             IsSelected = new ReactiveProperty<bool>(false);
-            IsSelected.Subscribe(w => Render());
+            IsSelected.Subscribe(w =>
+            {
+                _desktopWindowManager.Stop();
+                Render();
+            });
             SelectedWindow = new ReactiveProperty<WindowViewModel>();
-            SelectedWindow.Where(w => w != null).Subscribe(w => Render());
+            SelectedWindow.Where(w => w != null).Subscribe(w =>
+            {
+                _desktopWindowManager.Stop();
+                Render();
+            });
             Windows = windowManager.Windows.ToReadOnlyReactiveCollection(w => new WindowViewModel(w));
         }
 
         private void Render()
         {
-            _desktopWindowManager.Stop();
             if (SelectedWindow?.Value == null)
                 return;
 
