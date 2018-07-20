@@ -18,6 +18,7 @@ namespace Robock.ViewModels.Tabs
         public ReactiveProperty<bool> IsSelected { get; }
         public ReactiveProperty<WindowViewModel> SelectedWindow { get; }
         public ReadOnlyReactiveCollection<WindowViewModel> Windows { get; }
+        public string AspectRatio { get; }
 
         public string DesktopName => $"Desktop {_desktop.No}";
         public string Resolution => $"{_desktop.Width}x{_desktop.Height}";
@@ -35,6 +36,16 @@ namespace Robock.ViewModels.Tabs
             // 仮想スクリーン周りの計算
             _offsetX = (SystemParameters.VirtualScreenLeft < 0 ? -1 : 1) * SystemParameters.VirtualScreenLeft;
             _offsetY = (SystemParameters.VirtualScreenTop < 0 ? -1 : 1) * SystemParameters.VirtualScreenTop;
+
+            // アスペクト比
+            // ReSharper disable once RedundantAssignment
+            var (a, b, remainder) = (_desktop.Height, _desktop.Width, .0);
+            do
+            {
+                remainder = a % b;
+                (a, b) = (b, remainder);
+            } while (Math.Abs(remainder) > 0);
+            AspectRatio = $"http://placehold.jp/ffffff/ffffff/{_desktop.Width / a}x{_desktop.Height / a}.png?text=%20";
 
             IsSelected = new ReactiveProperty<bool>(false);
             SelectedWindow = new ReactiveProperty<WindowViewModel>();
