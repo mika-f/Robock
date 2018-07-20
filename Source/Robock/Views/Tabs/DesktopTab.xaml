@@ -3,8 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:vm="clr-namespace:Robock.ViewModels.Tabs"
-             d:DataContext="{d:DesignInstance vm:DesktopViewModel}"
+             xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
+             xmlns:tvm="clr-namespace:Robock.ViewModels.Tabs"
+             xmlns:vm="clr-namespace:Robock.ViewModels"
+             d:DataContext="{d:DesignInstance tvm:DesktopViewModel}"
              d:DesignHeight="450"
              d:DesignWidth="800"
              mc:Ignorable="d">
@@ -15,9 +17,31 @@
                 <Setter Property="Foreground" Value="{DynamicResource ForegroundBrushKey}" />
             </Style>
         </Grid.Resources>
-        <TextBlock>
-            <Run>Resolution:</Run>
-            <Run Text="{Binding Resolution, Mode=OneTime}" />
-        </TextBlock>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0"
+                    Height="24"
+                    Orientation="Horizontal">
+            <TextBlock VerticalAlignment="Center"
+                       Text="Window to render as wallpaper : " />
+            <metro:PromptComboBox Width="250"
+                                  IsEditable="False"
+                                  ItemsSource="{Binding Windows}"
+                                  Prompt="Select window for wallpaper"
+                                  SelectedItem="{Binding SelectedWindow.Value, Mode=OneWayToSource}">
+                <metro:PromptComboBox.ItemTemplate>
+                    <DataTemplate DataType="vm:WindowViewModel">
+                        <TextBlock VerticalAlignment="Center"
+                                   Text="{Binding Name}"
+                                   TextTrimming="CharacterEllipsis" />
+                    </DataTemplate>
+                </metro:PromptComboBox.ItemTemplate>
+            </metro:PromptComboBox>
+        </StackPanel>
+        <TextBlock Grid.Row="1"
+                   Text="Select the square range that you want to use as wallpaper : " />
     </Grid>
 </UserControl>

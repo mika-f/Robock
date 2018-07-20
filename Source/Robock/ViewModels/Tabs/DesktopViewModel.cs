@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 
 using Reactive.Bindings;
 
@@ -15,6 +16,8 @@ namespace Robock.ViewModels.Tabs
         private readonly double _offsetY;
 
         public ReactiveProperty<bool> IsSelected { get; }
+        public ReactiveProperty<WindowViewModel> SelectedWindow { get; }
+        public ReadOnlyReactiveCollection<WindowViewModel> Windows { get; }
 
         public string DesktopName => $"Desktop {_desktop.No}";
         public string Resolution => $"{_desktop.Width}x{_desktop.Height}";
@@ -25,7 +28,7 @@ namespace Robock.ViewModels.Tabs
         public double VirtualScreenHeight => _desktop.Height / Scale;
         public double VirtualScreenWidth => _desktop.Width / Scale;
 
-        public DesktopViewModel(Desktop desktop) : base($":Desktop: Desktop {desktop.No}")
+        public DesktopViewModel(Desktop desktop, WindowManager windowManager) : base($":Desktop: Desktop {desktop.No}")
         {
             _desktop = desktop;
 
@@ -34,6 +37,9 @@ namespace Robock.ViewModels.Tabs
             _offsetY = (SystemParameters.VirtualScreenTop < 0 ? -1 : 1) * SystemParameters.VirtualScreenTop;
 
             IsSelected = new ReactiveProperty<bool>(false);
+            SelectedWindow = new ReactiveProperty<WindowViewModel>();
+            SelectedWindow.Subscribe(w => { });
+            Windows = windowManager.Windows.ToReadOnlyReactiveCollection(w => new WindowViewModel(w));
         }
     }
 }

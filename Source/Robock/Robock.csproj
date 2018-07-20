@@ -145,9 +145,12 @@
     <Compile Include="Models\Desktop.cs" />
     <Compile Include="Models\DesktopManager.cs" />
     <Compile Include="Models\License.cs" />
+    <Compile Include="Models\Window.cs" />
+    <Compile Include="Models\WindowManager.cs" />
     <Compile Include="Models\ProductInfo.cs" />
     <Compile Include="Mvvm\ViewModel.cs" />
     <Compile Include="ViewModels\AppShellViewModel.cs" />
+    <Compile Include="ViewModels\WindowViewModel.cs" />
     <Compile Include="ViewModels\Tabs\DesktopViewModel.cs" />
     <Compile Include="ViewModels\LicenseViewModel.cs" />
     <Compile Include="ViewModels\Tabs\AboutTabViewModel.cs" />
@@ -170,6 +173,7 @@
     <Compile Include="Views\Tabs\DesktopTab.xaml.cs">
       <DependentUpon>DesktopTab.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Win32\Native\NativeMethods.cs" />
     <Page Include="Styles\Controls.TabControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

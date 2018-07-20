@@ -26,17 +26,23 @@ namespace Robock.ViewModels
             VirtualScreen = new VirtualScreenViewModel();
 
             var desktopManager = new DesktopManager();
+            var processManager = new WindowManager();
+
+            // Subscribe
             desktopManager.Desktops.CollectionChangedAsObservable().Subscribe(w =>
             {
                 if (w.Action != NotifyCollectionChangedAction.Add || !(w.NewItems[0] is Desktop desktop))
                     return;
 
-                var viewModel = new DesktopViewModel(desktop);
+                var viewModel = new DesktopViewModel(desktop, processManager);
                 Tabs.Insert(desktop.No - 1, viewModel);
                 VirtualScreen.Desktops.Insert(desktop.No - 1, viewModel);
             });
 
             desktopManager.Initialize();
+            processManager.Start();
+
+            CompositeDisposable.Add(processManager);
         }
     }
 }
