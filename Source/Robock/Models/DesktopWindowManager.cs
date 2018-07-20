@@ -62,6 +62,7 @@ namespace Robock.Models
             Size size;
             NativeMethods.DwmQueryThumbnailSourceSize(_thumb, out size);
 
+            // TODO: Keep aspect ratio of source
             var props = new DWM_THUMBNAIL_PROPERTIES
             {
                 fVisible = true,
