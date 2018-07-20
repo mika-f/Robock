@@ -1,4 +1,8 @@
-﻿using MetroRadiance.UI.Controls;
+﻿using System;
+
+using MetroRadiance.UI.Controls;
+
+using Robock.ViewModels;
 
 namespace Robock.Views
 {
@@ -10,6 +14,12 @@ namespace Robock.Views
         public AppShell()
         {
             InitializeComponent();
+        }
+
+        protected override void OnActivated(EventArgs e)
+        {
+            (DataContext as AppShellViewModel)?.Initialize();
+            base.OnActivated(e);
         }
     }
 }

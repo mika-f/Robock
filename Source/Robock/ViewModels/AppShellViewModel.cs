@@ -12,12 +12,17 @@ namespace Robock.ViewModels
 {
     public class AppShellViewModel : ViewModel
     {
+        private readonly DesktopWindowManager _desktopWindowManager;
         public ReactiveProperty<string> Title { get; }
         public ReactiveCollection<TabViewModel> Tabs { get; }
         public VirtualScreenViewModel VirtualScreen { get; }
 
         public AppShellViewModel()
         {
+            var desktopManager = new DesktopManager();
+            var processManager = new WindowManager();
+            _desktopWindowManager = new DesktopWindowManager();
+
             Title = new ReactiveProperty<string>("Robock");
             Tabs = new ReactiveCollection<TabViewModel>
             {
@@ -25,16 +30,13 @@ namespace Robock.ViewModels
             };
             VirtualScreen = new VirtualScreenViewModel();
 
-            var desktopManager = new DesktopManager();
-            var processManager = new WindowManager();
-
             // Subscribe
             desktopManager.Desktops.CollectionChangedAsObservable().Subscribe(w =>
             {
                 if (w.Action != NotifyCollectionChangedAction.Add || !(w.NewItems[0] is Desktop desktop))
                     return;
 
-                var viewModel = new DesktopViewModel(desktop, processManager);
+                var viewModel = new DesktopViewModel(desktop, processManager, _desktopWindowManager);
                 Tabs.Insert(desktop.No - 1, viewModel);
                 VirtualScreen.Desktops.Insert(desktop.No - 1, viewModel);
             });
@@ -43,6 +45,12 @@ namespace Robock.ViewModels
             processManager.Start();
 
             CompositeDisposable.Add(processManager);
+            CompositeDisposable.Add(_desktopWindowManager);
+        }
+
+        public void Initialize()
+        {
+            _desktopWindowManager.Initialize();
         }
     }
 }

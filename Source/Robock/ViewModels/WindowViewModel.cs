@@ -1,4 +1,6 @@
-﻿using Robock.Models;
+﻿using System;
+
+using Robock.Models;
 using Robock.Mvvm;
 
 namespace Robock.ViewModels
@@ -7,6 +9,7 @@ namespace Robock.ViewModels
     {
         private readonly Window _window;
         public string Name => $"{_window.Title}";
+        public IntPtr Handle => _window.Handle;
 
         public WindowViewModel(Window process)
         {

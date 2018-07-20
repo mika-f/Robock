@@ -141,9 +141,11 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Actions\DataContextDisposeAction.cs" />
+    <Compile Include="Behaviors\ControlPositionBindingBehavior.cs" />
     <Compile Include="Behaviors\ScrollToTopBehavior.cs" />
     <Compile Include="Models\Desktop.cs" />
     <Compile Include="Models\DesktopManager.cs" />
+    <Compile Include="Models\DesktopWindowManager.cs" />
     <Compile Include="Models\License.cs" />
     <Compile Include="Models\Window.cs" />
     <Compile Include="Models\WindowManager.cs" />
@@ -173,6 +175,7 @@
     <Compile Include="Views\Tabs\DesktopTab.xaml.cs">
       <DependentUpon>DesktopTab.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Win32\Native\DWM_THUMBNAIL_PROPERTIES.cs" />
     <Compile Include="Win32\Native\NativeMethods.cs" />
     <Page Include="Styles\Controls.TabControl.xaml">
       <SubType>Designer</SubType>
