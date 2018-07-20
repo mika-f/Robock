@@ -46,14 +46,7 @@ namespace Robock.ViewModels.Tabs
             _offsetY = (SystemParameters.VirtualScreenTop < 0 ? -1 : 1) * SystemParameters.VirtualScreenTop;
 
             // アスペクト比
-            // ReSharper disable once RedundantAssignment
-            var (a, b, remainder) = (_desktop.Height, _desktop.Width, .0);
-            do
-            {
-                remainder = a % b;
-                (a, b) = (b, remainder);
-            } while (Math.Abs(remainder) > 0);
-            AspectRatio = $"http://placehold.jp/ffffff/ffffff/{_desktop.Width / a}x{_desktop.Height / a}.png?text=%20";
+            AspectRatio = $"http://placehold.jp/ffffff/ffffff/{AspectHelper.Calc(_desktop.Height, _desktop.Width)}.png?text=%20";
 
             // プレビュー
             PreviewAreaLeft = new ReactiveProperty<int>();
