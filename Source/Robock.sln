@@ -16,6 +16,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Robock.Background", "Robock.Background\Robock.Background.csproj", "{F3D75D1B-A861-44A9-A88B-BFAA4D5E77AD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -30,6 +32,10 @@ Global
 		{07BECF0B-6E07-4AC5-B0C2-3EAE0539D9A2}.Debug|x64.Build.0 = Debug|Any CPU
 		{07BECF0B-6E07-4AC5-B0C2-3EAE0539D9A2}.Release|x64.ActiveCfg = Release|Any CPU
 		{07BECF0B-6E07-4AC5-B0C2-3EAE0539D9A2}.Release|x64.Build.0 = Release|Any CPU
+		{F3D75D1B-A861-44A9-A88B-BFAA4D5E77AD}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F3D75D1B-A861-44A9-A88B-BFAA4D5E77AD}.Debug|x64.Build.0 = Debug|Any CPU
+		{F3D75D1B-A861-44A9-A88B-BFAA4D5E77AD}.Release|x64.ActiveCfg = Release|Any CPU
+		{F3D75D1B-A861-44A9-A88B-BFAA4D5E77AD}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
