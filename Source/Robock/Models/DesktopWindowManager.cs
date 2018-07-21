@@ -70,9 +70,10 @@ namespace Robock.Models
             var props = new DWM_THUMBNAIL_PROPERTIES
             {
                 fVisible = true,
-                dwFlags = 0x8 | 0x4 | 0x1,
-                opacity = 255,
-                rcDestination = new RECT {left = left, top = top, right = left + width, bottom = top + height}
+                dwFlags = (int) (DWM_TNP.DWM_TNP_VISIBLE | DWM_TNP.DWM_TNP_OPACITY | DWM_TNP.DWM_TNP_RECTDESTINATION | DWM_TNP.DWM_TNP_SOURCECLIENTAREAONLY),
+                opacity = 255 / 2,
+                rcDestination = new RECT {left = left, top = top, right = left + width, bottom = top + height},
+                fSourceClientAreaOnly = true
             };
 
             NativeMethods.DwmUpdateThumbnailProperties(_thumb, ref props);
