@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Windows;
 
 using Reactive.Bindings;
+using Reactive.Bindings.Extensions;
 
 using Robock.Models;
 
@@ -26,6 +28,8 @@ namespace Robock.ViewModels.Tabs
         public ReactiveProperty<int> PreviewAreaTop { get; }
         public ReactiveProperty<int> PreviewAreaHeight { get; }
         public ReactiveProperty<int> PreviewAreaWidth { get; }
+        public ReactiveCommand ApplyWallpaperCommand { get; }
+        public ReactiveCommand DiscardWallpaperCommand { get; }
 
         public string DesktopName => $"Desktop {_desktop.No}";
         public string Resolution => $"{_desktop.Width}x{_desktop.Height}";
@@ -62,6 +66,7 @@ namespace Robock.ViewModels.Tabs
             }.CombineLatest();
             observer.Subscribe(w => Render());
 
+            Windows = windowManager.Windows.ToReadOnlyReactiveCollection(w => new WindowViewModel(w));
             IsSelected = new ReactiveProperty<bool>(false);
             IsSelected.Subscribe(w =>
             {
@@ -74,7 +79,12 @@ namespace Robock.ViewModels.Tabs
                 _desktopWindowManager.Stop();
                 Render();
             });
-            Windows = windowManager.Windows.ToReadOnlyReactiveCollection(w => new WindowViewModel(w));
+            ApplyWallpaperCommand = new[]
+            {
+                SelectedWindow.Select(w => w != null),
+                _desktopWindowManager.ObserveProperty(w => w.IsRendering)
+            }.CombineLatest().Select(w => w.All(v => v)).ToReactiveCommand();
+            ApplyWallpaperCommand.Subscribe(w => { });
         }
 
         private void Render()

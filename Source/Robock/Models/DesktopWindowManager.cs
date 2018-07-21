@@ -2,6 +2,8 @@
 using System.Windows;
 using System.Windows.Interop;
 
+using Prism.Mvvm;
+
 using Robock.Win32.Native;
 
 using Size = System.Drawing.Size;
@@ -11,12 +13,10 @@ namespace Robock.Models
     /// <summary>
     ///     Desktop Window Manager Wrapper Class
     /// </summary>
-    public class DesktopWindowManager : IDisposable
+    public class DesktopWindowManager : BindableBase, IDisposable
     {
         private IntPtr _hWnd;
         private IntPtr _thumb;
-
-        public bool IsRendering => _thumb != IntPtr.Zero;
 
         public DesktopWindowManager()
         {
@@ -38,6 +38,7 @@ namespace Robock.Models
             if (_thumb != IntPtr.Zero)
                 NativeMethods.DwmUnregisterThumbnail(_thumb);
             _thumb = IntPtr.Zero;
+            IsRendering = false;
         }
 
         public void Start(IntPtr src, int left, int top, int height, int width)
@@ -58,6 +59,7 @@ namespace Robock.Models
         {
             if (_thumb == IntPtr.Zero)
                 return;
+            IsRendering = true;
 
             Size size;
             NativeMethods.DwmQueryThumbnailSourceSize(_thumb, out size);
@@ -73,5 +75,17 @@ namespace Robock.Models
 
             NativeMethods.DwmUpdateThumbnailProperties(_thumb, ref props);
         }
+
+        #region IsRendering
+
+        private bool _isRendering;
+
+        public bool IsRendering
+        {
+            get => _isRendering;
+            set => SetProperty(ref _isRendering, value);
+        }
+
+        #endregion
     }
 }
