@@ -39,6 +39,7 @@ namespace Robock.ViewModels.Tabs
 
         public ReactiveCommand ApplyWallpaperCommand { get; }
         public ReactiveCommand DiscardWallpaperCommand { get; }
+        public ReactiveCommand ReloadWindowsCommand { get; }
 
         public string DesktopName => $"Desktop {_desktop.No}";
         public string Resolution => $"{_desktop.Width}x{_desktop.Height}";
@@ -99,7 +100,9 @@ namespace Robock.ViewModels.Tabs
                 SelectedWindow.Select(w => w != null),
                 _desktopWindowManager.ObserveProperty(w => w.IsRendering)
             }.CombineLatest().Select(w => w.All(v => v)).ToReactiveCommand();
-            ApplyWallpaperCommand.Subscribe(w => { }).AddTo(this);
+            ApplyWallpaperCommand.Subscribe(_ => { }).AddTo(this);
+            ReloadWindowsCommand = new ReactiveCommand();
+            ReloadWindowsCommand.Subscribe(_ => windowManager.ForceUpdate()).AddTo(this);
         }
 
         private void Render()

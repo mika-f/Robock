@@ -26,7 +26,12 @@ namespace Robock.Models
 
         public void Start()
         {
-            _timer = Observable.Timer(TimeSpan.FromSeconds(1), TimeSpan.FromMinutes(1)).Subscribe(w => FindWindows());
+            _timer = Observable.Timer(TimeSpan.FromSeconds(1), TimeSpan.FromMinutes(1)).Subscribe(_ => FindWindows());
+        }
+
+        public void ForceUpdate()
+        {
+            Observable.Return(1).Delay(TimeSpan.FromSeconds(1)).Subscribe(_ => FindWindows());
         }
 
         private void FindWindows()
@@ -49,20 +54,24 @@ namespace Robock.Models
                 return true;
             }, IntPtr.Zero);
 
+            // Unflag
+            foreach (var window in Windows)
+                window.IsMarked = false;
+
             // Add windows
-            foreach (var process in windows)
-                if (Windows.SingleOrDefault(w => w.Handle == process.Handle) == null)
+            foreach (var window in windows)
+                if (Windows.SingleOrDefault(w => w.Handle == window.Handle) == null)
                 {
-                    Windows.Add(process);
-                    process.IsMarked = true;
+                    window.IsMarked = true;
+                    Windows.Add(window);
                 }
                 else
                 {
-                    process.IsMarked = true;
+                    Windows.Single(w => w.Handle == window.Handle).IsMarked = true;
                 }
 
             // Remove killed windows.
-            foreach (var window in windows.Where(w => !w.IsMarked))
+            foreach (var window in Windows.ToArray().Where(w => !w.IsMarked))
                 Windows.Remove(window);
         }
     }
