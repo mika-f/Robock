@@ -60,7 +60,11 @@
                    Text="Select the square range from below preview that you want to use as wallpaper : " />
         <Grid Grid.Row="3">
             <i:Interaction.Behaviors>
-                <behaviors:RectangleSelectorBehavior Rectangle="{Binding ElementName=Rectangle}" />
+                <behaviors:RectangleSelectorBehavior Width="{Binding SelectedAreaWidth.Value, Mode=OneWayToSource}"
+                                                     Height="{Binding SelectedAreaHeight.Value, Mode=OneWayToSource}"
+                                                     Left="{Binding SelectedAreaLeft.Value, Mode=OneWayToSource}"
+                                                     Rectangle="{Binding ElementName=Rectangle}"
+                                                     Top="{Binding SelectedAreaTop.Value, Mode=OneWayToSource}" />
             </i:Interaction.Behaviors>
             <Image HorizontalAlignment="Center"
                    Source="{Binding AspectRatio, Mode=OneWay}"

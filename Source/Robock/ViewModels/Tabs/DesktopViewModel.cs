@@ -24,10 +24,18 @@ namespace Robock.ViewModels.Tabs
         public ReadOnlyReactiveCollection<WindowViewModel> Windows { get; }
         public string AspectRatio { get; }
 
+        // Preview
         public ReactiveProperty<int> PreviewAreaLeft { get; }
         public ReactiveProperty<int> PreviewAreaTop { get; }
         public ReactiveProperty<int> PreviewAreaHeight { get; }
         public ReactiveProperty<int> PreviewAreaWidth { get; }
+
+        // Selected
+        public ReactiveProperty<int> SelectedAreaLeft { get; }
+        public ReactiveProperty<int> SelectedAreaTop { get; }
+        public ReactiveProperty<int> SelectedAreaHeight { get; }
+        public ReactiveProperty<int> SelectedAreaWidth { get; }
+
         public ReactiveCommand ApplyWallpaperCommand { get; }
         public ReactiveCommand DiscardWallpaperCommand { get; }
 
@@ -65,6 +73,12 @@ namespace Robock.ViewModels.Tabs
                 PreviewAreaWidth
             }.CombineLatest();
             observer.Subscribe(w => Render());
+
+            // 選択範囲
+            SelectedAreaLeft = new ReactiveProperty<int>();
+            SelectedAreaTop = new ReactiveProperty<int>();
+            SelectedAreaHeight = new ReactiveProperty<int>();
+            SelectedAreaWidth = new ReactiveProperty<int>();
 
             Windows = windowManager.Windows.ToReadOnlyReactiveCollection(w => new WindowViewModel(w));
             IsSelected = new ReactiveProperty<bool>(false);
