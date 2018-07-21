@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Drawing;
 
 namespace Robock.Models
 {
     public static class AspectHelper
     {
         /// <summary>
-        ///     アスペクト比求めるくん
+        ///     height, width におけるアスペクト比を求めます。
         /// </summary>
         /// <param name="height"></param>
         /// <param name="width"></param>
@@ -20,6 +21,11 @@ namespace Robock.Models
                 (a, b) = (b, remainder);
             } while (Math.Abs(remainder) > 0);
             return $"{width / a}x{height / a}";
+        }
+
+        public static Size AsSize(string aspectRatio)
+        {
+            return new Size {Height = int.Parse(aspectRatio.Split('x')[1]), Width = int.Parse(aspectRatio.Split('x')[0])};
         }
     }
 }

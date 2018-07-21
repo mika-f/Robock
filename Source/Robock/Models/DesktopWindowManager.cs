@@ -6,8 +6,6 @@ using Prism.Mvvm;
 
 using Robock.Win32.Native;
 
-using Size = System.Drawing.Size;
-
 namespace Robock.Models
 {
     /// <summary>
@@ -43,9 +41,14 @@ namespace Robock.Models
 
         public void Start(IntPtr src, int left, int top, int height, int width)
         {
+            StartTo(src, _hWnd, left, top, height, width);
+        }
+
+        public void StartTo(IntPtr src, IntPtr dest, int left, int top, int height, int width)
+        {
             Stop();
 
-            var registered = NativeMethods.DwmRegisterThumbnail(_hWnd, src, out _thumb);
+            var registered = NativeMethods.DwmRegisterThumbnail(dest, src, out _thumb);
             if (registered == 0)
                 StartRender(left, top, height, width);
         }
@@ -61,10 +64,9 @@ namespace Robock.Models
                 return;
             IsRendering = true;
 
-            Size size;
-            NativeMethods.DwmQueryThumbnailSourceSize(_thumb, out size);
+            // 入力ソースのアスペクト比を保つべきか、破棄すべきか
+            NativeMethods.DwmQueryThumbnailSourceSize(_thumb, out _);
 
-            // TODO: Keep aspect ratio of source
             var props = new DWM_THUMBNAIL_PROPERTIES
             {
                 fVisible = true,
