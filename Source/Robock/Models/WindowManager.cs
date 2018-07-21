@@ -26,7 +26,7 @@ namespace Robock.Models
 
         public void Start()
         {
-            _timer = Observable.Timer(TimeSpan.FromSeconds(5), TimeSpan.FromMinutes(1)).Subscribe(w => FindWindows());
+            _timer = Observable.Timer(TimeSpan.FromSeconds(1), TimeSpan.FromMinutes(1)).Subscribe(w => FindWindows());
         }
 
         private void FindWindows()
