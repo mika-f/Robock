@@ -13,3 +13,9 @@
 * Windows Display Driver Model に対応したビデオカード
 * YouTube で 1080p 動画をフルスクリーンで見てもカクつかない程度のスペック
 
+
+## Components
+
+* Robock
+* Robock.Background
+* Robock.Shared
