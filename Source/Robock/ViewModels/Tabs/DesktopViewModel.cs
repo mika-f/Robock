@@ -50,7 +50,7 @@ namespace Robock.ViewModels.Tabs
             _offsetY = (SystemParameters.VirtualScreenTop < 0 ? -1 : 1) * SystemParameters.VirtualScreenTop;
 
             // アスペクト比
-            AspectRatio = $"http://placehold.jp/ffffff/ffffff/{AspectHelper.Calc(_desktop.Height, _desktop.Width)}.png?text=%20";
+            AspectRatio = $"https://placehold.mochizuki.moe/{AspectHelper.Calc(_desktop.Height, _desktop.Width)}/000000%2C000/000000%2C000/";
 
             // プレビュー
             PreviewAreaLeft = new ReactiveProperty<int>();
