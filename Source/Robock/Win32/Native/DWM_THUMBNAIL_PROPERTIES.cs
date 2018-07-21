@@ -13,7 +13,10 @@ namespace Robock.Win32.Native
         public RECT rcDestination;
         public RECT rcSource;
         public byte opacity;
+
+        [MarshalAs(UnmanagedType.Bool, SizeConst = 4)]
         public bool fVisible;
+
         public bool fSourceClientAreaOnly;
     }
 }
