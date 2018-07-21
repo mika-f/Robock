@@ -5,7 +5,8 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using Robock.Models;
-using Robock.Mvvm;
+using Robock.Shared.Extensions;
+using Robock.Shared.Mvvm;
 using Robock.ViewModels.Tabs;
 
 namespace Robock.ViewModels
@@ -20,8 +21,8 @@ namespace Robock.ViewModels
         public AppShellViewModel()
         {
             var desktopManager = new DesktopManager();
-            var processManager = new WindowManager();
-            _desktopWindowManager = new DesktopWindowManager();
+            var processManager = new WindowManager().AddTo(this);
+            _desktopWindowManager = new DesktopWindowManager().AddTo(this);
 
             Title = new ReactiveProperty<string>("Robock");
             Tabs = new ReactiveCollection<TabViewModel>
@@ -36,16 +37,13 @@ namespace Robock.ViewModels
                 if (w.Action != NotifyCollectionChangedAction.Add || !(w.NewItems[0] is Desktop desktop))
                     return;
 
-                var viewModel = new DesktopViewModel(desktop, processManager, _desktopWindowManager);
+                var viewModel = new DesktopViewModel(desktop, processManager, _desktopWindowManager).AddTo(this);
                 Tabs.Insert(desktop.No - 1, viewModel);
                 VirtualScreen.Desktops.Insert(desktop.No - 1, viewModel);
-            });
+            }).AddTo(this);
 
             desktopManager.Initialize();
             processManager.Start();
-
-            CompositeDisposable.Add(processManager);
-            CompositeDisposable.Add(_desktopWindowManager);
         }
 
         public void Initialize()

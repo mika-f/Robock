@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Interactivity;
 
-namespace Robock.Actions
+namespace Robock.Shared.Actions
 {
     public class DataContextDisposeAction : TriggerAction<FrameworkElement>
     {

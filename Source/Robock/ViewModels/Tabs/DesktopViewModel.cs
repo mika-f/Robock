@@ -7,6 +7,7 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using Robock.Models;
+using Robock.Shared.Extensions;
 
 namespace Robock.ViewModels.Tabs
 {
@@ -72,7 +73,7 @@ namespace Robock.ViewModels.Tabs
                 PreviewAreaHeight,
                 PreviewAreaWidth
             }.CombineLatest();
-            observer.Subscribe(w => Render());
+            observer.Subscribe(w => Render()).AddTo(this);
 
             // 選択範囲
             SelectedAreaLeft = new ReactiveProperty<int>();
@@ -86,19 +87,19 @@ namespace Robock.ViewModels.Tabs
             {
                 _desktopWindowManager.Stop();
                 Render();
-            });
+            }).AddTo(this);
             SelectedWindow = new ReactiveProperty<WindowViewModel>();
             SelectedWindow.Where(w => w != null).Subscribe(w =>
             {
                 _desktopWindowManager.Stop();
                 Render();
-            });
+            }).AddTo(this);
             ApplyWallpaperCommand = new[]
             {
                 SelectedWindow.Select(w => w != null),
                 _desktopWindowManager.ObserveProperty(w => w.IsRendering)
             }.CombineLatest().Select(w => w.All(v => v)).ToReactiveCommand();
-            ApplyWallpaperCommand.Subscribe(w => { });
+            ApplyWallpaperCommand.Subscribe(w => { }).AddTo(this);
         }
 
         private void Render()

@@ -5,7 +5,7 @@ using System.Windows;
 
 using Reactive.Bindings;
 
-using Robock.Mvvm;
+using Robock.Shared.Mvvm;
 using Robock.ViewModels.Tabs;
 
 namespace Robock.ViewModels

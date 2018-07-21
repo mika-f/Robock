@@ -1,7 +1,7 @@
 ﻿using System;
 
 using Robock.Models;
-using Robock.Mvvm;
+using Robock.Shared.Mvvm;
 
 namespace Robock.ViewModels
 {

@@ -1,4 +1,4 @@
-﻿using Robock.Mvvm;
+﻿using Robock.Shared.Mvvm;
 
 namespace Robock.ViewModels.Tabs
 {
