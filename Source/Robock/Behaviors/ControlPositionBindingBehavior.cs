@@ -74,6 +74,9 @@ namespace Robock.Behaviors
         {
             Height = (int) AssociatedObject.ActualHeight;
             Width = (int) AssociatedObject.ActualWidth;
+
+            // When rendered size is changed, should update relative points.
+            MainWindowOnSizeChanged(null, null);
         }
     }
 }
