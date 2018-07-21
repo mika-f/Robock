@@ -153,7 +153,6 @@
     <Compile Include="Models\WindowManager.cs" />
     <Compile Include="Models\ProductInfo.cs" />
     <Compile Include="Mvvm\ViewModel.cs" />
-    <Compile Include="Refrection\RefrectionHelper.cs" />
     <Compile Include="ViewModels\AppShellViewModel.cs" />
     <Compile Include="ViewModels\WindowViewModel.cs" />
     <Compile Include="ViewModels\Tabs\DesktopViewModel.cs" />
@@ -178,10 +177,6 @@
     <Compile Include="Views\Tabs\DesktopTab.xaml.cs">
       <DependentUpon>DesktopTab.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Win32\Native\DWM_THUMBNAIL_PROPERTIES.cs" />
-    <Compile Include="Win32\Native\DWM_TNP.cs" />
-    <Compile Include="Win32\Native\NativeMethods.cs" />
-    <Compile Include="Win32\Native\RECT.cs" />
     <Page Include="Styles\Controls.TabControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -238,10 +233,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Converters\" />
-    <Folder Include="Win32\Wmi\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Win32\Native\README.txt" />
+    <ProjectReference Include="..\Robock.Shared\Robock.Shared.csproj">
+      <Project>{07becf0b-6e07-4ac5-b0c2-3eae0539d9a2}</Project>
+      <Name>Robock.Shared</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
