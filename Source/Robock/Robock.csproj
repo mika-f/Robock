@@ -140,7 +140,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Actions\DataContextDisposeAction.cs" />
     <Compile Include="Behaviors\ControlPositionBindingBehavior.cs" />
     <Compile Include="Behaviors\RectangleSelectorBehavior.cs" />
     <Compile Include="Behaviors\ScrollToTopBehavior.cs" />
@@ -152,7 +151,6 @@
     <Compile Include="Models\Window.cs" />
     <Compile Include="Models\WindowManager.cs" />
     <Compile Include="Models\ProductInfo.cs" />
-    <Compile Include="Mvvm\ViewModel.cs" />
     <Compile Include="ViewModels\AppShellViewModel.cs" />
     <Compile Include="ViewModels\WindowViewModel.cs" />
     <Compile Include="ViewModels\Tabs\DesktopViewModel.cs" />
