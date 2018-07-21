@@ -25,11 +25,12 @@ namespace Robock.ViewModels.Tabs
         public ReadOnlyReactiveCollection<WindowViewModel> Windows { get; }
         public string AspectRatio { get; }
 
-        // Preview
-        public ReactiveProperty<int> PreviewAreaLeft { get; }
-        public ReactiveProperty<int> PreviewAreaTop { get; }
-        public ReactiveProperty<int> PreviewAreaHeight { get; }
-        public ReactiveProperty<int> PreviewAreaWidth { get; }
+        // Editor
+        public ReactiveProperty<string> EditorAspectRatio { get; }
+        public ReactiveProperty<int> EditorAreaLeft { get; }
+        public ReactiveProperty<int> EditorAreaTop { get; }
+        public ReactiveProperty<int> EditorAreaHeight { get; }
+        public ReactiveProperty<int> EditorAreaWidth { get; }
 
         // Selected
         public ReactiveProperty<int> SelectedAreaLeft { get; }
@@ -59,22 +60,28 @@ namespace Robock.ViewModels.Tabs
             _offsetX = (SystemParameters.VirtualScreenLeft < 0 ? -1 : 1) * SystemParameters.VirtualScreenLeft;
             _offsetY = (SystemParameters.VirtualScreenTop < 0 ? -1 : 1) * SystemParameters.VirtualScreenTop;
 
-            // アスペクト比
+            // プレビュー
             AspectRatio = $"https://placehold.mochizuki.moe/{AspectHelper.Calc(_desktop.Height, _desktop.Width)}/000000%2C000/000000%2C000/";
 
-            // プレビュー
-            PreviewAreaLeft = new ReactiveProperty<int>();
-            PreviewAreaTop = new ReactiveProperty<int>();
-            PreviewAreaHeight = new ReactiveProperty<int>();
-            PreviewAreaWidth = new ReactiveProperty<int>();
+            // エディター
+            EditorAspectRatio = new ReactiveProperty<string>("https://placehold.mochizuki.moe/1x1/");
+            EditorAreaLeft = new ReactiveProperty<int>();
+            EditorAreaTop = new ReactiveProperty<int>();
+            EditorAreaHeight = new ReactiveProperty<int>();
+            EditorAreaWidth = new ReactiveProperty<int>();
             var observer = new[]
             {
-                PreviewAreaLeft,
-                PreviewAreaTop,
-                PreviewAreaHeight,
-                PreviewAreaWidth
+                EditorAreaLeft,
+                EditorAreaTop,
+                EditorAreaHeight,
+                EditorAreaWidth
             }.CombineLatest();
             observer.Subscribe(w => Render()).AddTo(this);
+            desktopWindowManager.ObserveProperty(w => w.Size).Subscribe(w =>
+            {
+                //
+                EditorAspectRatio.Value = $"https://placehold.mochizuki.moe/{AspectHelper.Calc(w.Height, w.Width)}/000000%2C000/000000%2C000/";
+            }).AddTo(this);
 
             // 選択範囲
             SelectedAreaLeft = new ReactiveProperty<int>();
@@ -111,9 +118,9 @@ namespace Robock.ViewModels.Tabs
                 return;
 
             if (_desktopWindowManager.IsRendering)
-                _desktopWindowManager.Redender(PreviewAreaLeft.Value, PreviewAreaTop.Value, PreviewAreaHeight.Value, PreviewAreaWidth.Value);
+                _desktopWindowManager.Rerender(EditorAreaLeft.Value, EditorAreaTop.Value, EditorAreaHeight.Value, EditorAreaWidth.Value);
             else
-                _desktopWindowManager.Start(SelectedWindow.Value.Handle, PreviewAreaLeft.Value, PreviewAreaTop.Value, PreviewAreaHeight.Value, PreviewAreaWidth.Value);
+                _desktopWindowManager.Start(SelectedWindow.Value.Handle, EditorAreaLeft.Value, EditorAreaTop.Value, EditorAreaHeight.Value, EditorAreaWidth.Value);
         }
     }
 }

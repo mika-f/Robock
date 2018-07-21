@@ -6,6 +6,8 @@ using Prism.Mvvm;
 
 using Robock.Shared.Win32;
 
+using Size = System.Drawing.Size;
+
 namespace Robock.Models
 {
     /// <summary>
@@ -37,6 +39,7 @@ namespace Robock.Models
                 NativeMethods.DwmUnregisterThumbnail(_thumb);
             _thumb = IntPtr.Zero;
             IsRendering = false;
+            Size = new Size(1, 1);
         }
 
         public void Start(IntPtr src, int left, int top, int height, int width)
@@ -53,7 +56,7 @@ namespace Robock.Models
                 StartRender(left, top, height, width);
         }
 
-        public void Redender(int left, int top, int height, int width)
+        public void Rerender(int left, int top, int height, int width)
         {
             StartRender(left, top, height, width);
         }
@@ -65,7 +68,8 @@ namespace Robock.Models
             IsRendering = true;
 
             // 入力ソースのアスペクト比を保つべきか、破棄すべきか
-            NativeMethods.DwmQueryThumbnailSourceSize(_thumb, out _);
+            NativeMethods.DwmQueryThumbnailSourceSize(_thumb, out var size);
+            Size = size;
 
             var props = new DWM_THUMBNAIL_PROPERTIES
             {
@@ -87,6 +91,18 @@ namespace Robock.Models
         {
             get => _isRendering;
             set => SetProperty(ref _isRendering, value);
+        }
+
+        #endregion
+
+        #region Size
+
+        private Size _size;
+
+        public Size Size
+        {
+            get => _size;
+            set => SetProperty(ref _size, value);
         }
 
         #endregion
