@@ -25,7 +25,13 @@
             <RowDefinition Height="Auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
         <StackPanel Grid.Row="0"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
                     Margin="0,0,0,5"
                     Orientation="Horizontal">
             <Button Width="150"
@@ -37,6 +43,8 @@
                     Content="Discard Wallpaper" />
         </StackPanel>
         <StackPanel Grid.Row="1"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
                     Height="24"
                     Orientation="Horizontal">
             <TextBlock VerticalAlignment="Center"
@@ -56,34 +64,47 @@
             </metro:PromptComboBox>
         </StackPanel>
         <TextBlock Grid.Row="2"
+                   Grid.Column="0"
+                   Grid.ColumnSpan="2"
                    Margin="0,5,0,10"
-                   Text="Select the square range from below preview that you want to use as wallpaper : " />
-        <Grid Grid.Row="3">
-            <i:Interaction.Behaviors>
-                <behaviors:RectangleSelectorBehavior Width="{Binding SelectedAreaWidth.Value, Mode=OneWayToSource}"
-                                                     Height="{Binding SelectedAreaHeight.Value, Mode=OneWayToSource}"
-                                                     Left="{Binding SelectedAreaLeft.Value, Mode=OneWayToSource}"
-                                                     Rectangle="{Binding ElementName=Rectangle}"
-                                                     Top="{Binding SelectedAreaTop.Value, Mode=OneWayToSource}" />
-            </i:Interaction.Behaviors>
+                   Text="Select the square range from live editor that you want to use as wallpaper : " />
+        <StackPanel Grid.Row="3"
+                    Grid.Column="0">
+            <TextBlock Text="Live Editor:" />
+            <Grid>
+                <i:Interaction.Behaviors>
+                    <behaviors:RectangleSelectorBehavior Width="{Binding SelectedAreaWidth.Value, Mode=OneWayToSource}"
+                                                         Height="{Binding SelectedAreaHeight.Value, Mode=OneWayToSource}"
+                                                         Left="{Binding SelectedAreaLeft.Value, Mode=OneWayToSource}"
+                                                         Rectangle="{Binding ElementName=Rectangle}"
+                                                         Top="{Binding SelectedAreaTop.Value, Mode=OneWayToSource}" />
+                </i:Interaction.Behaviors>
+                <Image HorizontalAlignment="Center"
+                       Source="{Binding AspectRatio, Mode=OneWay}"
+                       Stretch="Uniform">
+                    <i:Interaction.Behaviors>
+                        <behaviors:ControlPositionBindingBehavior Width="{Binding PreviewAreaWidth.Value, Mode=OneWayToSource}"
+                                                                  Height="{Binding PreviewAreaHeight.Value, Mode=OneWayToSource}"
+                                                                  Left="{Binding PreviewAreaLeft.Value, Mode=OneWayToSource}"
+                                                                  Top="{Binding PreviewAreaTop.Value, Mode=OneWayToSource}" />
+                    </i:Interaction.Behaviors>
+                </Image>
+                <Rectangle x:Name="Rectangle"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Top"
+                           Fill="{DynamicResource AccentForegroundBrushKey}"
+                           Opacity="1"
+                           Stroke="{DynamicResource AccentBrushKey}"
+                           StrokeThickness="2"
+                           Visibility="Hidden" />
+
+            </Grid>
+        </StackPanel>
+        <StackPanel Grid.Row="3"
+                    Grid.Column="1">
             <Image HorizontalAlignment="Center"
                    Source="{Binding AspectRatio, Mode=OneWay}"
-                   Stretch="Uniform">
-                <i:Interaction.Behaviors>
-                    <behaviors:ControlPositionBindingBehavior Width="{Binding PreviewAreaWidth.Value, Mode=OneWayToSource}"
-                                                              Height="{Binding PreviewAreaHeight.Value, Mode=OneWayToSource}"
-                                                              Left="{Binding PreviewAreaLeft.Value, Mode=OneWayToSource}"
-                                                              Top="{Binding PreviewAreaTop.Value, Mode=OneWayToSource}" />
-                </i:Interaction.Behaviors>
-            </Image>
-            <Rectangle x:Name="Rectangle"
-                       HorizontalAlignment="Left"
-                       VerticalAlignment="Top"
-                       Fill="{DynamicResource AccentForegroundBrushKey}"
-                       Opacity="1"
-                       Stroke="{DynamicResource AccentBrushKey}"
-                       StrokeThickness="2"
-                       Visibility="Hidden" />
-        </Grid>
+                   Stretch="Uniform" />
+        </StackPanel>
     </Grid>
 </UserControl>
