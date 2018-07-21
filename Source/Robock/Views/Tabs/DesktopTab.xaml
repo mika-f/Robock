@@ -33,6 +33,7 @@
                     Command="{Binding ApplyWallpaperCommand}"
                     Content="Apply Wallpaper" />
             <Button Width="150"
+                    Command="{Binding DiscardWallpaperCommand}"
                     Content="Discard Wallpaper" />
         </StackPanel>
         <StackPanel Grid.Row="1"
@@ -57,16 +58,28 @@
         <TextBlock Grid.Row="2"
                    Margin="0,5,0,10"
                    Text="Select the square range from below preview that you want to use as wallpaper : " />
-        <Image Grid.Row="3"
-               HorizontalAlignment="Center"
-               Source="{Binding AspectRatio, Mode=OneWay}"
-               Stretch="Uniform">
+        <Grid Grid.Row="3">
             <i:Interaction.Behaviors>
-                <behaviors:ControlPositionBindingBehavior Width="{Binding PreviewAreaWidth.Value, Mode=OneWayToSource}"
-                                                          Height="{Binding PreviewAreaHeight.Value, Mode=OneWayToSource}"
-                                                          Left="{Binding PreviewAreaLeft.Value, Mode=OneWayToSource}"
-                                                          Top="{Binding PreviewAreaTop.Value, Mode=OneWayToSource}" />
+                <behaviors:RectangleSelectorBehavior Rectangle="{Binding ElementName=Rectangle}" />
             </i:Interaction.Behaviors>
-        </Image>
+            <Image HorizontalAlignment="Center"
+                   Source="{Binding AspectRatio, Mode=OneWay}"
+                   Stretch="Uniform">
+                <i:Interaction.Behaviors>
+                    <behaviors:ControlPositionBindingBehavior Width="{Binding PreviewAreaWidth.Value, Mode=OneWayToSource}"
+                                                              Height="{Binding PreviewAreaHeight.Value, Mode=OneWayToSource}"
+                                                              Left="{Binding PreviewAreaLeft.Value, Mode=OneWayToSource}"
+                                                              Top="{Binding PreviewAreaTop.Value, Mode=OneWayToSource}" />
+                </i:Interaction.Behaviors>
+            </Image>
+            <Rectangle x:Name="Rectangle"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Top"
+                       Fill="{DynamicResource AccentForegroundBrushKey}"
+                       Opacity="1"
+                       Stroke="{DynamicResource AccentBrushKey}"
+                       StrokeThickness="2"
+                       Visibility="Hidden" />
+        </Grid>
     </Grid>
 </UserControl>
