@@ -23,7 +23,6 @@ namespace Robock.ViewModels.Tabs
         public ReactiveProperty<bool> IsSelected { get; }
         public ReactiveProperty<WindowViewModel> SelectedWindow { get; }
         public ReadOnlyReactiveCollection<WindowViewModel> Windows { get; }
-        public string AspectRatio { get; }
 
         // Editor
         public ReactiveProperty<string> EditorAspectRatio { get; }
@@ -37,6 +36,13 @@ namespace Robock.ViewModels.Tabs
         public ReactiveProperty<int> SelectedAreaTop { get; }
         public ReactiveProperty<int> SelectedAreaHeight { get; }
         public ReactiveProperty<int> SelectedAreaWidth { get; }
+
+        // Preview
+        public string AspectRatio { get; }
+        public ReactiveProperty<int> PreviewAreaLeft { get; }
+        public ReactiveProperty<int> PreviewAreaTop { get; }
+        public ReactiveProperty<int> PreviewAreaHeight { get; }
+        public ReactiveProperty<int> PreviewAreaWidth { get; }
 
         public ReactiveCommand ApplyWallpaperCommand { get; }
         public ReactiveCommand DiscardWallpaperCommand { get; }
@@ -60,9 +66,6 @@ namespace Robock.ViewModels.Tabs
             _offsetX = (SystemParameters.VirtualScreenLeft < 0 ? -1 : 1) * SystemParameters.VirtualScreenLeft;
             _offsetY = (SystemParameters.VirtualScreenTop < 0 ? -1 : 1) * SystemParameters.VirtualScreenTop;
 
-            // プレビュー
-            AspectRatio = $"https://placehold.mochizuki.moe/{AspectHelper.Calc(_desktop.Height, _desktop.Width)}/000000%2C000/000000%2C000/";
-
             // エディター
             EditorAspectRatio = new ReactiveProperty<string>("https://placehold.mochizuki.moe/1x1/");
             EditorAreaLeft = new ReactiveProperty<int>();
@@ -77,7 +80,7 @@ namespace Robock.ViewModels.Tabs
                 EditorAreaWidth
             }.CombineLatest();
             observer.Subscribe(w => Render()).AddTo(this);
-            desktopWindowManager.ObserveProperty(w => w.Size).Subscribe(w =>
+            desktopWindowManager.Thumbnails[DesktopWindowManager.EDITOR_INDEX].ObserveProperty(w => w.Size).Subscribe(w =>
             {
                 //
                 EditorAspectRatio.Value = $"https://placehold.mochizuki.moe/{AspectHelper.Calc(w.Height, w.Width)}/000000%2C000/000000%2C000/";
@@ -89,6 +92,14 @@ namespace Robock.ViewModels.Tabs
             SelectedAreaHeight = new ReactiveProperty<int>();
             SelectedAreaWidth = new ReactiveProperty<int>();
 
+            // プレビュー
+            AspectRatio = $"https://placehold.mochizuki.moe/{AspectHelper.Calc(_desktop.Height, _desktop.Width)}/000000%2C000/000000%2C000/";
+            PreviewAreaLeft = new ReactiveProperty<int>();
+            PreviewAreaTop = new ReactiveProperty<int>();
+            PreviewAreaHeight = new ReactiveProperty<int>();
+            PreviewAreaWidth = new ReactiveProperty<int>();
+
+            // 他
             Windows = windowManager.Windows.ToReadOnlyReactiveCollection(w => new WindowViewModel(w));
             IsSelected = new ReactiveProperty<bool>(false);
             IsSelected.Subscribe(w =>
@@ -105,7 +116,7 @@ namespace Robock.ViewModels.Tabs
             ApplyWallpaperCommand = new[]
             {
                 SelectedWindow.Select(w => w != null),
-                _desktopWindowManager.ObserveProperty(w => w.IsRendering)
+                _desktopWindowManager.Thumbnails[DesktopWindowManager.EDITOR_INDEX].ObserveProperty(w => w.IsRendering)
             }.CombineLatest().Select(w => w.All(v => v)).ToReactiveCommand();
             ApplyWallpaperCommand.Subscribe(_ => { }).AddTo(this);
             ReloadWindowsCommand = new ReactiveCommand();
@@ -117,7 +128,7 @@ namespace Robock.ViewModels.Tabs
             if (SelectedWindow?.Value == null)
                 return;
 
-            if (_desktopWindowManager.IsRendering)
+            if (_desktopWindowManager.Thumbnails[DesktopWindowManager.EDITOR_INDEX].IsRendering)
                 _desktopWindowManager.Rerender(EditorAreaLeft.Value, EditorAreaTop.Value, EditorAreaHeight.Value, EditorAreaWidth.Value);
             else
                 _desktopWindowManager.Start(SelectedWindow.Value.Handle, EditorAreaLeft.Value, EditorAreaTop.Value, EditorAreaHeight.Value, EditorAreaWidth.Value);

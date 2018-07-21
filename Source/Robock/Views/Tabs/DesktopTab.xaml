@@ -113,7 +113,14 @@
                        Text="Live Preview:" />
             <Image HorizontalAlignment="Center"
                    Source="{Binding AspectRatio, Mode=OneWay}"
-                   Stretch="Uniform" />
+                   Stretch="Uniform">
+                <i:Interaction.Behaviors>
+                    <behaviors:ControlPositionBindingBehavior Width="{Binding PreviewAreaWidth.Value, Mode=OneWayToSource}"
+                                                              Height="{Binding PreviewAreaHeight.Value, Mode=OneWayToSource}"
+                                                              Left="{Binding PreviewAreaLeft.Value, Mode=OneWayToSource}"
+                                                              Top="{Binding PreviewAreaTop.Value, Mode=OneWayToSource}" />
+                </i:Interaction.Behaviors>
+            </Image>
         </StackPanel>
     </Grid>
 </UserControl>

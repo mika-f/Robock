@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Interop;
 
@@ -15,17 +16,31 @@ namespace Robock.Models
     /// </summary>
     public class DesktopWindowManager : BindableBase, IDisposable
     {
-        private IntPtr _hWnd;
-        private IntPtr _thumb;
+        #region Constants
 
-        public DesktopWindowManager()
+        // ReSharper disable InconsistentNaming
+        public const int EDITOR_INDEX = 0;
+        public const int PREVIEW_INDEX = 1;
+
+        // ReSharper enable InconsistentNaming
+
+        #endregion
+
+        private IntPtr _hWnd;
+
+        public List<Thumbnail> Thumbnails { get; }
+
+        public DesktopWindowManager(int capacity = 5)
         {
-            _thumb = IntPtr.Zero;
+            Thumbnails = new List<Thumbnail>();
+            for (var i = 0; i < capacity; i++)
+                Thumbnails.Add(new Thumbnail());
         }
 
         public void Dispose()
         {
-            Stop();
+            for (var i = 0; i < Thumbnails.Count; i++)
+                Stop(i);
         }
 
         public void Initialize()
@@ -33,43 +48,52 @@ namespace Robock.Models
             _hWnd = new WindowInteropHelper(Application.Current.MainWindow ?? throw new InvalidOperationException()).Handle;
         }
 
-        public void Stop()
+        public void Stop(int index = 0)
         {
-            if (_thumb != IntPtr.Zero)
-                NativeMethods.DwmUnregisterThumbnail(_thumb);
-            _thumb = IntPtr.Zero;
-            IsRendering = false;
-            Size = new Size(1, 1);
+            if (Thumbnails[index].Handle != IntPtr.Zero)
+                NativeMethods.DwmUnregisterThumbnail(Thumbnails[index].Handle);
+            Thumbnails[index].Handle = IntPtr.Zero;
+            Thumbnails[index].IsRendering = false;
+            Thumbnails[index].Size = new Size(1, 1);
         }
 
-        public void Start(IntPtr src, int left, int top, int height, int width)
+        public void Start(IntPtr src, int left, int top, int height, int width, int index = 0)
         {
-            StartTo(src, _hWnd, left, top, height, width);
+            StartTo(src, _hWnd, left, top, height, width, index);
         }
 
-        public void StartTo(IntPtr src, IntPtr dest, int left, int top, int height, int width)
+        public void StartTo(IntPtr src, IntPtr dest, int left, int top, int height, int width, int index = 0)
         {
-            Stop();
+            Stop(index);
 
-            var registered = NativeMethods.DwmRegisterThumbnail(dest, src, out _thumb);
+            var registered = NativeMethods.DwmRegisterThumbnail(dest, src, out var thumbnail);
+            Thumbnails[index].Handle = thumbnail;
+
             if (registered == 0)
-                StartRender(left, top, height, width);
+                StartRender(left, top, height, width, index);
         }
 
-        public void Rerender(int left, int top, int height, int width)
+        public void Rerender(int left, int top, int height, int width, int index = 0)
         {
-            StartRender(left, top, height, width);
+            Render(left, top, height, width, index);
         }
 
-        private void StartRender(int left, int top, int height, int width)
+        private void StartRender(int left, int top, int height, int width, int index = 0)
         {
-            if (_thumb == IntPtr.Zero)
+            if (Thumbnails[index].Handle == IntPtr.Zero)
                 return;
-            IsRendering = true;
+            Thumbnails[index].IsRendering = true;
 
-            // 入力ソースのアスペクト比を保つべきか、破棄すべきか
-            NativeMethods.DwmQueryThumbnailSourceSize(_thumb, out var size);
-            Size = size;
+            NativeMethods.DwmQueryThumbnailSourceSize(Thumbnails[index].Handle, out var size);
+            Thumbnails[index].Size = size;
+
+            Render(left, top, height, width, index);
+        }
+
+        private void Render(int left, int top, int height, int width, int index = 0)
+        {
+            if (Thumbnails[index].Handle == IntPtr.Zero)
+                return;
 
             var props = new DWM_THUMBNAIL_PROPERTIES
             {
@@ -80,31 +104,7 @@ namespace Robock.Models
                 fSourceClientAreaOnly = true
             };
 
-            NativeMethods.DwmUpdateThumbnailProperties(_thumb, ref props);
+            NativeMethods.DwmUpdateThumbnailProperties(Thumbnails[index].Handle, ref props);
         }
-
-        #region IsRendering
-
-        private bool _isRendering;
-
-        public bool IsRendering
-        {
-            get => _isRendering;
-            set => SetProperty(ref _isRendering, value);
-        }
-
-        #endregion
-
-        #region Size
-
-        private Size _size;
-
-        public Size Size
-        {
-            get => _size;
-            set => SetProperty(ref _size, value);
-        }
-
-        #endregion
     }
 }
