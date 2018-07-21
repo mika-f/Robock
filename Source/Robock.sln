@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Robock", "Robock\Robock.csproj", "{829FE68D-DA01-4FFA-9992-032CCEE00BEF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Robock.Shared", "Robock.Shared\Robock.Shared.csproj", "{07BECF0B-6E07-4AC5-B0C2-3EAE0539D9A2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -15,6 +17,10 @@ Global
 		{829FE68D-DA01-4FFA-9992-032CCEE00BEF}.Debug|x64.Build.0 = Debug|x64
 		{829FE68D-DA01-4FFA-9992-032CCEE00BEF}.Release|x64.ActiveCfg = Release|x64
 		{829FE68D-DA01-4FFA-9992-032CCEE00BEF}.Release|x64.Build.0 = Release|x64
+		{07BECF0B-6E07-4AC5-B0C2-3EAE0539D9A2}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{07BECF0B-6E07-4AC5-B0C2-3EAE0539D9A2}.Debug|x64.Build.0 = Debug|Any CPU
+		{07BECF0B-6E07-4AC5-B0C2-3EAE0539D9A2}.Release|x64.ActiveCfg = Release|Any CPU
+		{07BECF0B-6E07-4AC5-B0C2-3EAE0539D9A2}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
