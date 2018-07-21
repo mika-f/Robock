@@ -57,12 +57,12 @@ namespace Robock.Models
             Thumbnails[index].Size = new Size(1, 1);
         }
 
-        public void Start(IntPtr src, int left, int top, int height, int width, int index = 0)
+        public void Start(IntPtr src, int left, int top, int height, int width, int index = 0, RECT? rect = null)
         {
-            StartTo(src, _hWnd, left, top, height, width, index);
+            StartTo(src, _hWnd, left, top, height, width, index, rect);
         }
 
-        public void StartTo(IntPtr src, IntPtr dest, int left, int top, int height, int width, int index = 0)
+        public void StartTo(IntPtr src, IntPtr dest, int left, int top, int height, int width, int index = 0, RECT? rect = null)
         {
             Stop(index);
 
@@ -70,15 +70,15 @@ namespace Robock.Models
             Thumbnails[index].Handle = thumbnail;
 
             if (registered == 0)
-                StartRender(left, top, height, width, index);
+                StartRender(left, top, height, width, index, rect);
         }
 
-        public void Rerender(int left, int top, int height, int width, int index = 0)
+        public void Rerender(int left, int top, int height, int width, int index = 0, RECT? rect = null)
         {
-            Render(left, top, height, width, index);
+            Render(left, top, height, width, index, rect);
         }
 
-        private void StartRender(int left, int top, int height, int width, int index = 0)
+        private void StartRender(int left, int top, int height, int width, int index = 0, RECT? rect = null)
         {
             if (Thumbnails[index].Handle == IntPtr.Zero)
                 return;
@@ -87,10 +87,10 @@ namespace Robock.Models
             NativeMethods.DwmQueryThumbnailSourceSize(Thumbnails[index].Handle, out var size);
             Thumbnails[index].Size = size;
 
-            Render(left, top, height, width, index);
+            Render(left, top, height, width, index, rect);
         }
 
-        private void Render(int left, int top, int height, int width, int index = 0)
+        private void Render(int left, int top, int height, int width, int index = 0, RECT? rect = null)
         {
             if (Thumbnails[index].Handle == IntPtr.Zero)
                 return;
@@ -103,6 +103,11 @@ namespace Robock.Models
                 rcDestination = new RECT {left = left, top = top, right = left + width, bottom = top + height},
                 fSourceClientAreaOnly = true
             };
+            if (rect != null)
+            {
+                props.rcSource = rect.Value;
+                props.dwFlags |= (int) DWM_TNP.DWM_TNP_RECTSOURCE;
+            }
 
             NativeMethods.DwmUpdateThumbnailProperties(Thumbnails[index].Handle, ref props);
         }

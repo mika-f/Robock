@@ -80,6 +80,10 @@ namespace Robock.Behaviors
         private void AssociatedObjectOnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             _isSelecting = false;
+            Top = (int) Rectangle.Margin.Top;
+            Left = (int) Rectangle.Margin.Left;
+            Width = (int) Rectangle.Width;
+            Height = (int) Rectangle.Height;
         }
 
         private void AssociatedObjectOnMouseMove(object sender, MouseEventArgs e)
