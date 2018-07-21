@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Text;
 
-using Robock.Win32.Native;
+using Robock.Shared.Win32;
 
 namespace Robock.Models
 {

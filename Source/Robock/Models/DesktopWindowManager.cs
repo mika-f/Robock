@@ -4,7 +4,7 @@ using System.Windows.Interop;
 
 using Prism.Mvvm;
 
-using Robock.Win32.Native;
+using Robock.Shared.Win32;
 
 namespace Robock.Models
 {

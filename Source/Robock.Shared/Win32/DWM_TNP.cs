@@ -4,7 +4,7 @@
 // ReSharper disable  InconsistentNaming
 // ReSharper disable MemberCanBePrivate.Global
 
-namespace Robock.Win32.Native
+namespace Robock.Shared.Win32
 {
     [Flags]
     public enum DWM_TNP
