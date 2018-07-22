@@ -166,7 +166,7 @@ namespace Robock.ViewModels.Tabs
                 // 描画サイズから、縮小された割合を計算
                 var multi = _desktopWindowManager.Thumbnails[editor].Size.Height / (double) EditorAreaHeight.Value;
                 var rect = SelectedAreaHeight.Value != 0
-                    ? RectUtil.AsRect(SelectedAreaTop.Value, SelectedAreaLeft.Value, SelectedAreaTop.Value, SelectedAreaWidth.Value, multi)
+                    ? RectUtil.AsRect(SelectedAreaTop.Value, SelectedAreaLeft.Value, SelectedAreaHeight.Value, SelectedAreaWidth.Value, multi)
                     : RectUtil.AsRect(0, 0, _desktopWindowManager.Thumbnails[editor].Size.Height, _desktopWindowManager.Thumbnails[editor].Size.Width);
 
                 if (_desktopWindowManager.Thumbnails[DesktopWindowManager.PreviewIndex].IsRendering)

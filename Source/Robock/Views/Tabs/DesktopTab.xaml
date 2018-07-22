@@ -72,12 +72,17 @@
                    Grid.ColumnSpan="2"
                    Margin="0,5,0,10"
                    Text="Select the square range from live editor that you want to use as wallpaper : " />
-        <StackPanel Grid.Row="3"
-                    Grid.Column="0"
-                    Margin="0,2.5,5,0">
-            <TextBlock Margin="0,0,0,5"
+        <Grid Grid.Row="3"
+              Grid.Column="0"
+              Margin="0,2.5,5,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0"
+                       Margin="0,0,0,5"
                        Text="Live Editor:" />
-            <Grid>
+            <Grid Grid.Row="1">
                 <i:Interaction.Behaviors>
                     <behaviors:RectangleSelectorBehavior Width="{Binding SelectedAreaWidth.Value, Mode=OneWayToSource}"
                                                          Height="{Binding SelectedAreaHeight.Value, Mode=OneWayToSource}"
@@ -105,13 +110,19 @@
                            Visibility="Hidden" />
 
             </Grid>
-        </StackPanel>
-        <StackPanel Grid.Row="3"
-                    Grid.Column="1"
-                    Margin="5,2.5,0,0">
-            <TextBlock Margin="0,0,0,5"
+        </Grid>
+        <Grid Grid.Row="3"
+              Grid.Column="1"
+              Margin="5,2.5,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0"
+                       Margin="0,0,0,5"
                        Text="Live Preview:" />
-            <Image HorizontalAlignment="Center"
+            <Image Grid.Row="1"
+                   HorizontalAlignment="Center"
                    Source="{Binding AspectRatio, Mode=OneWay}"
                    Stretch="Uniform">
                 <i:Interaction.Behaviors>
@@ -121,6 +132,6 @@
                                                               Top="{Binding PreviewAreaTop.Value, Mode=OneWayToSource}" />
                 </i:Interaction.Behaviors>
             </Image>
-        </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>

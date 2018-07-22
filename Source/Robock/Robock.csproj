@@ -148,6 +148,7 @@
     <Compile Include="Models\DesktopWindowManager.cs" />
     <Compile Include="Models\License.cs" />
     <Compile Include="Models\AspectHelper.cs" />
+    <Compile Include="Models\RectUtil.cs" />
     <Compile Include="Models\Thumbnail.cs" />
     <Compile Include="Models\Window.cs" />
     <Compile Include="Models\WindowManager.cs" />
