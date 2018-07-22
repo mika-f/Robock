@@ -1,6 +1,6 @@
 ﻿using Robock.Shared.Win32;
 
-namespace Robock.Models
+namespace Robock.Shared.Models
 {
     public static class RectUtil
     {

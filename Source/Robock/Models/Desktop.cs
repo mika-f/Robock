@@ -1,4 +1,8 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Diagnostics;
+using System.Windows.Forms;
+
+using Robock.Shared.Communication;
 
 namespace Robock.Models
 {
@@ -7,6 +11,7 @@ namespace Robock.Models
     /// </summary>
     public class Desktop
     {
+        private readonly RobockClient _client;
         private readonly Screen _screen;
 
         public int No { get; }
@@ -21,6 +26,13 @@ namespace Robock.Models
         {
             _screen = screen;
             No = index;
+            _client = new RobockClient();
+            Process.Start("Robock.Background.exe");
+        }
+
+        public void ApplyWallpaper()
+        {
+            _client.ApplyWallpaper("", IntPtr.Zero, 0, 0, 0, 0);
         }
     }
 }

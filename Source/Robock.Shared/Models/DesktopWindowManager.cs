@@ -9,7 +9,7 @@ using Robock.Shared.Win32;
 
 using Size = System.Drawing.Size;
 
-namespace Robock.Models
+namespace Robock.Shared.Models
 {
     /// <summary>
     ///     Desktop Window Manager Wrapper Class

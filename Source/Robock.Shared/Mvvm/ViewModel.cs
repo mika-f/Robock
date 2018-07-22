@@ -14,7 +14,7 @@ namespace Robock.Shared.Mvvm
             CompositeDisposable = new CompositeDisposable();
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             CompositeDisposable?.Dispose();
         }

@@ -8,6 +8,7 @@ using Reactive.Bindings.Extensions;
 
 using Robock.Models;
 using Robock.Shared.Extensions;
+using Robock.Shared.Models;
 
 namespace Robock.ViewModels.Tabs
 {
@@ -149,7 +150,7 @@ namespace Robock.ViewModels.Tabs
                 SelectedWindow.Select(w => w != null),
                 _desktopWindowManager.Thumbnails[DesktopWindowManager.EditorIndex].ObserveProperty(w => w.IsRendering)
             }.CombineLatest().Select(w => w.All(v => v)).ToReactiveCommand();
-            ApplyWallpaperCommand.Subscribe(_ => { }).AddTo(this);
+            ApplyWallpaperCommand.Subscribe(_ => _desktop.ApplyWallpaper()).AddTo(this);
             ReloadWindowsCommand = new ReactiveCommand();
             ReloadWindowsCommand.Subscribe(_ => windowManager.ForceUpdate()).AddTo(this);
         }

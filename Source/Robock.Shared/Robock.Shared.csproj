@@ -42,6 +42,7 @@
     <Reference Include="System.Reactive, Version=4.0.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Reactive.4.0.0\lib\net46\System.Reactive.dll</HintPath>
     </Reference>
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
@@ -55,7 +56,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actions\DataContextDisposeAction.cs" />
+    <Compile Include="Communication\IRobockDuplex.cs" />
+    <Compile Include="Communication\IRobockDuplexCallback.cs" />
+    <Compile Include="Communication\RobockClient.cs" />
+    <Compile Include="Communication\RobockServer.cs" />
     <Compile Include="Extensions\IDisposableExtensions.cs" />
+    <Compile Include="Models\DesktopWindowManager.cs" />
+    <Compile Include="Models\RectUtil.cs" />
+    <Compile Include="Models\Thumbnail.cs" />
     <Compile Include="Mvvm\ViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Refrection\RefrectionHelper.cs" />
@@ -71,5 +79,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
