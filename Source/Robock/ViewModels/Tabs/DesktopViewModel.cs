@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Windows;
@@ -9,7 +8,6 @@ using Reactive.Bindings.Extensions;
 
 using Robock.Models;
 using Robock.Shared.Extensions;
-using Robock.Shared.Win32;
 
 namespace Robock.ViewModels.Tabs
 {
@@ -167,27 +165,10 @@ namespace Robock.ViewModels.Tabs
 
                 // 描画サイズから、縮小された割合を計算
                 var multi = _desktopWindowManager.Thumbnails[editor].Size.Height / (double) EditorAreaHeight.Value;
+                var rect = SelectedAreaHeight.Value != 0
+                    ? RectUtil.AsRect(SelectedAreaTop.Value, SelectedAreaLeft.Value, SelectedAreaHeight.Value, SelectedAreaWidth.Value, multi)
+                    : RectUtil.AsRect(0, 0, _desktopWindowManager.Thumbnails[editor].Size.Height, _desktopWindowManager.Thumbnails[editor].Size.Width);
 
-                // 選択された領域を取得
-                RECT rect;
-                if (SelectedAreaHeight.Value != 0)
-                    rect = new RECT
-                    {
-                        top = (int) (SelectedAreaTop.Value * multi),
-                        left = (int) (SelectedAreaLeft.Value * multi),
-                        bottom = (int) ((SelectedAreaTop.Value + SelectedAreaHeight.Value) * multi),
-                        right = (int) ((SelectedAreaLeft.Value + SelectedAreaWidth.Value) * multi)
-                    };
-                else
-                    rect = new RECT
-                    {
-                        top = 0,
-                        left = 0,
-                        bottom = _desktopWindowManager.Thumbnails[editor].Size.Height,
-                        right = _desktopWindowManager.Thumbnails[editor].Size.Width
-                    };
-
-                Debug.WriteLine($"{SelectedAreaTop.Value}, {SelectedAreaLeft.Value}, {SelectedAreaHeight.Value}, {SelectedAreaWidth.Value}");
                 if (_desktopWindowManager.Thumbnails[DesktopWindowManager.PreviewIndex].IsRendering)
                     _desktopWindowManager.Rerender(PreviewAreaLeft.Value, PreviewAreaTop.Value, PreviewAreaHeight.Value, PreviewAreaWidth.Value, index, rect);
                 else
