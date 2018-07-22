@@ -2,7 +2,6 @@
 using System.Reactive.Linq;
 
 using Robock.Background.Models;
-using Robock.Shared.Communication;
 using Robock.Shared.Extensions;
 using Robock.Shared.Mvvm;
 

@@ -4,10 +4,11 @@ using System.Reactive.Linq;
 using System.ServiceModel;
 using System.Windows;
 
+using Robock.Shared.Communication;
 using Robock.Shared.Models;
 using Robock.Shared.Win32;
 
-namespace Robock.Shared.Communication
+namespace Robock.Background.Models
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
     public class RobockServer : IRobockDuplex, IDisposable

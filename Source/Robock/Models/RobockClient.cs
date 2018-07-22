@@ -2,9 +2,10 @@
 using System.Diagnostics;
 using System.ServiceModel;
 
+using Robock.Shared.Communication;
 using Robock.Shared.Win32;
 
-namespace Robock.Shared.Communication
+namespace Robock.Models
 {
     public class RobockClient : IRobockDuplexCallback
     {
