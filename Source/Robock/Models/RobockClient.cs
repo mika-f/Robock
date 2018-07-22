@@ -28,7 +28,7 @@ namespace Robock.Models
 
         public void DiscardWallpaperCallback()
         {
-            // throw new NotImplementedException();
+            Debug.WriteLine("Discard finished.");
         }
 
         public void CloseCallback()

@@ -10,6 +10,8 @@ namespace Robock.Background.Views
     /// </summary>
     public partial class AppShell : Window
     {
+        private bool _isFirstRun = true;
+
         public AppShell()
         {
             InitializeComponent();
@@ -20,8 +22,12 @@ namespace Robock.Background.Views
             base.OnActivated(e);
 
             // 表示されてから
-            BackgroundService.Initialize();
-            BackgroundService.MoveToOutsideOfDesktop();
+            if (_isFirstRun)
+            {
+                BackgroundService.Initialize();
+                BackgroundService.MoveToOutsideOfDesktop();
+                _isFirstRun = false;
+            }
         }
     }
 }
