@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Windows;
 
+using Robock.Background.Models;
+
 namespace Robock.Background.Views
 {
     /// <summary>
@@ -17,7 +19,9 @@ namespace Robock.Background.Views
         {
             base.OnActivated(e);
 
-            // Hide();
+            // 表示されてから
+            BackgroundService.Initialize();
+            BackgroundService.MoveToOutsideOfDesktop();
         }
     }
 }

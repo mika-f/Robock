@@ -4,7 +4,6 @@ using System.Reactive.Linq;
 using System.ServiceModel;
 using System.Windows;
 
-using Robock.Refrection;
 using Robock.Shared.Models;
 using Robock.Shared.Win32;
 
