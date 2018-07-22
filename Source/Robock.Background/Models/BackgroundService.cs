@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Drawing;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Interop;
 
@@ -12,6 +14,7 @@ namespace Robock.Background.Models
     public static class BackgroundService
     {
         private static Bitmap _bitmap;
+        private static bool _drawing;
         public static IntPtr WindowHandle { get; private set; }
 
         public static void Initialize()
@@ -51,8 +54,11 @@ namespace Robock.Background.Models
                 if (workerW == IntPtr.Zero)
                     throw new InvalidOperationException();
 
-                NativeMethods.SetParent(WindowHandle, workerW);
-                MessageBox.Show(NativeMethods.GetLastError().ToString());
+                Observable.Return(1).Delay(TimeSpan.FromSeconds(5)).Subscribe(_ =>
+                {
+                    NativeMethods.SetWindowPos(WindowHandle, new IntPtr(1), x, y, width, height, SetWindowPosFlags.ShowWindow);
+                    MessageBox.Show(NativeMethods.GetLastError().ToString());
+                });
             }
             catch (Exception e)
             {
@@ -60,13 +66,54 @@ namespace Robock.Background.Models
             }
         }
 
+        public static void DrawOnWorkerW(int x, int y, int width, int height)
+        {
+            _drawing = true;
+            NativeMethods.MoveWindow(WindowHandle, x, y, width, height, true);
+            var task = Task.Run(() =>
+            {
+                NativeMethods.MoveWindow(WindowHandle, 10000, 10000, width, height, true);
+
+                var period = 1000f / 30f;
+                var nextFrame = (double) Environment.TickCount;
+                while (_drawing)
+                {
+                    var tick = (double) Environment.TickCount;
+                    if (tick < nextFrame)
+                    {
+                        if (nextFrame - tick > 1)
+                            Task.Delay(TimeSpan.FromMilliseconds(nextFrame - tick)).Wait();
+                        continue;
+                    }
+                    if (Environment.TickCount >= nextFrame + period)
+                    {
+                        nextFrame += period;
+                        continue;
+                    }
+
+                    var workerW = FindWorkerW();
+
+                    var hdcSrc = NativeMethods.GetDC(WindowHandle);
+                    var hdcDest = NativeMethods.GetDCEx(workerW, IntPtr.Zero, DeviceContextValues.Window | DeviceContextValues.Cache | DeviceContextValues.LockWindowUpdate);
+
+                    NativeMethods.BitBlt(hdcDest, x, y, width, height, hdcSrc, 0, 0, TernaryRasterOperations.SRCCOPY);
+                    NativeMethods.ReleaseDC(WindowHandle, hdcSrc);
+                    NativeMethods.ReleaseDC(workerW, hdcDest);
+
+                    nextFrame += period;
+                }
+            });
+        }
+
         public static void DrawAsNormal()
         {
             if (WindowHandle == null || WindowHandle == IntPtr.Zero)
                 throw new InvalidOperationException();
 
+            _drawing = false;
             NativeMethods.SetParent(WindowHandle, (IntPtr) null);
             MoveToOutsideOfDesktop();
+            RestoreWallpaper();
         }
 
         // いじっちゃうと自前で戻さないと、前描画した物が残り続けるので、予めビットマップをメモリに保存しておく

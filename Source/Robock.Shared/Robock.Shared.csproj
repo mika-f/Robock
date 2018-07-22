@@ -71,6 +71,7 @@
     <Compile Include="Win32\NativeMethods.cs" />
     <Compile Include="Win32\RECT.cs" />
     <Compile Include="Win32\SendMessageTimeoutFlags.cs" />
+    <Compile Include="Win32\SetWindowPosFlags.cs" />
     <Compile Include="Win32\TernaryRasterOperations.cs" />
   </ItemGroup>
   <ItemGroup>
