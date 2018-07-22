@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ServiceModel;
 
+using Robock.Shared.Win32;
+
 namespace Robock.Shared.Communication
 {
     [ServiceContract(Namespace = "robock://localhost", SessionMode = SessionMode.Required, CallbackContract = typeof(IRobockDuplexCallback))]
@@ -20,12 +22,9 @@ namespace Robock.Shared.Communication
         ///     Apply wallpaper
         /// </summary>
         /// <param name="src">hWnd of source window</param>
-        /// <param name="left">left position of rendering area</param>
-        /// <param name="top">top position of rendering area</param>
-        /// <param name="height">height of rendering area</param>
-        /// <param name="width">width of rendering area</param>
+        /// <param name="rect"></param>
         [OperationContract(IsOneWay = true)]
-        void ApplyWallpaper(IntPtr src, int left, int top, int height, int width);
+        void ApplyWallpaper(IntPtr src, RECT? rect);
 
         /// <summary>
         ///     Discard wallpaper

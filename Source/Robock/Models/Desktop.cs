@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Windows.Forms;
 
 using Robock.Shared.Communication;
+using Robock.Shared.Win32;
 
 namespace Robock.Models
 {
@@ -51,9 +52,14 @@ namespace Robock.Models
             _client.Handshake((int) X, (int) Y, (int) Height, (int) Width);
         }
 
-        public void ApplyWallpaper(IntPtr hWnd, int left, int top, int height, int width)
+        public void ApplyWallpaper(IntPtr hWnd, RECT? rect)
         {
-            _client.ApplyWallpaper(hWnd, left, top, height, width);
+            _client.ApplyWallpaper(hWnd, rect);
+        }
+
+        public void DiscardWallpaper()
+        {
+            _client.DiscardWallpaper();
         }
     }
 }

@@ -2,6 +2,8 @@
 using System.Diagnostics;
 using System.ServiceModel;
 
+using Robock.Shared.Win32;
+
 namespace Robock.Shared.Communication
 {
     public class RobockClient : IRobockDuplexCallback
@@ -20,7 +22,7 @@ namespace Robock.Shared.Communication
 
         public void ApplyWallpaperCallback(bool isSucceed)
         {
-            // throw new NotImplementedException();
+            Debug.WriteLine(isSucceed ? "Rendering Success" : "Rendering Failed");
         }
 
         public void DiscardWallpaperCallback()
@@ -40,9 +42,9 @@ namespace Robock.Shared.Communication
             _channel.Handshake(x, y, height, width);
         }
 
-        public void ApplyWallpaper(IntPtr src, int left, int top, int height, int width)
+        public void ApplyWallpaper(IntPtr src, RECT? rect)
         {
-            _channel.ApplyWallpaper(src, left, top, height, width);
+            _channel.ApplyWallpaper(src, rect);
         }
 
         public void DiscardWallpaper()

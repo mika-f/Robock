@@ -156,8 +156,16 @@ namespace Robock.ViewModels.Tabs
                 // タイミングどこが良いか問題
                 _desktop.Handshake();
 
-                var rect = CalcRenderingRect();
-                _desktop.ApplyWallpaper(SelectedWindow.Value.Handle, rect.left, rect.top, rect.bottom - rect.top, rect.right - rect.left);
+                _desktop.ApplyWallpaper(SelectedWindow.Value.Handle, SelectedAreaHeight.Value != 0 ? CalcRenderingRect() : (RECT?) null);
+            }).AddTo(this);
+            DiscardWallpaperCommand = new[]
+            {
+                SelectedWindow.Select(w => w != null)
+            }.CombineLatest().Select(w => w.All(v => v)).ToReactiveCommand();
+            DiscardWallpaperCommand.Subscribe(_ =>
+            {
+                //
+                _desktop.DiscardWallpaper();
             }).AddTo(this);
             ReloadWindowsCommand = new ReactiveCommand();
             ReloadWindowsCommand.Subscribe(_ => windowManager.ForceUpdate()).AddTo(this);
