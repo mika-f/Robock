@@ -67,7 +67,9 @@ namespace Robock.Models
                 }
                 else
                 {
-                    Windows.Single(w => w.Handle == window.Handle).IsMarked = true;
+                    var exist = Windows.Single(w => w.Handle == window.Handle);
+                    exist.IsMarked = true;
+                    exist.Title = window.Title;
                 }
 
             // Remove killed windows.

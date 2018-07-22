@@ -58,7 +58,7 @@
                 <metro:PromptComboBox.ItemTemplate>
                     <DataTemplate DataType="vm:WindowViewModel">
                         <TextBlock VerticalAlignment="Center"
-                                   Text="{Binding Name}"
+                                   Text="{Binding Title.Value, Mode=OneWay}"
                                    TextTrimming="CharacterEllipsis" />
                     </DataTemplate>
                 </metro:PromptComboBox.ItemTemplate>
