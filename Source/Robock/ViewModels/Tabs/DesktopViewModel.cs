@@ -44,6 +44,10 @@ namespace Robock.ViewModels.Tabs
         public ReactiveProperty<int> PreviewAreaHeight { get; }
         public ReactiveProperty<int> PreviewAreaWidth { get; }
 
+        // Grid
+        public ReactiveProperty<int> GridAreaLeft { get; }
+        public ReactiveProperty<int> GridAreaTop { get; }
+
         public ReactiveCommand ApplyWallpaperCommand { get; }
         public ReactiveCommand DiscardWallpaperCommand { get; }
         public ReactiveCommand ReloadWindowsCommand { get; }
@@ -120,6 +124,10 @@ namespace Robock.ViewModels.Tabs
                 Render(DesktopWindowManager.PreviewIndex);
             }).AddTo(this);
 
+            // 親
+            GridAreaLeft = new ReactiveProperty<int>();
+            GridAreaTop = new ReactiveProperty<int>();
+
             // 他
             Windows = windowManager.Windows.ToReadOnlyReactiveCollection(w => new WindowViewModel(w));
             IsSelected = new ReactiveProperty<bool>(false);
@@ -165,9 +173,14 @@ namespace Robock.ViewModels.Tabs
 
                 // 描画サイズから、縮小された割合を計算
                 var multi = _desktopWindowManager.Thumbnails[editor].Size.Height / (double) EditorAreaHeight.Value;
-                var rect = SelectedAreaHeight.Value != 0
-                    ? RectUtil.AsRect(SelectedAreaTop.Value, SelectedAreaLeft.Value, SelectedAreaHeight.Value, SelectedAreaWidth.Value, multi)
-                    : RectUtil.AsRect(0, 0, _desktopWindowManager.Thumbnails[editor].Size.Height, _desktopWindowManager.Thumbnails[editor].Size.Width);
+
+                var rect = RectUtil.AsRect(0, 0, _desktopWindowManager.Thumbnails[editor].Size.Height, _desktopWindowManager.Thumbnails[editor].Size.Width);
+                if (SelectedAreaHeight.Value != 0)
+                {
+                    // Grid と Image のズレが大きいと、描画領域がずれてしまうので、補正する
+                    var diff = new Size(EditorAreaLeft.Value - GridAreaLeft.Value, EditorAreaTop.Value - GridAreaTop.Value);
+                    rect = RectUtil.AsRect(SelectedAreaTop.Value - diff.Height, SelectedAreaLeft.Value - diff.Width, SelectedAreaHeight.Value, SelectedAreaWidth.Value, multi);
+                }
 
                 if (_desktopWindowManager.Thumbnails[DesktopWindowManager.PreviewIndex].IsRendering)
                     _desktopWindowManager.Rerender(PreviewAreaLeft.Value, PreviewAreaTop.Value, PreviewAreaHeight.Value, PreviewAreaWidth.Value, index, rect);

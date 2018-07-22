@@ -84,6 +84,8 @@
                        Text="Live Editor:" />
             <Grid Grid.Row="1">
                 <i:Interaction.Behaviors>
+                    <behaviors:ControlPositionBindingBehavior Left="{Binding GridAreaLeft.Value, Mode=OneWayToSource}"
+                                                              Top="{Binding GridAreaTop.Value, Mode=OneWayToSource}" />
                     <behaviors:RectangleSelectorBehavior Width="{Binding SelectedAreaWidth.Value, Mode=OneWayToSource}"
                                                          Height="{Binding SelectedAreaHeight.Value, Mode=OneWayToSource}"
                                                          Left="{Binding SelectedAreaLeft.Value, Mode=OneWayToSource}"
