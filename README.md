@@ -20,3 +20,10 @@
 * Robock
 * Robock.Background
 * Robock.Shared
+
+
+## Donation
+
+* BTC  : `1NFcYczriqTEzVgzfurTMJNbhxPY1vyki9`
+* ETH  : `0x3cd67f16c2d7fe518e924930f645dd73aadaaf39`
+* MONA : `MC4x87u1ffmhsRhHof1sHz8UAtNtKCTQut`
