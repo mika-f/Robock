@@ -58,15 +58,15 @@ namespace Robock.Background.Models
 
         public void ApplyWallpaper(IntPtr src, RECT? rect)
         {
-            _desktopWindowManager.Start(src, 0, 0, _height, _width, 0, rect);
+            _desktopWindowManager.Start(src, 0, 0, _height, _width, 1, rect);
             BackgroundService.DrawAfterWorkerW(_x, _y, _width, _height);
 
-            Callback.ApplyWallpaperCallback(_desktopWindowManager.Thumbnails[0].IsRendering);
+            Callback.ApplyWallpaperCallback(_desktopWindowManager.Thumbnails[1].IsRendering);
         }
 
         public void DiscardWallpaper()
         {
-            _desktopWindowManager.Stop();
+            _desktopWindowManager.Stop(1);
             BackgroundService.DrawAsNormal();
             BackgroundService.RestoreWallpaper();
 
