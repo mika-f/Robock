@@ -14,7 +14,8 @@ namespace Robock.Shared.Communication
 
         public RobockServer()
         {
-            _uuid = Guid.NewGuid().ToString();
+            var args = Environment.GetCommandLineArgs();
+            _uuid = args[1];
         }
 
         public void Dispose()
@@ -23,34 +24,43 @@ namespace Robock.Shared.Communication
             ((IDisposable) _serviceHost)?.Dispose();
         }
 
-        public void Handshake(int index)
+        public void Handshake(int x, int y, int height, int width)
         {
-            Callback.HandshakeCallback(_uuid);
+            Callback.HandshakeCallback();
         }
 
-        public void ApplyWallpaper(string uuid, IntPtr src, int left, int top, int height, int width)
+        public void ApplyWallpaper(IntPtr src, int left, int top, int height, int width)
         {
-            MessageBox.Show("aaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-            Callback.ApplyWallpaperCallback(uuid, true);
+            Callback.ApplyWallpaperCallback(true);
         }
 
-        public void DiscardWallpaper(string uuid)
+        public void DiscardWallpaper()
         {
-            Callback.DiscardWallpaperCallback(uuid);
+            Callback.DiscardWallpaperCallback();
         }
 
-        public void Close(string uuid)
+        public void Close()
         {
-            Callback.CloseCallback(uuid);
+            Callback.CloseCallback();
             _serviceHost.Close();
         }
 
         //
         public void Start()
         {
-            _serviceHost = new ServiceHost(typeof(RobockServer));
-            _serviceHost.AddServiceEndpoint(typeof(IRobockDuplex), new NetNamedPipeBinding(), "net.pipe://localhost/Robock");
-            _serviceHost.Open();
+            if (string.IsNullOrWhiteSpace(_uuid))
+                throw new ArgumentException("uuid");
+
+            try
+            {
+                _serviceHost = new ServiceHost(typeof(RobockServer));
+                _serviceHost.AddServiceEndpoint(typeof(IRobockDuplex), new NetNamedPipeBinding(), $"net.pipe://localhost/Robock.{_uuid}");
+                _serviceHost.Open();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
         }
     }
 }

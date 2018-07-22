@@ -9,33 +9,33 @@ namespace Robock.Shared.Communication
         /// <summary>
         ///     Handshake between Robock and Robock.Background
         /// </summary>
-        /// <param name="index">Wallpaper index (e.g. 0 = Primary)</param>
+        /// <param name="x">X</param>
+        /// <param name="y">Y</param>
+        /// <param name="height">Height</param>
+        /// <param name="width">Width</param>
         [OperationContract(IsOneWay = true)]
-        void Handshake(int index);
+        void Handshake(int x, int y, int height, int width);
 
         /// <summary>
         ///     Apply wallpaper
         /// </summary>
-        /// <param name="uuid">UUID of Robock.Background</param>
         /// <param name="src">hWnd of source window</param>
         /// <param name="left">left position of rendering area</param>
         /// <param name="top">top position of rendering area</param>
         /// <param name="height">height of rendering area</param>
         /// <param name="width">width of rendering area</param>
         [OperationContract(IsOneWay = true)]
-        void ApplyWallpaper(string uuid, IntPtr src, int left, int top, int height, int width);
+        void ApplyWallpaper(IntPtr src, int left, int top, int height, int width);
 
         /// <summary>
         ///     Discard wallpaper
         /// </summary>
-        /// <param name="uuid">UUID of Robock.Background</param>
         [OperationContract(IsOneWay = true)]
-        void DiscardWallpaper(string uuid);
+        void DiscardWallpaper();
 
         /// <summary>
         ///     Close communication pipe
         /// </summary>
-        /// <param name="uuid">UUID of Robock.Background</param>
-        void Close(string uuid);
+        void Close();
     }
 }

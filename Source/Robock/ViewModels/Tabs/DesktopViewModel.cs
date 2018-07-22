@@ -9,6 +9,7 @@ using Reactive.Bindings.Extensions;
 using Robock.Models;
 using Robock.Shared.Extensions;
 using Robock.Shared.Models;
+using Robock.Shared.Win32;
 
 namespace Robock.ViewModels.Tabs
 {
@@ -150,7 +151,14 @@ namespace Robock.ViewModels.Tabs
                 SelectedWindow.Select(w => w != null),
                 _desktopWindowManager.Thumbnails[DesktopWindowManager.EditorIndex].ObserveProperty(w => w.IsRendering)
             }.CombineLatest().Select(w => w.All(v => v)).ToReactiveCommand();
-            ApplyWallpaperCommand.Subscribe(_ => _desktop.ApplyWallpaper()).AddTo(this);
+            ApplyWallpaperCommand.Subscribe(_ =>
+            {
+                // タイミングどこが良いか問題
+                _desktop.Handshake();
+
+                var rect = CalcRenderingRect();
+                _desktop.ApplyWallpaper(SelectedWindow.Value.Handle, rect.left, rect.top, rect.bottom - rect.top, rect.right - rect.left);
+            }).AddTo(this);
             ReloadWindowsCommand = new ReactiveCommand();
             ReloadWindowsCommand.Subscribe(_ => windowManager.ForceUpdate()).AddTo(this);
         }
@@ -172,22 +180,25 @@ namespace Robock.ViewModels.Tabs
             {
                 var editor = DesktopWindowManager.EditorIndex;
 
-                // 描画サイズから、縮小された割合を計算
-                var multi = _desktopWindowManager.Thumbnails[editor].Size.Height / (double) EditorAreaHeight.Value;
-
                 var rect = RectUtil.AsRect(0, 0, _desktopWindowManager.Thumbnails[editor].Size.Height, _desktopWindowManager.Thumbnails[editor].Size.Width);
                 if (SelectedAreaHeight.Value != 0)
-                {
-                    // Grid と Image のズレが大きいと、描画領域がずれてしまうので、補正する
-                    var diff = new Size(EditorAreaLeft.Value - GridAreaLeft.Value, EditorAreaTop.Value - GridAreaTop.Value);
-                    rect = RectUtil.AsRect(SelectedAreaTop.Value - diff.Height, SelectedAreaLeft.Value - diff.Width, SelectedAreaHeight.Value, SelectedAreaWidth.Value, multi);
-                }
+                    rect = CalcRenderingRect();
 
                 if (_desktopWindowManager.Thumbnails[DesktopWindowManager.PreviewIndex].IsRendering)
                     _desktopWindowManager.Rerender(PreviewAreaLeft.Value, PreviewAreaTop.Value, PreviewAreaHeight.Value, PreviewAreaWidth.Value, index, rect);
                 else
                     _desktopWindowManager.Start(handle, PreviewAreaLeft.Value, PreviewAreaTop.Value, PreviewAreaHeight.Value, PreviewAreaWidth.Value, index, rect);
             }
+        }
+
+        private RECT CalcRenderingRect()
+        {
+            // 描画サイズから、縮小された割合を計算
+            var multi = _desktopWindowManager.Thumbnails[DesktopWindowManager.EditorIndex].Size.Height / (double) EditorAreaHeight.Value;
+
+            // Grid と Image のズレが大きいと、描画領域がずれてしまうので、補正する
+            var diff = new Size(EditorAreaLeft.Value - GridAreaLeft.Value, EditorAreaTop.Value - GridAreaTop.Value);
+            return RectUtil.AsRect(SelectedAreaTop.Value - diff.Height, SelectedAreaLeft.Value - diff.Width, SelectedAreaHeight.Value, SelectedAreaWidth.Value, multi);
         }
     }
 }

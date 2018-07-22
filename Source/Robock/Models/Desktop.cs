@@ -9,9 +9,10 @@ namespace Robock.Models
     /// <summary>
     ///     Desktop is equals to Monitor, Monitor has a one Desktop.
     /// </summary>
-    public class Desktop
+    public class Desktop : IDisposable
     {
         private readonly RobockClient _client;
+        private readonly Process _process;
         private readonly Screen _screen;
 
         public int No { get; }
@@ -26,13 +27,33 @@ namespace Robock.Models
         {
             _screen = screen;
             No = index;
-            _client = new RobockClient();
-            Process.Start("Robock.Background.exe");
+            var uuid = $"Background.Desktop{index}";
+            _client = new RobockClient(uuid);
+            _process = Process.Start("Robock.Background.exe", $"{uuid}");
         }
 
-        public void ApplyWallpaper()
+        public void Dispose()
         {
-            _client.ApplyWallpaper("", IntPtr.Zero, 0, 0, 0, 0);
+            try
+            {
+                _client.Close();
+                _process?.CloseMainWindow();
+                _process?.Dispose();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
+        }
+
+        public void Handshake()
+        {
+            _client.Handshake((int) X, (int) Y, (int) Height, (int) Width);
+        }
+
+        public void ApplyWallpaper(IntPtr hWnd, int left, int top, int height, int width)
+        {
+            _client.ApplyWallpaper(hWnd, left, top, height, width);
         }
     }
 }

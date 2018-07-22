@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.ServiceModel;
 
 namespace Robock.Shared.Communication
@@ -7,51 +8,58 @@ namespace Robock.Shared.Communication
     {
         private readonly IRobockDuplex _channel;
 
-        public RobockClient()
+        public RobockClient(string uuid)
         {
-            _channel = new DuplexChannelFactory<IRobockDuplex>(this, new NetNamedPipeBinding(), "net.pipe://localhost/Robock").CreateChannel();
+            _channel = new DuplexChannelFactory<IRobockDuplex>(this, new NetNamedPipeBinding(), $"net.pipe://localhost/Robock.{uuid}").CreateChannel();
         }
 
-        public void HandshakeCallback(string uuid)
+        public void HandshakeCallback()
         {
-            // throw new NotImplementedException();
+            Debug.WriteLine("Handshake ended");
         }
 
-        public void ApplyWallpaperCallback(string uuid, bool isSucceed)
-        {
-            // throw new NotImplementedException();
-        }
-
-        public void DiscardWallpaperCallback(string uuid)
+        public void ApplyWallpaperCallback(bool isSucceed)
         {
             // throw new NotImplementedException();
         }
 
-        public void CloseCallback(string uuid)
+        public void DiscardWallpaperCallback()
+        {
+            // throw new NotImplementedException();
+        }
+
+        public void CloseCallback()
         {
             // throw new NotImplementedException();
         }
 
         #region IRobockDuples
 
-        public void Handshake(int index)
+        public void Handshake(int x, int y, int height, int width)
         {
-            _channel.Handshake(index);
+            _channel.Handshake(x, y, height, width);
         }
 
-        public void ApplyWallpaper(string uuid, IntPtr src, int left, int top, int height, int width)
+        public void ApplyWallpaper(IntPtr src, int left, int top, int height, int width)
         {
-            _channel.ApplyWallpaper(uuid, src, left, top, height, width);
+            _channel.ApplyWallpaper(src, left, top, height, width);
         }
 
-        public void DiscardWallpaper(string uuid)
+        public void DiscardWallpaper()
         {
-            _channel.DiscardWallpaper(uuid);
+            _channel.DiscardWallpaper();
         }
 
-        public void Close(string uuid)
+        public void Close()
         {
-            _channel.Close(uuid);
+            try
+            {
+                _channel.Close();
+            }
+            catch
+            {
+                // ignored
+            }
         }
 
         #endregion

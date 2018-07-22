@@ -21,7 +21,7 @@ namespace Robock.ViewModels
 
         public AppShellViewModel()
         {
-            var desktopManager = new DesktopManager();
+            var desktopManager = new DesktopManager().AddTo(this);
             var processManager = new WindowManager().AddTo(this);
             _desktopWindowManager = new DesktopWindowManager().AddTo(this);
 

@@ -9,30 +9,26 @@ namespace Robock.Shared.Communication
         /// <summary>
         ///     Handshake() callback
         /// </summary>
-        /// <param name="uuid">UUID of Robock.Background</param>
         [OperationContract(IsOneWay = true)]
-        void HandshakeCallback(string uuid);
+        void HandshakeCallback();
 
         /// <summary>
         ///     ApplyWallpaper() callback
         /// </summary>
-        /// <param name="uuid">UUID of Robock.Background</param>
         /// <param name="isSucceed">If wallpaper applied to background, returns true</param>
         [OperationContract(IsOneWay = true)]
-        void ApplyWallpaperCallback(string uuid, bool isSucceed);
+        void ApplyWallpaperCallback(bool isSucceed);
 
         /// <summary>
         ///     DiscardWallpaper() callback
         /// </summary>
-        /// <param name="uuid">UUID of Robock.Background</param>
         [OperationContract(IsOneWay = true)]
-        void DiscardWallpaperCallback(string uuid);
+        void DiscardWallpaperCallback();
 
         /// <summary>
         ///     Close() callback
         /// </summary>
-        /// <param name="uuid">UUID of Robock.Background</param>
         [OperationContract(IsOneWay = true)]
-        void CloseCallback(string uuid);
+        void CloseCallback();
     }
 }
