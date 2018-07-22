@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Windows;
@@ -80,8 +81,8 @@ namespace Robock.ViewModels.Tabs
                 EditorAreaHeight,
                 EditorAreaWidth
             }.CombineLatest();
-            editorArea.Subscribe(w => Render(DesktopWindowManager.EDITOR_INDEX)).AddTo(this);
-            desktopWindowManager.Thumbnails[DesktopWindowManager.EDITOR_INDEX].ObserveProperty(w => w.Size).Subscribe(w =>
+            editorArea.Subscribe(w => Render(DesktopWindowManager.EditorIndex)).AddTo(this);
+            desktopWindowManager.Thumbnails[DesktopWindowManager.EditorIndex].ObserveProperty(w => w.Size).Subscribe(w =>
             {
                 //
                 EditorAspectRatio.Value = $"https://placehold.mochizuki.moe/{AspectHelper.Calc(w.Height, w.Width)}/000000%2C000/000000%2C000/";
@@ -99,7 +100,7 @@ namespace Robock.ViewModels.Tabs
                 SelectedAreaHeight,
                 SelectedAreaWidth
             }.CombineLatest();
-            selectedArea.Subscribe(w => Render(DesktopWindowManager.PREVIEW_INDEX)).AddTo(this);
+            selectedArea.Subscribe(w => Render(DesktopWindowManager.PreviewIndex)).AddTo(this);
 
             // プレビュー
             AspectRatio = $"https://placehold.mochizuki.moe/{AspectHelper.Calc(_desktop.Height, _desktop.Width)}/000000%2C000/000000%2C000/";
@@ -114,11 +115,11 @@ namespace Robock.ViewModels.Tabs
                 EditorAreaHeight,
                 EditorAreaWidth
             }.CombineLatest();
-            previewArea.Subscribe(w => Render(DesktopWindowManager.PREVIEW_INDEX)).AddTo(this);
-            desktopWindowManager.Thumbnails[DesktopWindowManager.EDITOR_INDEX].ObserveProperty(w => w.IsRendering).Subscribe(w =>
+            previewArea.Subscribe(w => Render(DesktopWindowManager.PreviewIndex)).AddTo(this);
+            desktopWindowManager.Thumbnails[DesktopWindowManager.EditorIndex].ObserveProperty(w => w.IsRendering).Subscribe(w =>
             {
                 //
-                Render(DesktopWindowManager.PREVIEW_INDEX);
+                Render(DesktopWindowManager.PreviewIndex);
             }).AddTo(this);
 
             // 他
@@ -128,19 +129,19 @@ namespace Robock.ViewModels.Tabs
             {
                 _desktopWindowManager.Stop(0);
                 _desktopWindowManager.Stop(1);
-                Render(DesktopWindowManager.EDITOR_INDEX);
+                Render(DesktopWindowManager.EditorIndex);
             }).AddTo(this);
             SelectedWindow = new ReactiveProperty<WindowViewModel>();
             SelectedWindow.Where(w => w != null).Subscribe(w =>
             {
                 _desktopWindowManager.Stop(0);
                 _desktopWindowManager.Stop(1);
-                Render(DesktopWindowManager.EDITOR_INDEX);
+                Render(DesktopWindowManager.EditorIndex);
             }).AddTo(this);
             ApplyWallpaperCommand = new[]
             {
                 SelectedWindow.Select(w => w != null),
-                _desktopWindowManager.Thumbnails[DesktopWindowManager.EDITOR_INDEX].ObserveProperty(w => w.IsRendering)
+                _desktopWindowManager.Thumbnails[DesktopWindowManager.EditorIndex].ObserveProperty(w => w.IsRendering)
             }.CombineLatest().Select(w => w.All(v => v)).ToReactiveCommand();
             ApplyWallpaperCommand.Subscribe(_ => { }).AddTo(this);
             ReloadWindowsCommand = new ReactiveCommand();
@@ -151,21 +152,24 @@ namespace Robock.ViewModels.Tabs
         {
             if (SelectedWindow?.Value == null)
                 return;
+            var handle = SelectedWindow.Value.Handle;
 
-            if (index == DesktopWindowManager.EDITOR_INDEX)
+            if (index == DesktopWindowManager.EditorIndex)
             {
-                if (_desktopWindowManager.Thumbnails[DesktopWindowManager.EDITOR_INDEX].IsRendering)
+                if (_desktopWindowManager.Thumbnails[DesktopWindowManager.EditorIndex].IsRendering)
                     _desktopWindowManager.Rerender(EditorAreaLeft.Value, EditorAreaTop.Value, EditorAreaHeight.Value, EditorAreaWidth.Value);
                 else
-                    _desktopWindowManager.Start(SelectedWindow.Value.Handle, EditorAreaLeft.Value, EditorAreaTop.Value, EditorAreaHeight.Value, EditorAreaWidth.Value);
+                    _desktopWindowManager.Start(handle, EditorAreaLeft.Value, EditorAreaTop.Value, EditorAreaHeight.Value, EditorAreaWidth.Value);
             }
             else
             {
+                var editor = DesktopWindowManager.EditorIndex;
+
                 // 描画サイズから、縮小された割合を計算
-                var multi = _desktopWindowManager.Thumbnails[DesktopWindowManager.EDITOR_INDEX].Size.Height / (double) EditorAreaHeight.Value;
+                var multi = _desktopWindowManager.Thumbnails[editor].Size.Height / (double) EditorAreaHeight.Value;
 
                 // 選択された領域を取得
-                RECT? rect = null;
+                RECT rect;
                 if (SelectedAreaHeight.Value != 0)
                     rect = new RECT
                     {
@@ -174,12 +178,20 @@ namespace Robock.ViewModels.Tabs
                         bottom = (int) ((SelectedAreaTop.Value + SelectedAreaHeight.Value) * multi),
                         right = (int) ((SelectedAreaLeft.Value + SelectedAreaWidth.Value) * multi)
                     };
+                else
+                    rect = new RECT
+                    {
+                        top = 0,
+                        left = 0,
+                        bottom = _desktopWindowManager.Thumbnails[editor].Size.Height,
+                        right = _desktopWindowManager.Thumbnails[editor].Size.Width
+                    };
 
-                if (_desktopWindowManager.Thumbnails[DesktopWindowManager.PREVIEW_INDEX].IsRendering)
+                Debug.WriteLine($"{SelectedAreaTop.Value}, {SelectedAreaLeft.Value}, {SelectedAreaHeight.Value}, {SelectedAreaWidth.Value}");
+                if (_desktopWindowManager.Thumbnails[DesktopWindowManager.PreviewIndex].IsRendering)
                     _desktopWindowManager.Rerender(PreviewAreaLeft.Value, PreviewAreaTop.Value, PreviewAreaHeight.Value, PreviewAreaWidth.Value, index, rect);
                 else
-                    _desktopWindowManager.Start(SelectedWindow.Value.Handle, PreviewAreaLeft.Value, PreviewAreaTop.Value, PreviewAreaHeight.Value, PreviewAreaWidth.Value, index,
-                                                rect);
+                    _desktopWindowManager.Start(handle, PreviewAreaLeft.Value, PreviewAreaTop.Value, PreviewAreaHeight.Value, PreviewAreaWidth.Value, index, rect);
             }
         }
     }

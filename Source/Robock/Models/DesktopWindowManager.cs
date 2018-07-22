@@ -18,11 +18,8 @@ namespace Robock.Models
     {
         #region Constants
 
-        // ReSharper disable InconsistentNaming
-        public const int EDITOR_INDEX = 0;
-        public const int PREVIEW_INDEX = 1;
-
-        // ReSharper enable InconsistentNaming
+        public const int EditorIndex = 0;
+        public const int PreviewIndex = 1;
 
         #endregion
 
