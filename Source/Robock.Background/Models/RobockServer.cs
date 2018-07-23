@@ -44,7 +44,7 @@ namespace Robock.Background.Models
 
         public void Dispose()
         {
-            _serviceHost.Close();
+            _serviceHost?.Close();
             ((IDisposable) _serviceHost)?.Dispose();
         }
 
