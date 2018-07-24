@@ -28,15 +28,7 @@ namespace Robock.Background.Models
             if (WindowHandle == null || WindowHandle == IntPtr.Zero)
                 throw new InvalidOperationException();
 
-            var rect = SystemInformation.VirtualScreen;
-            var x = 10000;
-            var y = 10000;
-
-            if (x < rect.Right)
-                x = rect.Right;
-            if (y < rect.Bottom)
-                y = rect.Bottom;
-
+            var (x, y) = GetPreviewWindowPosition();
             NativeMethods.GetWindowRect(WindowHandle, out var window);
             if (!NativeMethods.MoveWindow(WindowHandle, x, y, window.right - window.left, window.bottom - window.top, true))
                 MessageBox.Show(NativeMethods.GetLastError().ToString());
@@ -161,6 +153,20 @@ namespace Robock.Background.Models
             }, IntPtr.Zero);
 
             return workerW;
+        }
+
+        private static (int, int) GetPreviewWindowPosition()
+        {
+            var rect = SystemInformation.VirtualScreen;
+            var x = 10000;
+            var y = 10000;
+
+            if (x < rect.Right)
+                x = rect.Right;
+            if (y < rect.Bottom)
+                y = rect.Bottom;
+
+            return (x, y);
         }
     }
 }
