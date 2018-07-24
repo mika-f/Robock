@@ -2,8 +2,11 @@
 // ReSharper disable  InconsistentNaming
 // ReSharper disable MemberCanBePrivate.Global
 
+using System;
+
 namespace Robock.Shared.Win32
 {
+    [Flags]
     public enum TernaryRasterOperations : uint
     {
         /// <summary>dest = source</summary>
