@@ -50,6 +50,8 @@ namespace Robock.Models
                 if (string.IsNullOrWhiteSpace(title.ToString()))
                     return true; // Skipped
 
+                if (Ignores.IgnoreWindowTitles.Contains(title.ToString()))
+                    return true;
                 windows.Add(new Window {Handle = hWnd, Title = title.ToString()});
                 return true;
             }, IntPtr.Zero);
