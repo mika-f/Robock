@@ -13,5 +13,10 @@ namespace Robock.Shared.Win32
         public int top;
         public int right;
         public int bottom;
+
+        public bool IsEmpty()
+        {
+            return left == 0 && top == 0 && right == 0 && bottom == 0;
+        }
     }
 }
