@@ -8,7 +8,7 @@ namespace Robock.Models
         public bool Equals(int x, int y)
         {
             if (x != 0 && y == 0)
-                return true; // 通知すると死ぬ
+                return true; // なぜか新しい値に0が降ってきて、それを通知すると死ぬ
             return x == y;
         }
 

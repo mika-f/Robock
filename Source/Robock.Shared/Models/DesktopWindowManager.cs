@@ -96,7 +96,6 @@ namespace Robock.Shared.Models
                 fSourceClientAreaOnly = true
             };
 
-            // fuck
             if (rect != null && !rect.Value.IsEmpty())
             {
                 props.rcSource = rect.Value;
