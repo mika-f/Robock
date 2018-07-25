@@ -49,14 +49,9 @@ namespace Robock.Shared.Models
 
         public void Start(int index, IntPtr src, int left, int top, int height, int width, RECT? rect = null)
         {
-            StartTo(index, src, _hWnd, left, top, height, width, rect);
-        }
-
-        public void StartTo(int index, IntPtr src, IntPtr dest, int left, int top, int height, int width, RECT? rect = null)
-        {
             Stop(index);
 
-            var registered = NativeMethods.DwmRegisterThumbnail(dest, src, out var thumbnail);
+            var registered = NativeMethods.DwmRegisterThumbnail(_hWnd, src, out var thumbnail);
             Thumbnails[index].Handle = thumbnail;
 
             if (registered == 0)
