@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Interop;
 
 using Robock.Background.Models;
 
@@ -22,12 +23,13 @@ namespace Robock.Background.Views
             base.OnActivated(e);
 
             // 表示されてから
-            if (_isFirstRun)
-            {
-                BackgroundService.Initialize();
-                BackgroundService.MoveToOutsideOfDesktop();
-                _isFirstRun = false;
-            }
+            if (!_isFirstRun)
+                return;
+
+            _isFirstRun = false;
+
+            BackgroundService.Instance.Initialize(new WindowInteropHelper(this).Handle);
+            BackgroundService.Instance.MoveToOutsideOfVirtualScreen();
         }
     }
 }

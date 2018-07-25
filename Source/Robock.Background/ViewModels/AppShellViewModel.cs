@@ -11,8 +11,6 @@ namespace Robock.Background.ViewModels
     {
         public AppShellViewModel()
         {
-            BackgroundService.SaveCurrentWallpaper();
-
             Observable.Return(0).Delay(TimeSpan.FromMilliseconds(500)).Subscribe(_ =>
             {
                 var server = new RobockServer().AddTo(this);

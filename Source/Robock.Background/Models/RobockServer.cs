@@ -13,6 +13,7 @@ namespace Robock.Background.Models
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
     public class RobockServer : IRobockDuplex, IDisposable
     {
+        private readonly BackgroundService _backgroundService;
         private readonly DesktopWindowManager _desktopWindowManager;
         private readonly string _uuid;
         private int _height;
@@ -27,6 +28,7 @@ namespace Robock.Background.Models
         {
             var args = Environment.GetCommandLineArgs();
             _uuid = args[1];
+            _backgroundService = BackgroundService.Instance;
             _desktopWindowManager = new DesktopWindowManager();
 
             Observable.Return(0).ObserveOn(Application.Current.Dispatcher).Subscribe(_ =>
@@ -59,7 +61,7 @@ namespace Robock.Background.Models
         public void ApplyWallpaper(IntPtr src, RECT? rect)
         {
             _desktopWindowManager.Start(src, 0, 0, _height, _width, 1, rect);
-            BackgroundService.DrawOnWorkerW(_x, _y, _width, _height);
+            _backgroundService.StartRender(src, _x, _y, _width, _height);
 
             Callback.ApplyWallpaperCallback(_desktopWindowManager.Thumbnails[1].IsRendering);
         }
@@ -67,8 +69,7 @@ namespace Robock.Background.Models
         public void DiscardWallpaper()
         {
             _desktopWindowManager.Stop(1);
-            BackgroundService.DrawAsNormal();
-            BackgroundService.RestoreWallpaper();
+            _backgroundService.StopRender();
 
             Callback.DiscardWallpaperCallback();
         }
