@@ -53,8 +53,7 @@ namespace Robock.Background.Models
             NativeMethods.SetParent(_hWnd, progman);
 
             // 3rd, move self to rendering position
-            var (x1, y1) = GetPreviewWindowPosition();
-            NativeMethods.MoveWindow(_hWnd, x1, y1, width, height, true);
+            NativeMethods.MoveWindow(_hWnd, x, y, width, height, true);
         }
 
         private void Render(IntPtr hSurface, bool isNewSurface)
@@ -69,7 +68,13 @@ namespace Robock.Background.Models
         {
             _srcWindowHandle = IntPtr.Zero;
 
+            // 1st, set parent to desktop (nullptr)
             NativeMethods.SetParent(_hWnd, (IntPtr) null);
+
+            // 2nd, move self to outside of desktop
+            NativeMethods.GetWindowRect(_hWnd, out var window);
+            var (x, y) = GetPreviewWindowPosition();
+            NativeMethods.MoveWindow(_hWnd, x, y, window.right - window.left, window.bottom - window.top, true);
         }
 
         public void Release()
