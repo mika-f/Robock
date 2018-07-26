@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Interop;
 
@@ -28,8 +29,15 @@ namespace Robock.Background.Views
 
             _isFirstRun = false;
 
-            BackgroundService.Instance.Initialize(new WindowInteropHelper(this).Handle);
+            BackgroundService.Instance.Initialize(new WindowInteropHelper(this).Handle, InteropImage);
             BackgroundService.Instance.MoveToOutsideOfVirtualScreen();
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            BackgroundService.Instance.Release();
+
+            base.OnClosing(e);
         }
     }
 }
