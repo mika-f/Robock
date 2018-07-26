@@ -49,12 +49,12 @@ namespace Robock.Background.Models
             var workerW = FindWorkerW();
             var progman = NativeMethods.FindWindow("Progman", null);
 
-            // 2nd, move self to rendering position
+            // 2nd, stick myself to progman
+            NativeMethods.SetParent(_hWnd, progman);
+
+            // 3rd, move self to rendering position
             var (x1, y1) = GetPreviewWindowPosition();
             NativeMethods.MoveWindow(_hWnd, x1, y1, width, height, true);
-
-            // 3rd, stick myself to progman
-            NativeMethods.SetParent(_hWnd, progman);
         }
 
         private void Render(IntPtr hSurface, bool isNewSurface)

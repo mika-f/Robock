@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Windows;
 using System.Windows.Forms;
 
-using Robock.Shared.Communication;
 using Robock.Shared.Win32;
 
 namespace Robock.Models
@@ -49,7 +49,10 @@ namespace Robock.Models
 
         public void Handshake()
         {
-            _client.Handshake((int) X, (int) Y, (int) Height, (int) Width);
+            var offsetX = (SystemParameters.VirtualScreenLeft < 0 ? -1 : 1) * SystemParameters.VirtualScreenLeft;
+            var offsetY = (SystemParameters.VirtualScreenTop < 0 ? -1 : 1) * SystemParameters.VirtualScreenTop;
+
+            _client.Handshake((int) (offsetX + X), (int) (offsetY + Y), (int) Height, (int) Width);
         }
 
         public void ApplyWallpaper(IntPtr hWnd, RECT? rect)
