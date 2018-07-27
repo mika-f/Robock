@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -47,6 +48,8 @@ namespace Robock.Background.Models
 
             // 1st, send 0x052C (undocumented) message to progman
             var workerW = FindWorkerW();
+            if (workerW == IntPtr.Zero)
+                Debug.WriteLine("WARNING: Unknown desktop structure"); // SHELLDLL_DefView だとか WorkerW なくても動くが、ログだけ残しとく
             var progman = NativeMethods.FindWindow("Progman", null);
 
             // 2nd, stick myself to progman
@@ -99,7 +102,7 @@ namespace Robock.Background.Models
         private IntPtr FindWorkerW()
         {
             var progman = NativeMethods.FindWindow("Progman", null);
-            NativeMethods.SendMessageTimeout(progman, 0x052C, new IntPtr(0), IntPtr.Zero, SendMessageTimeoutFlags.SMTO_NORMAL, 1000, out var result);
+            NativeMethods.SendMessageTimeout(progman, 0x052C, new IntPtr(0), IntPtr.Zero, SendMessageTimeoutFlags.SMTO_NORMAL, 1000, out _);
 
             var workerW = IntPtr.Zero;
             NativeMethods.EnumWindows((hWnd, lParam) =>
