@@ -147,6 +147,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\BackgroundService.cs" />
+    <Compile Include="Models\DxRenderer.cs" />
     <Compile Include="Models\RobockServer.cs" />
     <Compile Include="ViewModels\AppShellViewModel.cs" />
     <Compile Include="Views\AppShell.xaml.cs">

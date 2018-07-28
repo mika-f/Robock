@@ -19,6 +19,7 @@ namespace Robock.Background.Models
         private D3D11Image _dxImage;
         private IntPtr _hWnd;
         private TimeSpan _lastRender;
+        private DxRenderer _renderer;
         private IntPtr _srcWindowHandle;
         private DGetDxSharedSurface GetDxSharedSurface { get; set; }
 
@@ -28,6 +29,11 @@ namespace Robock.Background.Models
                 MessageBox.Show("");
             _hWnd = hWnd;
             _dxImage = dxImage;
+
+            // Initialize DirectX devices.
+            _renderer = new DxRenderer();
+            _renderer.Init();
+
             _dxImage.WindowOwner = hWnd;
             _dxImage.OnRender = Render;
 
@@ -85,6 +91,7 @@ namespace Robock.Background.Models
                 return;
 
             GetDxSharedSurface(_srcWindowHandle, out var phSurface, out var pAdapterLuid, out var pFmtWindow, out var pPresentFlgs, out var pWin32KUpdateId);
+            _renderer.Render(hSurface, phSurface, isNewSurface);
         }
 
         public void StopRender()
@@ -103,6 +110,7 @@ namespace Robock.Background.Models
 
         public void Release()
         {
+            _renderer.Dispose();
             _dxImage.Dispose();
         }
 
