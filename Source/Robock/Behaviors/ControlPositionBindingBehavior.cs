@@ -65,9 +65,17 @@ namespace Robock.Behaviors
             if (Application.Current.MainWindow == null)
                 return;
 
-            var relative = AssociatedObject.TransformToAncestor(Application.Current.MainWindow).Transform(new Point());
-            Left = (int) relative.X;
-            Top = (int) relative.Y;
+            try
+            {
+                var relative = AssociatedObject.TransformToAncestor(Application.Current.MainWindow).Transform(new Point());
+                Left = (int) relative.X;
+                Top = (int) relative.Y;
+            }
+            catch
+            {
+                // ignored
+                // 何もないタブで動作させると死ぬらしい
+            }
         }
 
         private void AssociatedObjectSizeChanged(object sender, SizeChangedEventArgs e)
