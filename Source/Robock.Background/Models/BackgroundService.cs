@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using System.Windows.Media;
 
 using Microsoft.Wpf.Interop.DirectX;
 
@@ -17,6 +18,7 @@ namespace Robock.Background.Models
     {
         private D3D11Image _dxImage;
         private IntPtr _hWnd;
+        private TimeSpan _lastRender;
         private IntPtr _srcWindowHandle;
         private DGetDxSharedSurface GetDxSharedSurface { get; set; }
 
@@ -28,10 +30,11 @@ namespace Robock.Background.Models
             _dxImage = dxImage;
             _dxImage.WindowOwner = hWnd;
             _dxImage.OnRender = Render;
-            _dxImage.RequestRender();
 
             var funcPtr = NativeMethods.GetProcAddress(NativeMethods.GetModuleHandle("user32"), "DwmGetDxSharedSurface");
             GetDxSharedSurface = Marshal.GetDelegateForFunctionPointer<DGetDxSharedSurface>(funcPtr);
+
+            _dxImage.RequestRender();
         }
 
         public void MoveToOutsideOfVirtualScreen()
@@ -46,17 +49,34 @@ namespace Robock.Background.Models
         {
             _srcWindowHandle = hWnd;
 
-            // 1st, send 0x052C (undocumented) message to progman
+            // 1st, change DirectX rendering size and register composition event.
+            _dxImage.Dispatcher.Invoke(() =>
+            {
+                _dxImage.SetPixelSize(width, height);
+                CompositionTarget.Rendering += CompositionTargetOnRendering;
+            });
+
+            // 2st, find WorkerW and send 0x052C (undocumented) message to progman
             var workerW = FindWorkerW();
             if (workerW == IntPtr.Zero)
                 Debug.WriteLine("WARNING: Unknown desktop structure"); // SHELLDLL_DefView だとか WorkerW なくても動くが、ログだけ残しとく
             var progman = NativeMethods.FindWindow("Progman", null);
 
-            // 2nd, stick myself to progman
+            // 3rd, stick myself to progman
             NativeMethods.SetParent(_hWnd, progman);
 
-            // 3rd, move self to rendering position
+            // 4th, move self to rendering position
             NativeMethods.MoveWindow(_hWnd, x, y, width, height, true);
+        }
+
+        private void CompositionTargetOnRendering(object sender, EventArgs e)
+        {
+            if (!(e is RenderingEventArgs args) || _lastRender == args.RenderingTime)
+                return;
+
+            // Request next frame to Render()
+            _dxImage.RequestRender();
+            _lastRender = args.RenderingTime;
         }
 
         private void Render(IntPtr hSurface, bool isNewSurface)
@@ -71,13 +91,14 @@ namespace Robock.Background.Models
         {
             _srcWindowHandle = IntPtr.Zero;
 
-            // 1st, set parent to desktop (nullptr)
+            // 1st, unregister composition rendering event.
+            _dxImage.Dispatcher.Invoke(() => { CompositionTarget.Rendering -= CompositionTargetOnRendering; });
+
+            // 2nd, set parent to desktop (nullptr)
             NativeMethods.SetParent(_hWnd, (IntPtr) null);
 
-            // 2nd, move self to outside of desktop
-            NativeMethods.GetWindowRect(_hWnd, out var window);
-            var (x, y) = GetPreviewWindowPosition();
-            NativeMethods.MoveWindow(_hWnd, x, y, window.right - window.left, window.bottom - window.top, true);
+            // 3rd, move self to outside of desktop
+            MoveToOutsideOfVirtualScreen();
         }
 
         public void Release()
