@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Interactivity;
+using System.Windows.Media;
 
 namespace Robock.Behaviors
 {
@@ -65,17 +66,15 @@ namespace Robock.Behaviors
             if (Application.Current.MainWindow == null)
                 return;
 
-            try
-            {
-                var relative = AssociatedObject.TransformToAncestor(Application.Current.MainWindow).Transform(new Point());
-                Left = (int) relative.X;
-                Top = (int) relative.Y;
-            }
-            catch
-            {
-                // ignored
-                // 何もないタブで動作させると死ぬらしい
-            }
+            var parent = VisualTreeHelper.GetParent(AssociatedObject) as FrameworkElement;
+            while (parent != null && !(parent is Window))
+                parent = VisualTreeHelper.GetParent(parent) as FrameworkElement;
+
+            if (parent == null)
+                return;
+            var relative = AssociatedObject.TransformToAncestor(Application.Current.MainWindow).Transform(new Point());
+            Left = (int) relative.X;
+            Top = (int) relative.Y;
         }
 
         private void AssociatedObjectSizeChanged(object sender, SizeChangedEventArgs e)
