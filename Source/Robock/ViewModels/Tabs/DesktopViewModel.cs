@@ -19,7 +19,6 @@ namespace Robock.ViewModels.Tabs
 
         private readonly Desktop _desktop;
         private readonly DesktopWindowManager _desktopWindowManager;
-        private readonly object _lockObj = new object();
         private readonly double _offsetX;
         private readonly double _offsetY;
 
@@ -57,7 +56,6 @@ namespace Robock.ViewModels.Tabs
 
         public string DesktopName => $"Desktop {_desktop.No}";
         public string Resolution => $"{_desktop.Width}x{_desktop.Height}";
-        public bool IsPrimary => _desktop.IsPrimary;
 
         public double VirtualScreenX => (_offsetX + _desktop.X) / Scale;
         public double VirtualScreenY => (_offsetY + _desktop.Y) / Scale;

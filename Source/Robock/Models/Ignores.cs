@@ -2,9 +2,9 @@
 
 namespace Robock.Models
 {
-    public class Ignores
+    public static class Ignores
     {
-        public static List<string> IgnoreWindowTitles = new List<string>
+        public static readonly List<string> IgnoreWindowTitles = new List<string>
         {
             "ChromeWindow", // Robock's window separator
             "Robock", // Myself

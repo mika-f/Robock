@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace Robock.Refrection
+namespace Robock.Shared.Refrection
 {
     public static class RefrectionHelper
     {
