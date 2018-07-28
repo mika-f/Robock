@@ -6,8 +6,7 @@ namespace Robock.Background.Models
     {
         public void Dispose() { }
 
-        public void Init() { }
-
-        public void Render(IntPtr hSurface, IntPtr phSurface, bool isNewSurface) { }
+        // 基本 hSurface, phSurface は変わらないと思われ
+        public void Render(IntPtr hSurface, IntPtr phSurface, int width, int height, bool isNewSurface) { }
     }
 }

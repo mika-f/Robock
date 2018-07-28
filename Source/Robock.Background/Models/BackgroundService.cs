@@ -17,10 +17,14 @@ namespace Robock.Background.Models
     public class BackgroundService
     {
         private D3D11Image _dxImage;
+        private int _height;
         private IntPtr _hWnd;
         private TimeSpan _lastRender;
         private DxRenderer _renderer;
         private IntPtr _srcWindowHandle;
+        private int _width;
+        private int _x;
+        private int _y;
         private DGetDxSharedSurface GetDxSharedSurface { get; set; }
 
         public void Initialize(IntPtr hWnd, D3D11Image dxImage)
@@ -30,17 +34,8 @@ namespace Robock.Background.Models
             _hWnd = hWnd;
             _dxImage = dxImage;
 
-            // Initialize DirectX devices.
-            _renderer = new DxRenderer();
-            _renderer.Init();
-
             _dxImage.WindowOwner = hWnd;
             _dxImage.OnRender = Render;
-
-            var funcPtr = NativeMethods.GetProcAddress(NativeMethods.GetModuleHandle("user32"), "DwmGetDxSharedSurface");
-            GetDxSharedSurface = Marshal.GetDelegateForFunctionPointer<DGetDxSharedSurface>(funcPtr);
-
-            _dxImage.RequestRender();
         }
 
         public void MoveToOutsideOfVirtualScreen()
@@ -51,6 +46,22 @@ namespace Robock.Background.Models
                 MessageBox.Show("MoveWindow failed");
         }
 
+        public void SetupRenderer(int x, int y, int width, int height)
+        {
+            _x = x;
+            _y = y;
+            _width = width;
+            _height = height;
+
+            // Initialize DirectX devices.
+            _renderer = new DxRenderer();
+
+            var funcPtr = NativeMethods.GetProcAddress(NativeMethods.GetModuleHandle("user32"), "DwmGetDxSharedSurface");
+            GetDxSharedSurface = Marshal.GetDelegateForFunctionPointer<DGetDxSharedSurface>(funcPtr);
+
+            _dxImage.Dispatcher.Invoke(() => _dxImage.RequestRender());
+        }
+
         public void StartRender(IntPtr hWnd, int x, int y, int width, int height)
         {
             _srcWindowHandle = hWnd;
@@ -58,7 +69,7 @@ namespace Robock.Background.Models
             // 1st, change DirectX rendering size and register composition event.
             _dxImage.Dispatcher.Invoke(() =>
             {
-                _dxImage.SetPixelSize(width, height);
+                _dxImage.SetPixelSize(_width, _height);
                 CompositionTarget.Rendering += CompositionTargetOnRendering;
             });
 
@@ -72,7 +83,7 @@ namespace Robock.Background.Models
             NativeMethods.SetParent(_hWnd, progman);
 
             // 4th, move self to rendering position
-            NativeMethods.MoveWindow(_hWnd, x, y, width, height, true);
+            NativeMethods.MoveWindow(_hWnd, _x, _y, _width, _height, true);
         }
 
         private void CompositionTargetOnRendering(object sender, EventArgs e)
@@ -91,7 +102,7 @@ namespace Robock.Background.Models
                 return;
 
             GetDxSharedSurface(_srcWindowHandle, out var phSurface, out var pAdapterLuid, out var pFmtWindow, out var pPresentFlgs, out var pWin32KUpdateId);
-            _renderer.Render(hSurface, phSurface, isNewSurface);
+            _renderer.Render(hSurface, phSurface, _width, _height, isNewSurface);
         }
 
         public void StopRender()
@@ -110,7 +121,7 @@ namespace Robock.Background.Models
 
         public void Release()
         {
-            _renderer.Dispose();
+            _renderer?.Dispose();
             _dxImage.Dispose();
         }
 

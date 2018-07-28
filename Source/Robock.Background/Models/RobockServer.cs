@@ -12,11 +12,7 @@ namespace Robock.Background.Models
     {
         private readonly BackgroundService _backgroundService;
         private readonly string _uuid;
-        private int _height;
         private ServiceHost _serviceHost;
-        private int _width;
-        private int _x;
-        private int _y;
 
         private IRobockDuplexCallback Callback => OperationContext.Current.GetCallbackChannel<IRobockDuplexCallback>();
 
@@ -35,15 +31,14 @@ namespace Robock.Background.Models
 
         public void Handshake(int x, int y, int height, int width)
         {
-            _x = x;
-            _y = y;
-            _height = height;
-            _width = width;
+            _backgroundService.SetupRenderer(x, y, width, height);
+
+            Callback.HandshakeCallback();
         }
 
         public void ApplyWallpaper(IntPtr src, RECT? rect)
         {
-            _backgroundService.StartRender(src, _x, _y, _width, _height);
+            _backgroundService.StartRender(src, rect?.left ?? 0, rect?.top ?? 0, rect?.right - rect?.left ?? 0, rect?.bottom - rect?.top ?? 0);
 
             Callback.ApplyWallpaperCallback(true);
         }
