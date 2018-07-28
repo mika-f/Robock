@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Interop;
 
@@ -12,32 +11,23 @@ namespace Robock.Background.Views
     /// </summary>
     public partial class AppShell : Window
     {
-        private bool _isFirstRun = true;
-
         public AppShell()
         {
             InitializeComponent();
+
+            Closing += OnClosing;
+            Loaded += OnLoaded;
         }
 
-        protected override void OnActivated(EventArgs e)
-        {
-            base.OnActivated(e);
-
-            // 表示されてから
-            if (!_isFirstRun)
-                return;
-
-            _isFirstRun = false;
-
-            BackgroundService.Instance.Initialize(new WindowInteropHelper(this).Handle, InteropImage);
-            BackgroundService.Instance.MoveToOutsideOfVirtualScreen();
-        }
-
-        protected override void OnClosing(CancelEventArgs e)
+        private void OnClosing(object sender, CancelEventArgs e)
         {
             BackgroundService.Instance.Release();
+        }
 
-            base.OnClosing(e);
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            BackgroundService.Instance.Initialize(new WindowInteropHelper(this).Handle, InteropImage);
+            BackgroundService.Instance.MoveToOutsideOfVirtualScreen();
         }
     }
 }

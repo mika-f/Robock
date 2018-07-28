@@ -21,11 +21,9 @@
             <actions:DataContextDisposeAction />
         </i:EventTrigger>
     </i:Interaction.Triggers>
-    <Grid>
-        <Image>
-            <Image.Source>
-                <directx:D3D11Image x:Name="InteropImage" />
-            </Image.Source>
-        </Image>
-    </Grid>
+    <Image Stretch="UniformToFill">
+        <Image.Source>
+            <directx:D3D11Image x:Name="InteropImage" />
+        </Image.Source>
+    </Image>
 </Window>
