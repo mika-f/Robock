@@ -154,48 +154,6 @@ and limitations under the License."
             },
             new License
             {
-                Name = "SharpDx",
-                Url = "http://sharpdx.org/",
-                Authors = new[] {"Alexandre Mutel"},
-                Body = License.MIT.Replace("{yyyy}", "2010-2015").Replace("{name of copyright owner}", "SharpDX - Alexandre Mutel")
-            },
-            new License
-            {
-                Name = "SharpDx.D3DCompiler",
-                Url = "http://sharpdx.org/",
-                Authors = new[] {"Alexandre Mutel"},
-                Body = License.MIT.Replace("{yyyy}", "2010-2015").Replace("{name of copyright owner}", "SharpDX - Alexandre Mutel")
-            },
-            new License
-            {
-                Name = "SharpDx.Desktop",
-                Url = "http://sharpdx.org/",
-                Authors = new[] {"Alexandre Mutel"},
-                Body = License.MIT.Replace("{yyyy}", "2010-2015").Replace("{name of copyright owner}", "SharpDX - Alexandre Mutel")
-            },
-            new License
-            {
-                Name = "SharpDx.Direct3D11",
-                Url = "http://sharpdx.org/",
-                Authors = new[] {"Alexandre Mutel"},
-                Body = License.MIT.Replace("{yyyy}", "2010-2015").Replace("{name of copyright owner}", "SharpDX - Alexandre Mutel")
-            },
-            new License
-            {
-                Name = "SharpDx.DXGI",
-                Url = "http://sharpdx.org/",
-                Authors = new[] {"Alexandre Mutel"},
-                Body = License.MIT.Replace("{yyyy}", "2010-2015").Replace("{name of copyright owner}", "SharpDX - Alexandre Mutel")
-            },
-            new License
-            {
-                Name = "SharpDx.Mathematics",
-                Url = "http://sharpdx.org/",
-                Authors = new[] {"Alexandre Mutel"},
-                Body = License.MIT.Replace("{yyyy}", "2010-2015").Replace("{name of copyright owner}", "SharpDX - Alexandre Mutel")
-            },
-            new License
-            {
                 Name = "Microsoft.Wpf.Interop.DirectX",
                 Url = "https://github.com/Microsoft/WPFDXInterop",
                 Authors = new[] {"Microsoft"},
