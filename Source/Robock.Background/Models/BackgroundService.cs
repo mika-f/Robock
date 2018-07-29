@@ -6,6 +6,7 @@ using System.Windows.Media;
 
 using Microsoft.Wpf.Interop.DirectX;
 
+using Robock.Background.Native;
 using Robock.Shared.Win32;
 
 // ReSharper disable LocalizableElement
@@ -121,7 +122,7 @@ namespace Robock.Background.Models
 
         public void Release()
         {
-            _renderer?.Dispose();
+            _renderer?.Release();
             _dxImage.Dispose();
         }
 
@@ -156,7 +157,8 @@ namespace Robock.Background.Models
             return workerW;
         }
 
-        private delegate bool DGetDxSharedSurface(IntPtr hWnd, out IntPtr phSurface, out long pAdapterLuid, out int pFmtWindow, out int pPresentFlgs, out long pWin32KUpdateId);
+        private delegate bool DGetDxSharedSurface(
+            IntPtr hWnd, out IntPtr phSurface, out long pAdapterLuid, out int pFmtWindow, out int pPresentFlgs, out long pWin32KUpdateId);
 
         #region Singleton
 

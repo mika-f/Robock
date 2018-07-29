@@ -163,6 +163,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Robock.Background.Native\Robock.Background.Native.vcxproj">
+      <Project>{5c90987b-36b8-44b1-a3b1-018a0a44bba1}</Project>
+      <Name>Robock.Background.Native</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Robock.Shared\Robock.Shared.csproj">
       <Project>{07becf0b-6e07-4ac5-b0c2-3eae0539d9a2}</Project>
       <Name>Robock.Shared</Name>
