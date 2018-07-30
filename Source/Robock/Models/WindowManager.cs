@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 
 using Robock.Shared.Win32;
@@ -49,6 +50,11 @@ namespace Robock.Models
                 NativeMethods.GetWindowText(hWnd, title, title.Capacity);
                 if (string.IsNullOrWhiteSpace(title.ToString()))
                     return true; // Skipped
+
+                // Universal Windows (invisible / background)
+                NativeMethods.DwmGetWindowAttribute(hWnd, DWMWINDOWATTRIBUTE.Cloaked, out var isCloaked, Marshal.SizeOf(typeof(bool)));
+                if (isCloaked)
+                    return true;
 
                 if (Ignores.IgnoreWindowTitles.Contains(title.ToString()))
                     return true;

@@ -58,6 +58,9 @@ namespace Robock.Shared.Win32
         [DllImport("dwmapi.dll", PreserveSig = true)]
         public static extern int DwmUpdateThumbnailProperties(IntPtr hThumbnail, ref DWM_THUMBNAIL_PROPERTIES props);
 
+        [DllImport("dwmapi.dll")]
+        public static extern int DwmGetWindowAttribute(IntPtr hwnd, DWMWINDOWATTRIBUTE dwAttribute, out bool pvAttribute, int cbAttribute);
+
         #endregion
 
         #region User32
