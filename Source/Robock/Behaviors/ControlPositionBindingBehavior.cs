@@ -51,10 +51,17 @@ namespace Robock.Behaviors
             if (Application.Current.MainWindow != null)
                 Application.Current.MainWindow.SizeChanged += MainWindowOnSizeChanged;
             AssociatedObject.SizeChanged += AssociatedObjectSizeChanged;
+            AssociatedObject.DataContextChanged += AssociatedObjectOnDataContextChanged;
+        }
+
+        private void AssociatedObjectOnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            AssociatedObjectSizeChanged(null, null);
         }
 
         protected override void OnDetaching()
         {
+            AssociatedObject.DataContextChanged -= AssociatedObjectOnDataContextChanged;
             AssociatedObject.SizeChanged -= AssociatedObjectSizeChanged;
             if (Application.Current.MainWindow != null)
                 Application.Current.MainWindow.SizeChanged -= MainWindowOnSizeChanged;
