@@ -130,14 +130,14 @@ namespace Robock.ViewModels.Tabs
                 PreviewAreaTop,
                 PreviewAreaHeight,
                 PreviewAreaWidth
-            }.CombineLatest().Subscribe(w =>
+            }.CombineLatest().Where(w => IsSelected.Value).Subscribe(w =>
             {
                 //
                 Render(1);
             });
             desktopWindowManager.Thumbnails[0]
                 .ObserveProperty(w => w.IsRendering)
-                .Where(w => w)
+                .Where(w => w && IsSelected.Value)
                 .Subscribe(w =>
                 {
                     //
