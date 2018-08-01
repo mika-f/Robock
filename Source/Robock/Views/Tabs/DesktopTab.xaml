@@ -86,11 +86,11 @@
                 <i:Interaction.Behaviors>
                     <behaviors:ControlPositionBindingBehavior Left="{Binding GridAreaLeft.Value, Mode=OneWayToSource}"
                                                               Top="{Binding GridAreaTop.Value, Mode=OneWayToSource}" />
-                    <behaviors:RectangleSelectorBehavior Width="{Binding SelectedAreaWidth.Value, Mode=OneWayToSource}"
-                                                         Height="{Binding SelectedAreaHeight.Value, Mode=OneWayToSource}"
-                                                         Left="{Binding SelectedAreaLeft.Value, Mode=OneWayToSource}"
+                    <behaviors:RectangleSelectorBehavior Width="{Binding SelectedAreaWidth.Value, Mode=TwoWay}"
+                                                         Height="{Binding SelectedAreaHeight.Value, Mode=TwoWay}"
+                                                         Left="{Binding SelectedAreaLeft.Value, Mode=TwoWay}"
                                                          Rectangle="{Binding ElementName=Rectangle}"
-                                                         Top="{Binding SelectedAreaTop.Value, Mode=OneWayToSource}" />
+                                                         Top="{Binding SelectedAreaTop.Value, Mode=TwoWay}" />
                 </i:Interaction.Behaviors>
                 <Image HorizontalAlignment="Center"
                        Source="{Binding EditorAspectRatio.Value, Mode=OneWay}"
@@ -109,7 +109,7 @@
                            Opacity="1"
                            Stroke="{DynamicResource AccentBrushKey}"
                            StrokeThickness="2"
-                           Visibility="Hidden" />
+                           Visibility="{Binding IsSelected.Value, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
             </Grid>
         </Grid>
