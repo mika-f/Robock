@@ -75,7 +75,7 @@ namespace Robock.ViewModels.Tabs
             IsSelected = new ReactiveProperty<bool>(false);
             IsSelected.Subscribe(w =>
             {
-                if (w)
+                if (w && CanRender())
                 {
                     Render(0);
                 }
@@ -98,7 +98,8 @@ namespace Robock.ViewModels.Tabs
                 EditorAreaTop,
                 EditorAreaHeight,
                 EditorAreaWidth
-            }.CombineLatest().Where(w => IsSelected.Value).Subscribe(w => Render(0)).AddTo(this);
+            }.CombineLatest().Throttle(TimeSpan.FromMilliseconds(50))
+             .Where(w => CanRender()).Subscribe(w => Render(0)).AddTo(this);
             desktopWindowManager.Thumbnails[0].ObserveProperty(w => w.Size).Subscribe(w =>
             {
                 //
@@ -116,28 +117,30 @@ namespace Robock.ViewModels.Tabs
                 SelectedAreaTop,
                 SelectedAreaHeight,
                 SelectedAreaWidth
-            }.CombineLatest().Where(w => IsSelected.Value).Subscribe(w => Render(1)).AddTo(this);
+            }.CombineLatest().Throttle(TimeSpan.FromMilliseconds(50))
+             .Where(w => CanRender()).Subscribe(w => Render(1)).AddTo(this);
 
             // プレビュー
             AspectRatio = $"https://placehold.mochizuki.moe/{AspectHelper.Calc(_desktop.Height, _desktop.Width)}/000000%2C000/000000%2C000/";
-            PreviewAreaLeft = new ReactiveProperty<int>(1, equalityComparer: new IgnoreComparator());
-            PreviewAreaTop = new ReactiveProperty<int>(1, equalityComparer: new IgnoreComparator());
-            PreviewAreaHeight = new ReactiveProperty<int>(1, equalityComparer: new IgnoreComparator());
-            PreviewAreaWidth = new ReactiveProperty<int>(1, equalityComparer: new IgnoreComparator());
+            PreviewAreaLeft = new ReactiveProperty<int>();
+            PreviewAreaTop = new ReactiveProperty<int>();
+            PreviewAreaHeight = new ReactiveProperty<int>();
+            PreviewAreaWidth = new ReactiveProperty<int>();
             new[]
             {
                 PreviewAreaLeft,
                 PreviewAreaTop,
                 PreviewAreaHeight,
                 PreviewAreaWidth
-            }.CombineLatest().Where(w => IsSelected.Value).Subscribe(w =>
-            {
-                //
-                Render(1);
-            });
+            }.CombineLatest().Throttle(TimeSpan.FromMilliseconds(50))
+             .Where(w => CanRender()).Subscribe(w =>
+             {
+                 //
+                 Render(1);
+             });
             desktopWindowManager.Thumbnails[0]
                 .ObserveProperty(w => w.IsRendering)
-                .Where(w => w && IsSelected.Value)
+                .Where(w => w && CanRender())
                 .Subscribe(w =>
                 {
                     //
@@ -151,7 +154,7 @@ namespace Robock.ViewModels.Tabs
             // 他
             Windows = windowManager.Windows.ToReadOnlyReactiveCollection(w => new WindowViewModel(w));
             SelectedWindow = new ReactiveProperty<WindowViewModel>();
-            SelectedWindow.Where(w => w != null && IsSelected.Value).Subscribe(w =>
+            SelectedWindow.Where(w => w != null && CanRender()).Subscribe(w =>
             {
                 _desktopWindowManager.Stop(0);
                 _desktopWindowManager.Stop(1);
@@ -184,8 +187,6 @@ namespace Robock.ViewModels.Tabs
 
         private void Render(int index)
         {
-            if (SelectedWindow?.Value == null)
-                return;
             var handle = SelectedWindow.Value.Handle;
 
             if (index == 0)
@@ -201,14 +202,18 @@ namespace Robock.ViewModels.Tabs
                 if (SelectedAreaHeight.Value != 0)
                     rect = CalcRenderingRect();
 
-                if (PreviewAreaHeight.Value == 0)
-                    throw new InvalidOperationException("Fucking ");
-
                 if (_desktopWindowManager.Thumbnails[DesktopWindowManager.PreviewIndex].IsRendering)
                     _desktopWindowManager.Rerender(1, PreviewAreaLeft.Value, PreviewAreaTop.Value, PreviewAreaHeight.Value, PreviewAreaWidth.Value, rect);
                 else
                     _desktopWindowManager.Start(1, handle, PreviewAreaLeft.Value, PreviewAreaTop.Value, PreviewAreaHeight.Value, PreviewAreaWidth.Value, rect);
             }
+        }
+
+        private bool CanRender()
+        {
+            if (!IsSelected.Value || SelectedWindow.Value == null)
+                return false;
+            return PreviewAreaHeight.Value != 0 && PreviewAreaWidth.Value != 0;
         }
 
         private RECT CalcRenderingRect()

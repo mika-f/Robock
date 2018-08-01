@@ -146,7 +146,6 @@
     <Compile Include="Behaviors\ScrollToTopBehavior.cs" />
     <Compile Include="Models\Desktop.cs" />
     <Compile Include="Models\DesktopManager.cs" />
-    <Compile Include="Models\IgnoreComparator.cs" />
     <Compile Include="Models\Ignores.cs" />
     <Compile Include="Models\License.cs" />
     <Compile Include="Models\AspectHelper.cs" />
