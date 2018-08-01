@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System;
+using System.Reactive.Linq;
+using System.Windows;
 using System.Windows.Interactivity;
 using System.Windows.Media;
 
@@ -56,7 +58,10 @@ namespace Robock.Behaviors
 
         private void AssociatedObjectOnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            AssociatedObjectSizeChanged(null, null);
+            // XXX: DataContext が変わったら強制的に変更を通知する
+            //      なんとかしたい気持ち
+            Height = Width = Left = Top = -1;
+            Observable.Return(0).Delay(TimeSpan.FromMilliseconds(1)).Subscribe(w => { Dispatcher.Invoke(() => { AssociatedObjectSizeChanged(null, null); }); });
         }
 
         protected override void OnDetaching()
