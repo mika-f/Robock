@@ -36,6 +36,9 @@ HRESULT DxRenderer::Render(void* phWindowSurface, void* phDwmSurface, const int 
             return hr;
         }
     }
+
+    const float clearColor[4] = {1, 0, 1, 1}; // RGBA
+    this->_deviceContext->ClearRenderTargetView(this->_renderTargetView, clearColor);
     if (this->_deviceContext != nullptr)
         this->_deviceContext->Flush();
     return hr;
