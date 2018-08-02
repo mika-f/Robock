@@ -18,7 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Robock.Background", "Robock.Background\Robock.Background.csproj", "{F3D75D1B-A861-44A9-A88B-BFAA4D5E77AD}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Robock.Background.Native", "Robock.Background.Native\Robock.Background.Native.vcxproj", "{5C90987B-36B8-44B1-A3B1-018A0A44BBA1}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Robock.Background.Native", "Robock.Background.Native\Robock.Background.Native.vcxproj", "{9EA33D1B-E569-4E0C-BB36-1BCC899FF1E3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,14 +52,14 @@ Global
 		{F3D75D1B-A861-44A9-A88B-BFAA4D5E77AD}.Release|x64.Build.0 = Release|Any CPU
 		{F3D75D1B-A861-44A9-A88B-BFAA4D5E77AD}.Release|x86.ActiveCfg = Release|Any CPU
 		{F3D75D1B-A861-44A9-A88B-BFAA4D5E77AD}.Release|x86.Build.0 = Release|Any CPU
-		{5C90987B-36B8-44B1-A3B1-018A0A44BBA1}.Debug|x64.ActiveCfg = Debug|x64
-		{5C90987B-36B8-44B1-A3B1-018A0A44BBA1}.Debug|x64.Build.0 = Debug|x64
-		{5C90987B-36B8-44B1-A3B1-018A0A44BBA1}.Debug|x86.ActiveCfg = Debug|Win32
-		{5C90987B-36B8-44B1-A3B1-018A0A44BBA1}.Debug|x86.Build.0 = Debug|Win32
-		{5C90987B-36B8-44B1-A3B1-018A0A44BBA1}.Release|x64.ActiveCfg = Release|x64
-		{5C90987B-36B8-44B1-A3B1-018A0A44BBA1}.Release|x64.Build.0 = Release|x64
-		{5C90987B-36B8-44B1-A3B1-018A0A44BBA1}.Release|x86.ActiveCfg = Release|Win32
-		{5C90987B-36B8-44B1-A3B1-018A0A44BBA1}.Release|x86.Build.0 = Release|Win32
+		{9EA33D1B-E569-4E0C-BB36-1BCC899FF1E3}.Debug|x64.ActiveCfg = Debug|x64
+		{9EA33D1B-E569-4E0C-BB36-1BCC899FF1E3}.Debug|x64.Build.0 = Debug|x64
+		{9EA33D1B-E569-4E0C-BB36-1BCC899FF1E3}.Debug|x86.ActiveCfg = Debug|Win32
+		{9EA33D1B-E569-4E0C-BB36-1BCC899FF1E3}.Debug|x86.Build.0 = Debug|Win32
+		{9EA33D1B-E569-4E0C-BB36-1BCC899FF1E3}.Release|x64.ActiveCfg = Release|x64
+		{9EA33D1B-E569-4E0C-BB36-1BCC899FF1E3}.Release|x64.Build.0 = Release|x64
+		{9EA33D1B-E569-4E0C-BB36-1BCC899FF1E3}.Release|x86.ActiveCfg = Release|Win32
+		{9EA33D1B-E569-4E0C-BB36-1BCC899FF1E3}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
