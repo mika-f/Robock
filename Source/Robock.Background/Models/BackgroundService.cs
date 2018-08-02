@@ -6,7 +6,6 @@ using System.Windows.Media;
 
 using Microsoft.Wpf.Interop.DirectX;
 
-using Robock.Background.Native;
 using Robock.Shared.Win32;
 
 // ReSharper disable LocalizableElement
@@ -17,15 +16,20 @@ namespace Robock.Background.Models
     // 様々な理由から Singleton にせざるを得ない (RobockService への注入不可)
     public class BackgroundService
     {
+        private int _clientHeight;
+        private int _clientWidth;
+        private int _clientX;
+        private int _clientY;
+
         private D3D11Image _dxImage;
-        private int _height;
         private IntPtr _hWnd;
         private TimeSpan _lastRender;
-        private DxRenderer _renderer;
         private IntPtr _srcWindowHandle;
-        private int _width;
-        private int _x;
-        private int _y;
+
+        private int _windowHeight;
+        private int _windowWidth;
+        private int _windowX;
+        private int _windowY;
         private DGetDxSharedSurface GetDxSharedSurface { get; set; }
 
         public void Initialize(IntPtr hWnd, D3D11Image dxImage)
@@ -49,13 +53,13 @@ namespace Robock.Background.Models
 
         public void SetupRenderer(int x, int y, int width, int height)
         {
-            _x = x;
-            _y = y;
-            _width = width;
-            _height = height;
+            _windowX = x;
+            _windowY = y;
+            _windowWidth = width;
+            _windowHeight = height;
 
             // Initialize DirectX devices.
-            _renderer = new DxRenderer();
+            NativeMethods.Init(width, height);
 
             var funcPtr = NativeMethods.GetProcAddress(NativeMethods.GetModuleHandle("user32"), "DwmGetDxSharedSurface");
             GetDxSharedSurface = Marshal.GetDelegateForFunctionPointer<DGetDxSharedSurface>(funcPtr);
@@ -66,11 +70,15 @@ namespace Robock.Background.Models
         public void StartRender(IntPtr hWnd, int x, int y, int width, int height)
         {
             _srcWindowHandle = hWnd;
+            _clientX = x;
+            _clientY = y;
+            _clientWidth = width;
+            _clientHeight = height;
 
             // 1st, change DirectX rendering size and register composition event.
             _dxImage.Dispatcher.Invoke(() =>
             {
-                _dxImage.SetPixelSize(_width, _height);
+                _dxImage.SetPixelSize(_windowWidth, _windowHeight);
                 CompositionTarget.Rendering += CompositionTargetOnRendering;
             });
 
@@ -81,10 +89,10 @@ namespace Robock.Background.Models
             var progman = NativeMethods.FindWindow("Progman", null);
 
             // 3rd, stick myself to progman
-            NativeMethods.SetParent(_hWnd, progman);
+            // NativeMethods.SetParent(_hWnd, progman);
 
             // 4th, move self to rendering position
-            NativeMethods.MoveWindow(_hWnd, _x, _y, _width, _height, true);
+            NativeMethods.MoveWindow(_hWnd, _windowX, _windowY, _windowWidth, _windowHeight, true);
         }
 
         private void CompositionTargetOnRendering(object sender, EventArgs e)
@@ -102,27 +110,33 @@ namespace Robock.Background.Models
             if (_srcWindowHandle == IntPtr.Zero)
                 return;
 
+            // 1st, Get DWM DirectX shared handle.
             GetDxSharedSurface(_srcWindowHandle, out var phSurface, out var pAdapterLuid, out var pFmtWindow, out var pPresentFlgs, out var pWin32KUpdateId);
-            _renderer.Render(hSurface, phSurface, _width, _height, isNewSurface);
+
+            // 2nd, render window using shared handle
+            NativeMethods.Render(hSurface, phSurface, _clientX, _clientY, _clientWidth, _clientHeight, isNewSurface);
         }
 
         public void StopRender()
         {
             _srcWindowHandle = IntPtr.Zero;
 
-            // 1st, unregister composition rendering event.
+            // 1st, release DirectX resources.
+            NativeMethods.Release();
+
+            // 2nd, unregister composition rendering event.
             _dxImage.Dispatcher.Invoke(() => { CompositionTarget.Rendering -= CompositionTargetOnRendering; });
 
-            // 2nd, set parent to desktop (nullptr)
+            // 3rd, set parent to desktop (nullptr)
             NativeMethods.SetParent(_hWnd, (IntPtr) null);
 
-            // 3rd, move self to outside of desktop
+            // 4th, move self to outside of desktop
             MoveToOutsideOfVirtualScreen();
         }
 
         public void Release()
         {
-            _renderer?.Release();
+            NativeMethods.Release();
             _dxImage.Dispose();
         }
 
@@ -157,8 +171,7 @@ namespace Robock.Background.Models
             return workerW;
         }
 
-        private delegate bool DGetDxSharedSurface(
-            IntPtr hWnd, out IntPtr phSurface, out long pAdapterLuid, out int pFmtWindow, out int pPresentFlgs, out long pWin32KUpdateId);
+        private delegate bool DGetDxSharedSurface(IntPtr hWnd, out IntPtr phSurface, out long pAdapterLuid, out int pFmtWindow, out int pPresentFlgs, out long pWin32KUpdateId);
 
         #region Singleton
 

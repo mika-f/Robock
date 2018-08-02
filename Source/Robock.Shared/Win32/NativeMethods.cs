@@ -108,5 +108,18 @@ namespace Robock.Shared.Win32
         public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int x, int y, int cx, int cy, SetWindowPosFlags uFlags);
 
         #endregion
+
+        #region Robock.Background.Native
+
+        [DllImport("Robock.Background.Native.dll")]
+        public static extern void Init(int width, int height);
+
+        [DllImport("Robock.Background.Native.dll")]
+        public static extern void Render(IntPtr hWindowSurface, IntPtr hDwmSurface, int x, int y, int width, int height, bool isNewSurface);
+
+        [DllImport("Robock.Background.Native.dll")]
+        public static extern void Release();
+
+        #endregion
     }
 }
