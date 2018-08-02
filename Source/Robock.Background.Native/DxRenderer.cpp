@@ -36,6 +36,8 @@ HRESULT DxRenderer::Render(void* phWindowSurface, void* phDwmSurface, const int 
             return hr;
         }
     }
+    if (this->_deviceContext != nullptr)
+        this->_deviceContext->Flush();
     return hr;
 }
 
