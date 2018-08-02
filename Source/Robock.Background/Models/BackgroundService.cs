@@ -89,7 +89,7 @@ namespace Robock.Background.Models
             var progman = NativeMethods.FindWindow("Progman", null);
 
             // 3rd, stick myself to progman
-            // NativeMethods.SetParent(_hWnd, progman);
+            NativeMethods.SetParent(_hWnd, progman);
 
             // 4th, move self to rendering position
             NativeMethods.MoveWindow(_hWnd, _windowX, _windowY, _windowWidth, _windowHeight, true);
