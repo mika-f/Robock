@@ -5,11 +5,9 @@
 
 ## Requirements
 
-* Windows 7 SP1 以降 (64-bit)
-  * Windows 7 については DWM を有効にする必要があり
-  * Windows 8.1 以前についてはサポート、 Pull Request 共に受け付けていません
+* Windows 10 10.0.17134.0
 * .NET Framework 4.7.2 以降
-* Dirext3D 9.0Ex および HLSL 2.0 に対応したビデオカード
+* DirectX 11 ~
 * Windows Display Driver Model に対応したビデオカード
 * インターネット接続
 * YouTube で 1080p 動画をフルスクリーンで見てもカクつかない程度のスペック
