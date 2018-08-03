@@ -36,9 +36,9 @@ namespace Robock.Background.Models
             Callback.HandshakeCallback();
         }
 
-        public void ApplyWallpaper(IntPtr src, RECT? rect)
+        public void ApplyWallpaper(IntPtr src, RECT rect)
         {
-            _backgroundService.StartRender(src, rect?.left ?? 0, rect?.top ?? 0, rect?.right - rect?.left ?? 0, rect?.bottom - rect?.top ?? 0);
+            _backgroundService.StartRender(src, rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
 
             Callback.ApplyWallpaperCallback(true);
         }

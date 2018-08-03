@@ -24,7 +24,7 @@ namespace Robock.Shared.Communication
         /// <param name="src">hWnd of source window</param>
         /// <param name="rect"></param>
         [OperationContract(IsOneWay = true)]
-        void ApplyWallpaper(IntPtr src, RECT? rect);
+        void ApplyWallpaper(IntPtr src, RECT rect);
 
         /// <summary>
         ///     Discard wallpaper

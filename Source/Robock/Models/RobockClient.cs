@@ -43,7 +43,7 @@ namespace Robock.Models
             _channel.Handshake(x, y, height, width);
         }
 
-        public void ApplyWallpaper(IntPtr src, RECT? rect)
+        public void ApplyWallpaper(IntPtr src, RECT rect)
         {
             _channel.ApplyWallpaper(src, rect);
         }

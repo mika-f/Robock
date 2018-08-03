@@ -54,7 +54,7 @@ namespace Robock.Models
             _client.Handshake((int) (offsetX + X), (int) (offsetY + Y), (int) Height, (int) Width);
         }
 
-        public void ApplyWallpaper(IntPtr hWnd, RECT? rect)
+        public void ApplyWallpaper(IntPtr hWnd, RECT rect)
         {
             _client.ApplyWallpaper(hWnd, rect);
         }
