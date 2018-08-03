@@ -1,4 +1,3 @@
-// dllmain.cpp : DLL アプリケーションのエントリ ポイントを定義します。
 #include "stdafx.h"
 #include "DxRenderer.h"
 #include "dllmain.h"
@@ -10,7 +9,7 @@ HRESULT Init()
     return S_OK;
 }
 
-HRESULT Render(void *phWindowSurface, void *phDwmSurface, const int x, const int y, const int width, const int height, const bool isNewSurface)
+HRESULT Render(void* phWindowSurface, void* phDwmSurface, const int x, const int y, const int width, const int height, const bool isNewSurface)
 {
     if (renderer == nullptr)
         return E_FAIL;

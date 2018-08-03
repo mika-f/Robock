@@ -17,6 +17,7 @@ DxRenderer::DxRenderer()
     this->_vertexBuffer = nullptr;
     this->_vertexShader = nullptr;
     this->_pixelShader = nullptr;
+    this->_indexBuffer = nullptr;
     this->_samplerState = nullptr;
     this->_shaderResourceView = nullptr;
 }
@@ -31,14 +32,44 @@ HRESULT DxRenderer::Render(void* phWindowSurface, void* phDwmSurface, const int 
         hr = this->InitRenderTarget(phWindowSurface);
 
         if (FAILED(hr))
-        {
-            MessageBoxW(nullptr, L"Failed to initialize a render target", L"Robock.Native Internal Error", MB_OK | MB_ICONEXCLAMATION);
-            return hr;
-        }
+            return this->MsgBox(hr, L"Render#InitRenderTarget");
     }
 
-    const float clearColor[4] = {1, 0, 1, 1}; // RGBA
+    if (this->_shaderResourceView == nullptr)
+    {
+        IUnknown* resource;
+        hr = this->_device->OpenSharedResource(phDwmSurface, __uuidof(ID3D11Resource), reinterpret_cast<void**>(&resource));
+        if (FAILED(hr))
+            return this->MsgBox(hr, L"Render#OpenSharedResource<ID3D11Resource>");
+
+        ID3D11Texture2D* texture2D;
+        D3D11_TEXTURE2D_DESC textureDesc;
+        textureDesc.Usage = D3D11_USAGE_DEFAULT;
+        textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+        textureDesc.CPUAccessFlags = 0;
+        textureDesc.MiscFlags = 0;
+        D3D11_SUBRESOURCE_DATA initData;
+        initData.pSysMem = resource;
+        hr = this->_device->CreateTexture2D(&textureDesc, &initData, &texture2D);
+        if (FAILED(hr))
+            return this->MsgBox(hr, L"Render#CreateTexture2D");
+
+        hr = this->_device->CreateShaderResourceView(texture2D, nullptr, &this->_shaderResourceView);
+        if (FAILED(hr))
+            return this->MsgBox(hr, L"Render#CreateShaderResourceView");
+    }
+
+    const float clearColor[4] = {0, 0, 0, 1}; // RGBA
     this->_deviceContext->ClearRenderTargetView(this->_renderTargetView, clearColor);
+
+    this->_deviceContext->VSSetShader(this->_vertexShader, nullptr, 0);
+    this->_deviceContext->PSSetShader(this->_pixelShader, nullptr, 0);
+
+    this->_deviceContext->PSSetSamplers(0, 1, &this->_samplerState);
+    this->_deviceContext->PSSetShaderResources(0, 1, &this->_shaderResourceView);
+
+    this->_deviceContext->Draw(4, 0);
+
     if (this->_deviceContext != nullptr)
         this->_deviceContext->Flush();
     return hr;
@@ -57,6 +88,7 @@ HRESULT DxRenderer::Release()
     SAFE_RELEASE(this->_vertexBuffer);
     SAFE_RELEASE(this->_vertexShader);
     SAFE_RELEASE(this->_pixelShader);
+    SAFE_RELEASE(this->_indexBuffer);
     SAFE_RELEASE(this->_samplerState);
     SAFE_RELEASE(this->_shaderResourceView);
 
@@ -65,22 +97,7 @@ HRESULT DxRenderer::Release()
 
 HRESULT DxRenderer::Init()
 {
-    const auto hr = this->InitDevice();
-    if (FAILED(hr))
-    {
-        MessageBoxW(nullptr, L"Failed to create a new device", L"Robock.Native Internal Error", MB_OK | MB_ICONEXCLAMATION);
-        return hr;
-    }
-
-    return hr;
-}
-
-HRESULT DxRenderer::SetViewport(const int width, const int height)
-{
-    this->_width = width;
-    this->_height = height;
-
-    return S_OK;
+    return this->InitDevice();
 }
 
 HRESULT DxRenderer::InitDevice()
@@ -100,60 +117,23 @@ HRESULT DxRenderer::InitDevice()
         D3D_FEATURE_LEVEL_10_1,
         D3D_FEATURE_LEVEL_10_0,
     };
+    const UINT drivers = sizeof featureLevels / sizeof featureLevels[0];
 
     for (UINT i = 0; i < 3; i++)
     {
-        hr = D3D11CreateDevice(nullptr, driverTypes[i], nullptr, flags, featureLevels, 3, D3D11_SDK_VERSION, &this->_device, &this->_featureLevel, &this->_deviceContext);
+        hr = D3D11CreateDevice(nullptr, driverTypes[i], nullptr, flags, featureLevels, drivers, D3D11_SDK_VERSION, &this->_device, &this->_featureLevel, &this->_deviceContext);
         if (SUCCEEDED(hr))
         {
             this->_driverType = driverTypes[i];
             break;
         }
     }
-
     if (FAILED(hr))
-        return hr;
+        return this->MsgBox(hr, L"InitDevice#D3D11CreateDevice");
 
     hr = this->LoadShader();
     if (FAILED(hr))
-    {
-        MessageBoxW(nullptr, L"Failed to load a shader", L"Robock.Native Internal Error", MB_OK | MB_ICONEXCLAMATION);
-        return hr;
-    }
-
-    SimpleVertex vertices[] = {
-    };
-
-    D3D11_BUFFER_DESC bufferDesc;
-    ZeroMemory(&bufferDesc, sizeof bufferDesc);
-    bufferDesc.Usage = D3D11_USAGE_DEFAULT;
-    bufferDesc.ByteWidth = sizeof(SimpleVertex) * 4;
-    bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-    bufferDesc.CPUAccessFlags = 0;
-    bufferDesc.MiscFlags = 0;
-
-    D3D11_SUBRESOURCE_DATA initData;
-    ZeroMemory(&initData, sizeof initData);
-    initData.pSysMem = vertices;
-
-    hr = this->_device->CreateBuffer(&bufferDesc, &initData, &this->_vertexBuffer);
-    if (FAILED(hr))
-        return hr;
-
-    UINT stride = sizeof(SimpleVertex);
-    UINT offset = 0;
-    this->_deviceContext->IASetVertexBuffers(0, 1, &this->_vertexBuffer, &stride, &offset);
-
-    this->_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
-
-    D3D11_SAMPLER_DESC samplerDesc;
-    ZeroMemory(&samplerDesc, sizeof samplerDesc);
-    samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-    samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-    samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-    samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-
-    this->_device->CreateSamplerState(&samplerDesc, &this->_samplerState);
+        return this->MsgBox(hr, L"InitDevice#LoadShader");
 
     return hr;
 }
@@ -164,22 +144,22 @@ HRESULT DxRenderer::InitRenderTarget(void* pResource)
     IDXGIResource* pDXGIResource;
     auto hr = pUnk->QueryInterface(__uuidof(IDXGIResource), reinterpret_cast<void**>(&pDXGIResource));
     if (FAILED(hr))
-        return hr;
+        return this->MsgBox(hr, L"InitRenderTarget#QueryInterface<IDXGIResource>");
 
     HANDLE sharedHandle;
     hr = pDXGIResource->GetSharedHandle(&sharedHandle);
     if (FAILED(hr))
-        return hr;
+        return this->MsgBox(hr, L"InitRenderTarget#GetSharedHandle");
 
     IUnknown* resource;
     hr = this->_device->OpenSharedResource(sharedHandle, __uuidof(ID3D11Resource), reinterpret_cast<void**>(&resource));
     if (FAILED(hr))
-        return hr;
+        return this->MsgBox(hr, L"InitRenderTarget#OpenSharedResource<ID3D11Resource>");
 
     ID3D11Texture2D* output;
     hr = resource->QueryInterface(__uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&output));
     if (FAILED(hr))
-        return hr;
+        return this->MsgBox(hr, L"InitRenderTarget#QueryInterface<ID3D11Texture2D>");
 
     resource->Release();
 
@@ -196,11 +176,11 @@ HRESULT DxRenderer::InitRenderTarget(void* pResource)
     output->GetDesc(&resourceDesc);
     if (resourceDesc.Width != this->_width || resourceDesc.Height != this->_height)
     {
-        this->SetViewport(resourceDesc.Width, resourceDesc.Height);
-
         D3D11_VIEWPORT viewport;
-        viewport.Width = this->_width;
-        viewport.Height = this->_height;
+        this->_width = resourceDesc.Width;
+        this->_height = resourceDesc.Height;
+        viewport.Width = static_cast<float>(this->_width);
+        viewport.Height = static_cast<float>(this->_height);
         viewport.MinDepth = 0.0f;
         viewport.MaxDepth = 1.0f;
         viewport.TopLeftX = 0;
@@ -217,41 +197,77 @@ HRESULT DxRenderer::InitRenderTarget(void* pResource)
 
 HRESULT DxRenderer::LoadShader()
 {
-    ID3DBlob* vsBlob = nullptr;
+    ID3DBlob* vsBlob;
     auto hr = this->CompileShaderFromFile(L"shader.hlsl", "VS", "vs_5_0", &vsBlob);
     if (FAILED(hr))
-        return hr;
+        return this->MsgBox(hr, L"LoadShader#CompileShaderFromFile<VS>");
 
     hr = this->_device->CreateVertexShader(vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), nullptr, &this->_vertexShader);
     if (FAILED(hr))
     {
-        vsBlob->Release();
-        return hr;
+        SAFE_RELEASE(vsBlob);
+        return this->MsgBox(hr, L"LoadShader#CreateVertexShader");
     }
-
-    ID3DBlob* psBlob = nullptr;
-    hr = this->CompileShaderFromFile(L"shader.hlsl", "PS", "ps_5_0", &psBlob);
-    if (FAILED(hr))
-        return hr;
-
-    hr = this->_device->CreatePixelShader(psBlob->GetBufferPointer(), psBlob->GetBufferSize(), nullptr, &this->_pixelShader);
-    psBlob->Release();
-    if (FAILED(hr))
-        return hr;
 
     D3D11_INPUT_ELEMENT_DESC layout[] =
     {
         {"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
         {"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
     };
+    const UINT elements = sizeof layout / sizeof layout[0];
 
-    hr = this->_device->CreateInputLayout(layout, 2, vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &this->_vertexLayout);
-    vsBlob->Release();
+    hr = this->_device->CreateInputLayout(layout, elements, vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &this->_vertexLayout);
     if (FAILED(hr))
-        return hr;
+        return this->MsgBox(hr, L"LoadShader#CreateInputLayout");
 
     this->_deviceContext->IASetInputLayout(this->_vertexLayout);
-    return hr;
+
+    ID3DBlob* psBlob;
+    hr = this->CompileShaderFromFile(L"shader.hlsl", "PS", "ps_5_0", &psBlob);
+    if (FAILED(hr))
+        return this->MsgBox(hr, L"LoadShader#CompileShaderFromFile<PS>");
+
+    hr = this->_device->CreatePixelShader(psBlob->GetBufferPointer(), psBlob->GetBufferSize(), nullptr, &this->_pixelShader);
+    SAFE_RELEASE(vsBlob);
+    if (FAILED(hr))
+        return this->MsgBox(hr, L"LoadShader#CreatePixelShader");
+
+    SimpleVertex vertices[] =
+    {
+        {XMFLOAT3(-0.5f, -0.5f, 0.5f), XMFLOAT2(0, 1)},
+        {XMFLOAT3(-0.5f, 0.5f, 0.5f), XMFLOAT2(0, 0)},
+        {XMFLOAT3(0.5f, -0.5f, 0.5f), XMFLOAT2(1, 1)},
+        {XMFLOAT3(0.5f, 0.5f, 0.5f), XMFLOAT2(1, 0)}
+    };
+
+    D3D11_BUFFER_DESC bufferDesc;
+    bufferDesc.Usage = D3D11_USAGE_DEFAULT;
+    bufferDesc.ByteWidth = sizeof(SimpleVertex) * 4;
+    bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+    bufferDesc.CPUAccessFlags = 0;
+    bufferDesc.MiscFlags = 0;
+    D3D11_SUBRESOURCE_DATA InitData;
+    InitData.pSysMem = vertices;
+
+    hr = this->_device->CreateBuffer(&bufferDesc, &InitData, &this->_vertexBuffer);
+    if (FAILED(hr))
+        return this->MsgBox(hr, L"LoadShader#CreateBuffer<Vertex>");
+
+    const UINT stride = sizeof(SimpleVertex);
+    const UINT offset = 0;
+    this->_deviceContext->IASetVertexBuffers(0, 1, &this->_vertexBuffer, &stride, &offset);
+
+    this->_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+
+    D3D11_SAMPLER_DESC samplerDesc;
+    ZeroMemory(&samplerDesc, sizeof(D3D11_SAMPLER_DESC));
+    samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+    samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+    samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+    samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+    this->_device->CreateSamplerState(&samplerDesc, &this->_samplerState);
+
+    return S_OK;
 }
 
 HRESULT DxRenderer::CompileShaderFromFile(const LPCWSTR pFileName, const LPCSTR pEntrypoint, const LPCSTR pTarget, ID3D10Blob** ppCode)
@@ -260,5 +276,11 @@ HRESULT DxRenderer::CompileShaderFromFile(const LPCWSTR pFileName, const LPCSTR 
     const auto hr = D3DCompileFromFile(pFileName, nullptr, nullptr, pEntrypoint, pTarget, 0, 0, ppCode, &pErrorBlob);
     SAFE_RELEASE(pErrorBlob);
 
+    return hr;
+}
+
+HRESULT DxRenderer::MsgBox(const HRESULT hr, const LPCWSTR lpText)
+{
+    MessageBoxW(nullptr, lpText, L"Robock.Native Internal Error", MB_OK | MB_ICONEXCLAMATION);
     return hr;
 }
