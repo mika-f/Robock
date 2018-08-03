@@ -13,8 +13,9 @@ namespace Robock.Models
     public class Desktop : IDisposable
     {
         private readonly RobockClient _client;
-        private readonly Process _process;
         private readonly Screen _screen;
+        private readonly string _uuid;
+        private Process _process;
 
         public int No { get; }
         public bool IsPrimary => _screen.Primary;
@@ -27,9 +28,8 @@ namespace Robock.Models
         {
             _screen = screen;
             No = index;
-            var uuid = $"Background.Desktop{index}";
-            _client = new RobockClient(uuid);
-            _process = Process.Start("Robock.Background.exe", $"{uuid}");
+            _uuid = $"Background.Desktop{index}";
+            _client = new RobockClient(_uuid);
         }
 
         public void Dispose()
@@ -48,6 +48,11 @@ namespace Robock.Models
 
         public void Handshake()
         {
+            _process = Process.Start("Robock.Background.exe", $"{_uuid}");
+            if (_process == null)
+                return;
+            _process.WaitForInputIdle();
+
             var offsetX = (SystemParameters.VirtualScreenLeft < 0 ? -1 : 1) * SystemParameters.VirtualScreenLeft;
             var offsetY = (SystemParameters.VirtualScreenTop < 0 ? -1 : 1) * SystemParameters.VirtualScreenTop;
 
@@ -62,6 +67,10 @@ namespace Robock.Models
         public void DiscardWallpaper()
         {
             _client.DiscardWallpaper();
+            _client.Close();
+            _process?.CloseMainWindow();
+            _process?.WaitForExit();
+            _process?.Dispose();
         }
     }
 }

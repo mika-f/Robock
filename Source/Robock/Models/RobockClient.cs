@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.ServiceModel;
+using System.Threading.Tasks;
 
 using Robock.Shared.Communication;
 using Robock.Shared.Win32;
@@ -9,15 +10,19 @@ namespace Robock.Models
 {
     public class RobockClient : IRobockDuplexCallback
     {
-        private readonly IRobockDuplex _channel;
+        private readonly string _uuid;
+        private IRobockDuplex _channel;
+        private bool _connecting;
 
         public RobockClient(string uuid)
         {
-            _channel = new DuplexChannelFactory<IRobockDuplex>(this, new NetNamedPipeBinding(), $"net.pipe://localhost/Robock.{uuid}").CreateChannel();
+            _uuid = uuid;
+            _connecting = false;
         }
 
         public void HandshakeCallback()
         {
+            _connecting = true;
             Debug.WriteLine("Handshake ended");
         }
 
@@ -36,11 +41,21 @@ namespace Robock.Models
             // throw new NotImplementedException();
         }
 
-        #region IRobockDuples
+        #region IRobockDuplex
 
         public void Handshake(int x, int y, int height, int width)
         {
-            _channel.Handshake(x, y, height, width);
+            while (!_connecting)
+                try
+                {
+                    _channel = new DuplexChannelFactory<IRobockDuplex>(this, new NetNamedPipeBinding(), $"net.pipe://localhost/Robock.{_uuid}").CreateChannel();
+                    _channel.Handshake(x, y, height, width);
+                    _connecting = true;
+                }
+                catch
+                {
+                    Task.Delay(TimeSpan.FromMilliseconds(100)).Wait();
+                }
         }
 
         public void ApplyWallpaper(IntPtr src, RECT rect)
@@ -58,6 +73,7 @@ namespace Robock.Models
             try
             {
                 _channel.Close();
+                _connecting = false;
             }
             catch
             {
