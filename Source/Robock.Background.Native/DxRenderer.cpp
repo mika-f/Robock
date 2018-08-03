@@ -46,6 +46,8 @@ HRESULT DxRenderer::Render(void* phWindowSurface, void* phDwmSurface, const int 
         D3D11_TEXTURE2D_DESC textureDesc;
         textureDesc.Usage = D3D11_USAGE_DEFAULT;
         textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+        textureDesc.Width = width;
+        textureDesc.Height = height;
         textureDesc.CPUAccessFlags = 0;
         textureDesc.MiscFlags = 0;
         D3D11_SUBRESOURCE_DATA initData;
@@ -72,7 +74,7 @@ HRESULT DxRenderer::Render(void* phWindowSurface, void* phDwmSurface, const int 
 
     if (this->_deviceContext != nullptr)
         this->_deviceContext->Flush();
-    return hr;
+    return S_OK;
 }
 
 HRESULT DxRenderer::Release()
@@ -135,7 +137,7 @@ HRESULT DxRenderer::InitDevice()
     if (FAILED(hr))
         return this->MsgBox(hr, L"InitDevice#LoadShader");
 
-    return hr;
+    return S_OK;
 }
 
 HRESULT DxRenderer::InitRenderTarget(void* pResource)
@@ -192,7 +194,7 @@ HRESULT DxRenderer::InitRenderTarget(void* pResource)
     if (output != nullptr)
         output->Release();
 
-    return hr;
+    return S_OK;
 }
 
 HRESULT DxRenderer::LoadShader()
