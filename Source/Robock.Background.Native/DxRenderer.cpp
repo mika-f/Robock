@@ -229,10 +229,10 @@ HRESULT DxRenderer::LoadShader()
 
     SimpleVertex vertices[] =
     {
-        {XMFLOAT3(-0.5f, -0.5f, 0.5f), XMFLOAT2(0, 1)},
-        {XMFLOAT3(-0.5f, 0.5f, 0.5f), XMFLOAT2(0, 0)},
-        {XMFLOAT3(0.5f, -0.5f, 0.5f), XMFLOAT2(1, 1)},
-        {XMFLOAT3(0.5f, 0.5f, 0.5f), XMFLOAT2(1, 0)}
+        {XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT2(0, 1)},
+        {XMFLOAT3(-1.0f, 1.0f, 1.0f), XMFLOAT2(0, 0)},
+        {XMFLOAT3(1.0f, -1.0f, 1.0f), XMFLOAT2(1, 1)},
+        {XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT2(1, 0)}
     };
 
     D3D11_BUFFER_DESC bufferDesc;
