@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "DxRenderer.h"
+#include "comdef.h"
+#include <string>
 
 using namespace DirectX;
 using namespace PackedVector;
@@ -283,6 +285,9 @@ HRESULT DxRenderer::CompileShaderFromFile(const LPCWSTR pFileName, const LPCSTR 
 
 HRESULT DxRenderer::MsgBox(const HRESULT hr, const LPCWSTR lpText)
 {
-    MessageBoxW(nullptr, lpText, L"Robock.Native Internal Error", MB_OK | MB_ICONEXCLAMATION);
+    _com_error err(hr);
+    const std::wstring base(lpText);
+    const auto message = base + L"\r\nMessage: " + err.ErrorMessage();
+    MessageBoxW(nullptr, message.c_str(), L"Robock.Native Internal Error", MB_OK | MB_ICONEXCLAMATION);
     return hr;
 }
