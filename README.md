@@ -5,24 +5,21 @@ Window Capture + Dynamic Wallpaper = Good Experience
 
 ## Requirements
 
-* Windows 10 10.0.17134.0
-* .NET Framework 4.7.2 以降
+* Windows 10 (1804 ~)
+* .NET Framework 4.7.2 ~
 * DirectX 11 ~
-* Windows Display Driver Model に対応したビデオカード
-* インターネット接続
-* YouTube で 1080p 動画をフルスクリーンで見てもカクつかない程度のスペック
+* Video Card that supports Windows Display Driver Model
+* Internet Connection
 
 
 ## Components
 
-* Robock
-* Robock.Background
-* Robock.Background.Native
-* Robock.Shared
+* Robock (C#)
+* Robock.Background (C# + DirectX Host)
+* Robock.Background.Native (C++)
+* Robock.Shared (C#)
 
 
 ## Donation
 
-* BTC  : `1NFcYczriqTEzVgzfurTMJNbhxPY1vyki9`
-* ETH  : `0x3cd67f16c2d7fe518e924930f645dd73aadaaf39`
-* MONA : `MC4x87u1ffmhsRhHof1sHz8UAtNtKCTQut`
+https://mochizuki.moe/donation
