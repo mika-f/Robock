@@ -60,11 +60,15 @@ namespace Robock.Models
 
         public void ApplyWallpaper(IntPtr src, RECT rect)
         {
+            if (_channel == null)
+                throw new InvalidOperationException("Invalid connection");
             _channel.ApplyWallpaper(src, rect);
         }
 
         public void DiscardWallpaper()
         {
+            if (_channel == null)
+                throw new InvalidOperationException("Invalid connection");
             _channel.DiscardWallpaper();
         }
 
