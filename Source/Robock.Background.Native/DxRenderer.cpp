@@ -44,19 +44,10 @@ HRESULT DxRenderer::Render(void* phWindowSurface, void* phDwmSurface, const int 
         if (FAILED(hr))
             return this->MsgBox(hr, L"Render#OpenSharedResource<ID3D11Resource>");
 
-        ID3D11Texture2D* texture2D;
-        D3D11_TEXTURE2D_DESC textureDesc;
-        textureDesc.Usage = D3D11_USAGE_DEFAULT;
-        textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-        textureDesc.Width = width;
-        textureDesc.Height = height;
-        textureDesc.CPUAccessFlags = 0;
-        textureDesc.MiscFlags = 0;
-        D3D11_SUBRESOURCE_DATA initData;
-        initData.pSysMem = resource;
-        hr = this->_device->CreateTexture2D(&textureDesc, &initData, &texture2D);
+        ID3D11Texture2D* texture2D = nullptr;
+        hr = resource->QueryInterface(__uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&texture2D));
         if (FAILED(hr))
-            return this->MsgBox(hr, L"Render#CreateTexture2D");
+            return this->MsgBox(hr, L"Render#QueryInterface<ID3D11Texture2D>");
 
         hr = this->_device->CreateShaderResourceView(texture2D, nullptr, &this->_shaderResourceView);
         if (FAILED(hr))
