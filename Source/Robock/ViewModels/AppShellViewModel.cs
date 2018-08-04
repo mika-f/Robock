@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Specialized;
+using System.Reactive.Linq;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using Robock.Models;
+using Robock.Services;
 using Robock.Shared.Extensions;
 using Robock.Shared.Models;
 using Robock.Shared.Mvvm;
@@ -16,6 +18,7 @@ namespace Robock.ViewModels
     {
         private readonly DesktopWindowManager _desktopWindowManager;
         public ReactiveProperty<string> Title { get; }
+        public ReactiveProperty<string> Status { get; }
         public ReactiveCollection<TabViewModel> Tabs { get; }
         public VirtualScreenViewModel VirtualScreen { get; }
 
@@ -26,6 +29,8 @@ namespace Robock.ViewModels
             _desktopWindowManager = new DesktopWindowManager().AddTo(this);
 
             Title = new ReactiveProperty<string>("Robock");
+            Status = StatusTextService.Instance.ObserveProperty(w => w.Status).ToReactiveProperty();
+            Status.Throttle(TimeSpan.FromSeconds(10)).Subscribe(_ => StatusTextService.Instance.Status = "Ready").AddTo(this);
             Tabs = new ReactiveCollection<TabViewModel>
             {
                 new AboutTabViewModel()

@@ -6,6 +6,7 @@ using System.Reactive.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
+using Robock.Services;
 using Robock.Shared.Win32;
 
 namespace Robock.Models
@@ -38,6 +39,7 @@ namespace Robock.Models
         private void FindWindows()
         {
             var windows = new List<Window>();
+            StatusTextService.Instance.Status = "Synchronizing visible windows...";
 
             NativeMethods.EnumWindows((hWnd, lParam) =>
             {
@@ -83,6 +85,8 @@ namespace Robock.Models
             // Remove killed windows.
             foreach (var window in Windows.ToArray().Where(w => !w.IsMarked))
                 Windows.Remove(window);
+
+            StatusTextService.Instance.Status = "Synchronizied windows";
         }
     }
 }

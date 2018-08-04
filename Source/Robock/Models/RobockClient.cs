@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.ServiceModel;
 using System.Threading.Tasks;
 
+using Robock.Services;
 using Robock.Shared.Communication;
 using Robock.Shared.Win32;
 
@@ -26,24 +27,25 @@ namespace Robock.Models
         public void HandshakeCallback()
         {
             _connecting = true;
-            Debug.WriteLine("Handshake ended");
+            StatusTextService.Instance.Status = "Handshake success, Connected to background process";
             InvokeCallback(nameof(Handshake));
         }
 
         public void ApplyWallpaperCallback(bool isSucceed)
         {
-            Debug.WriteLine(isSucceed ? "Rendering Success" : "Rendering Failed");
+            StatusTextService.Instance.Status = isSucceed ? "Rendering success, Start rendering" : "Rendering failed";
             InvokeCallback(nameof(ApplyWallpaper));
         }
 
         public void DiscardWallpaperCallback()
         {
-            Debug.WriteLine("Discard finished.");
+            StatusTextService.Instance.Status = "Discard wallpaper finished";
             InvokeCallback(nameof(DiscardWallpaper));
         }
 
         public void CloseCallback()
         {
+            StatusTextService.Instance.Status = "Closed connection to background process";
             InvokeCallback(nameof(Close));
         }
 
@@ -69,6 +71,7 @@ namespace Robock.Models
 
         public void Handshake(int x, int y, int height, int width, Action action = null)
         {
+            StatusTextService.Instance.Status = "Start handshaking between Robock and background process... It may take a little time";
             while (!_connecting)
                 try
                 {
@@ -87,6 +90,7 @@ namespace Robock.Models
         {
             if (_channel == null)
                 throw new InvalidOperationException("Invalid connection");
+            StatusTextService.Instance.Status = "Applying wallpeper...";
             RegisterCallback(nameof(ApplyWallpaper), action);
             _channel.ApplyWallpaper(src, rect);
         }
@@ -95,6 +99,7 @@ namespace Robock.Models
         {
             if (_channel == null)
                 throw new InvalidOperationException("Invalid connection");
+            StatusTextService.Instance.Status = "Discarding wallpeper...";
             RegisterCallback(nameof(DiscardWallpaper), action);
             _channel.DiscardWallpaper();
         }
@@ -106,6 +111,7 @@ namespace Robock.Models
 
             try
             {
+                StatusTextService.Instance.Status = "Closing connection to background process... It may take a little time";
                 RegisterCallback(nameof(Close), action);
                 _channel.Close();
                 _connecting = false;

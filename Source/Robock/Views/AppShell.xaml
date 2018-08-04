@@ -128,7 +128,7 @@
             <TextBlock Grid.Column="0"
                        Margin="10,0,0,0"
                        VerticalAlignment="Center"
-                       Text="Ready" />
+                       Text="{Binding Status.Value, Mode=OneWay}" />
             <metro:ResizeGrip Grid.Column="1" />
         </Grid>
     </Grid>

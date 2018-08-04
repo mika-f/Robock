@@ -153,6 +153,7 @@
     <Compile Include="Models\Window.cs" />
     <Compile Include="Models\WindowManager.cs" />
     <Compile Include="Models\ProductInfo.cs" />
+    <Compile Include="Services\StatusTextService.cs" />
     <Compile Include="ViewModels\AppShellViewModel.cs" />
     <Compile Include="ViewModels\WindowViewModel.cs" />
     <Compile Include="ViewModels\Tabs\DesktopViewModel.cs" />
