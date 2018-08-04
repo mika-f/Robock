@@ -168,12 +168,13 @@ namespace Robock.ViewModels.Tabs
             ApplyWallpaperCommand.Subscribe(_ =>
             {
                 // タイミングどこが良いか問題
-                _desktop.Handshake();
-
-                var rect = SelectedAreaHeight.Value != 0
-                    ? CalcRenderingRect()
-                    : new RECT {top = 0, left = 0, bottom = _desktopWindowManager.Thumbnails[0].Size.Height, right = _desktopWindowManager.Thumbnails[0].Size.Width};
-                _desktop.ApplyWallpaper(SelectedWindow.Value.Handle, SelectedAreaHeight.Value != 0 ? CalcRenderingRect() : rect);
+                _desktop.Handshake(() =>
+                {
+                    var rect = SelectedAreaHeight.Value != 0
+                        ? CalcRenderingRect()
+                        : new RECT {top = 0, left = 0, bottom = _desktopWindowManager.Thumbnails[0].Size.Height, right = _desktopWindowManager.Thumbnails[0].Size.Width};
+                    _desktop.ApplyWallpaper(SelectedWindow.Value.Handle, SelectedAreaHeight.Value != 0 ? CalcRenderingRect() : rect);
+                });
             }).AddTo(this);
             DiscardWallpaperCommand = new[]
             {

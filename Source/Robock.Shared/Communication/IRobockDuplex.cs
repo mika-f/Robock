@@ -35,6 +35,7 @@ namespace Robock.Shared.Communication
         /// <summary>
         ///     Close communication pipe
         /// </summary>
+        [OperationContract(IsOneWay = true)]
         void Close();
     }
 }

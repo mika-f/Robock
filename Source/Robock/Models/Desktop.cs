@@ -36,9 +36,11 @@ namespace Robock.Models
         {
             try
             {
-                _client.Close();
-                _process?.CloseMainWindow();
-                _process?.Dispose();
+                _client.Close(() =>
+                {
+                    _process?.CloseMainWindow();
+                    _process?.Dispose();
+                });
             }
             catch (Exception e)
             {
@@ -46,7 +48,7 @@ namespace Robock.Models
             }
         }
 
-        public void Handshake()
+        public void Handshake(Action action = null)
         {
             _process = Process.Start("Robock.Background.exe", $"{_uuid}");
             if (_process == null)
@@ -56,7 +58,7 @@ namespace Robock.Models
             var offsetX = (SystemParameters.VirtualScreenLeft < 0 ? -1 : 1) * SystemParameters.VirtualScreenLeft;
             var offsetY = (SystemParameters.VirtualScreenTop < 0 ? -1 : 1) * SystemParameters.VirtualScreenTop;
 
-            _client.Handshake((int) (offsetX + X), (int) (offsetY + Y), (int) Height, (int) Width);
+            _client.Handshake((int) (offsetX + X), (int) (offsetY + Y), (int) Height, (int) Width, action);
         }
 
         public void ApplyWallpaper(IntPtr hWnd, RECT rect)
@@ -66,11 +68,16 @@ namespace Robock.Models
 
         public void DiscardWallpaper()
         {
-            _client.DiscardWallpaper();
-            _client.Close();
-            _process?.CloseMainWindow();
-            _process?.WaitForExit();
-            _process?.Dispose();
+            // なんかつらい
+            _client.DiscardWallpaper(() =>
+            {
+                _client.Close(() =>
+                {
+                    _process?.CloseMainWindow();
+                    _process?.WaitForExit();
+                    _process?.Dispose();
+                });
+            });
         }
     }
 }

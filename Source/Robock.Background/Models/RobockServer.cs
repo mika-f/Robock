@@ -54,7 +54,6 @@ namespace Robock.Background.Models
         {
             DiscardWallpaper();
             Callback.CloseCallback();
-            _serviceHost.Close();
         }
 
         //
