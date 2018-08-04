@@ -30,7 +30,7 @@ namespace Robock.ViewModels
 
             Title = new ReactiveProperty<string>("Robock");
             Status = StatusTextService.Instance.ObserveProperty(w => w.Status).ToReactiveProperty();
-            Status.Throttle(TimeSpan.FromSeconds(10)).Subscribe(_ => StatusTextService.Instance.Status = "Ready").AddTo(this);
+            Status.Throttle(TimeSpan.FromSeconds(30)).Subscribe(_ => StatusTextService.Instance.Status = "Ready").AddTo(this);
             Tabs = new ReactiveCollection<TabViewModel>
             {
                 new AboutTabViewModel()

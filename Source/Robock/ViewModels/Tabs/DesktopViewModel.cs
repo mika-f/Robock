@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 
 using Reactive.Bindings;
@@ -163,28 +164,28 @@ namespace Robock.ViewModels.Tabs
             ApplyWallpaperCommand = new[]
             {
                 SelectedWindow.Select(w => w != null),
-                _desktopWindowManager.Thumbnails[0].ObserveProperty(w => w.IsRendering)
+                _desktopWindowManager.Thumbnails[0].ObserveProperty(w => w.IsRendering),
+                desktop.ObserveProperty(w => w.IsConnecting).Select(w => !w)
             }.CombineLatest().Select(w => w.All(v => v)).ToReactiveCommand();
             ApplyWallpaperCommand.Subscribe(_ =>
             {
-                // タイミングどこが良いか問題
-                _desktop.Handshake(() =>
+                Task.Run(() =>
                 {
-                    var rect = SelectedAreaHeight.Value != 0
-                        ? CalcRenderingRect()
-                        : new RECT {top = 0, left = 0, bottom = _desktopWindowManager.Thumbnails[0].Size.Height, right = _desktopWindowManager.Thumbnails[0].Size.Width};
-                    _desktop.ApplyWallpaper(SelectedWindow.Value.Handle, SelectedAreaHeight.Value != 0 ? CalcRenderingRect() : rect);
+                    _desktop.Handshake(() =>
+                    {
+                        var rect = SelectedAreaHeight.Value != 0
+                            ? CalcRenderingRect()
+                            : new RECT {top = 0, left = 0, bottom = _desktopWindowManager.Thumbnails[0].Size.Height, right = _desktopWindowManager.Thumbnails[0].Size.Width};
+                        _desktop.ApplyWallpaper(SelectedWindow.Value.Handle, SelectedAreaHeight.Value != 0 ? CalcRenderingRect() : rect);
+                    });
                 });
             }).AddTo(this);
             DiscardWallpaperCommand = new[]
             {
-                SelectedWindow.Select(w => w != null)
+                SelectedWindow.Select(w => w != null),
+                desktop.ObserveProperty(w => w.IsConnecting)
             }.CombineLatest().Select(w => w.All(v => v)).ToReactiveCommand();
-            DiscardWallpaperCommand.Subscribe(_ =>
-            {
-                //
-                _desktop.DiscardWallpaper();
-            }).AddTo(this);
+            DiscardWallpaperCommand.Subscribe(_ => Task.Run(() => _desktop.DiscardWallpaper())).AddTo(this);
             ReloadWindowsCommand = new ReactiveCommand();
             ReloadWindowsCommand.Subscribe(_ => windowManager.ForceUpdate()).AddTo(this);
         }

@@ -3,6 +3,9 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Forms;
 
+using Prism.Mvvm;
+
+using Robock.Services;
 using Robock.Shared.Win32;
 
 namespace Robock.Models
@@ -10,7 +13,7 @@ namespace Robock.Models
     /// <summary>
     ///     Desktop is equals to Monitor, Monitor has a one Desktop.
     /// </summary>
-    public class Desktop : IDisposable
+    public class Desktop : BindableBase, IDisposable
     {
         private readonly RobockClient _client;
         private readonly Screen _screen;
@@ -63,7 +66,7 @@ namespace Robock.Models
 
         public void ApplyWallpaper(IntPtr hWnd, RECT rect)
         {
-            _client.ApplyWallpaper(hWnd, rect);
+            _client.ApplyWallpaper(hWnd, rect, () => { IsConnecting = true; });
         }
 
         public void DiscardWallpaper()
@@ -73,11 +76,25 @@ namespace Robock.Models
             {
                 _client.Close(() =>
                 {
+                    StatusTextService.Instance.Status = "Waiting for shutting down of background process...";
                     _process?.CloseMainWindow();
                     _process?.WaitForExit();
                     _process?.Dispose();
+                    IsConnecting = false;
                 });
             });
         }
+
+        #region IsConnecting
+
+        private bool _isConnecting;
+
+        public bool IsConnecting
+        {
+            get => _isConnecting;
+            set => SetProperty(ref _isConnecting, value);
+        }
+
+        #endregion
     }
 }
