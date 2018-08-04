@@ -1,6 +1,6 @@
 # Robock
 
-ロボ子さんをデスクトップに住ませて無限に癒やされたかった
+Window Capture + Dynamic Wallpaper = Good Experience
 
 
 ## Requirements
@@ -17,6 +17,7 @@
 
 * Robock
 * Robock.Background
+* Robock.Background.Native
 * Robock.Shared
 
 
