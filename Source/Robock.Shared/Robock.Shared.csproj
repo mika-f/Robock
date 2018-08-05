@@ -65,7 +65,6 @@
     <Compile Include="Models\Thumbnail.cs" />
     <Compile Include="Mvvm\ViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Refrection\RefrectionHelper.cs" />
     <Compile Include="Win32\DeviceContextValues.cs" />
     <Compile Include="Win32\DWMWINDOWATTRIBUTE.cs" />
     <Compile Include="Win32\DWM_THUMBNAIL_PROPERTIES.cs" />
