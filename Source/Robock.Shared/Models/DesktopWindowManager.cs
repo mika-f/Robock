@@ -86,7 +86,7 @@ namespace Robock.Shared.Models
             {
                 fVisible = true,
                 dwFlags = (int) (DWM_TNP.DWM_TNP_VISIBLE | DWM_TNP.DWM_TNP_OPACITY | DWM_TNP.DWM_TNP_RECTDESTINATION | DWM_TNP.DWM_TNP_SOURCECLIENTAREAONLY),
-                opacity = (byte) (255 / (index == EditorIndex ? 2 : 1)),
+                opacity = (byte) (255 / (index == 0 ? 2 : 1)),
                 rcDestination = new RECT {left = left, top = top, right = left + width, bottom = top + height},
                 fSourceClientAreaOnly = true
             };
@@ -99,12 +99,5 @@ namespace Robock.Shared.Models
 
             NativeMethods.DwmUpdateThumbnailProperties(Thumbnails[index].Handle, ref props);
         }
-
-        #region Constants
-
-        public const int EditorIndex = 0;
-        public const int PreviewIndex = 1;
-
-        #endregion
     }
 }

@@ -207,7 +207,7 @@ namespace Robock.ViewModels.Tabs
                 if (SelectedAreaHeight.Value != 0)
                     rect = CalcRenderingRect();
 
-                if (_desktopWindowManager.Thumbnails[DesktopWindowManager.PreviewIndex].IsRendering)
+                if (_desktopWindowManager.Thumbnails[1].IsRendering)
                     _desktopWindowManager.Rerender(1, PreviewAreaLeft.Value, PreviewAreaTop.Value, PreviewAreaHeight.Value, PreviewAreaWidth.Value, rect);
                 else
                     _desktopWindowManager.Start(1, handle, PreviewAreaLeft.Value, PreviewAreaTop.Value, PreviewAreaHeight.Value, PreviewAreaWidth.Value, rect);

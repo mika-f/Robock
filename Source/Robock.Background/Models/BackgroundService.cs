@@ -111,7 +111,7 @@ namespace Robock.Background.Models
                 return;
 
             // 1st, Get DWM DirectX shared handle.
-            GetDxSharedSurface(_srcWindowHandle, out var phSurface, out var pAdapterLuid, out var pFmtWindow, out var pPresentFlgs, out var pWin32KUpdateId);
+            GetDxSharedSurface(_srcWindowHandle, out var phSurface, out _, out _, out _, out _);
 
             // 2nd, render window using shared handle
             NativeMethods.Render(hSurface, phSurface, _clientX, _clientY, _clientWidth, _clientHeight, isNewSurface);
