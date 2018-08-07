@@ -1,4 +1,6 @@
 # Robock
+[![License](https://img.shields.io/github/license/mika-f/robock.svg?style=flat-square)](./blob/develop/LICENSE)
+
 
 Window Capture + Dynamic Wallpaper = Good Experience
 
