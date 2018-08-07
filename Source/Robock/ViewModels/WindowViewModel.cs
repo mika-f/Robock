@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive.Linq;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -18,7 +19,9 @@ namespace Robock.ViewModels
         public WindowViewModel(Window window)
         {
             _window = window;
-            Title = window.ObserveProperty(w => w.Title).ToReactiveProperty().AddTo(this);
+
+            // .exe 決め打ちでも問題無かろう
+            Title = window.ObserveProperty(w => w.Title).Select(w => $"{w} ({window.ProcessName}.exe)").ToReactiveProperty().AddTo(this);
         }
     }
 }

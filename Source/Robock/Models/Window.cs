@@ -9,6 +9,7 @@ namespace Robock.Models
     {
         public IntPtr Handle { get; set; }
         public bool IsMarked { get; set; }
+        public string ProcessName { get; set; }
 
         #region Title
 

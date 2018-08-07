@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Runtime.InteropServices;
@@ -60,7 +61,14 @@ namespace Robock.Models
 
                 if (Ignores.IgnoreWindowTitles.Contains(title.ToString()))
                     return true;
-                windows.Add(new Window {Handle = hWnd, Title = title.ToString()});
+
+                NativeMethods.GetWindowThreadProcessId(hWnd, out var processId);
+                windows.Add(new Window
+                {
+                    Handle = hWnd,
+                    Title = title.ToString(),
+                    ProcessName = Process.GetProcessById((int) processId).ProcessName
+                });
                 return true;
             }, IntPtr.Zero);
 
