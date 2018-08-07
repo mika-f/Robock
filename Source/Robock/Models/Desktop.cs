@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 
@@ -39,11 +40,7 @@ namespace Robock.Models
         {
             try
             {
-                _client.Close(() =>
-                {
-                    _process?.CloseMainWindow();
-                    _process?.Dispose();
-                });
+                Close().Wait();
             }
             catch (Exception e)
             {
@@ -51,7 +48,7 @@ namespace Robock.Models
             }
         }
 
-        public void Handshake(Action action = null)
+        public async Task Handshake(Action action = null)
         {
             _process = Process.Start("Robock.Background.exe", $"{_uuid}");
             if (_process == null)
@@ -61,28 +58,33 @@ namespace Robock.Models
             var offsetX = (SystemParameters.VirtualScreenLeft < 0 ? -1 : 1) * SystemParameters.VirtualScreenLeft;
             var offsetY = (SystemParameters.VirtualScreenTop < 0 ? -1 : 1) * SystemParameters.VirtualScreenTop;
 
-            _client.Handshake((int) (offsetX + X), (int) (offsetY + Y), (int) Height, (int) Width, action);
+            await _client.Handshake((int) (offsetX + X), (int) (offsetY + Y), (int) Height, (int) Width);
         }
 
-        public void ApplyWallpaper(IntPtr hWnd, RECT rect)
+        public async Task ApplyWallpaper(IntPtr hWnd, RECT rect)
         {
-            _client.ApplyWallpaper(hWnd, rect, () => { IsConnecting = true; });
+            await _client.ApplyWallpaper(hWnd, rect);
+            IsConnecting = true;
         }
 
-        public void DiscardWallpaper()
+        public async Task DiscardWallpaper()
         {
-            // なんかつらい
-            _client.DiscardWallpaper(() =>
-            {
-                _client.Close(() =>
-                {
-                    StatusTextService.Instance.Status = "Waiting for shutting down of background process...";
-                    _process?.CloseMainWindow();
-                    _process?.WaitForExit();
-                    _process?.Dispose();
-                    IsConnecting = false;
-                });
-            });
+            await _client.DiscardWallpaper();
+            await Close();
+            IsConnecting = false;
+        }
+
+        private async Task Close()
+        {
+            StatusTextService.Instance.Status = "Waiting for shutting down of background process...";
+            await _client.Close();
+            if (_process == null)
+                return;
+
+            _process.CloseMainWindow();
+            _process.WaitForExit();
+            _process.Dispose();
+            StatusTextService.Instance.Status = "Shutdown successful";
         }
 
         #region IsConnecting

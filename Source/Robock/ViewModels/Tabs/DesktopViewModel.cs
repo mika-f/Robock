@@ -167,17 +167,15 @@ namespace Robock.ViewModels.Tabs
                 _desktopWindowManager.Thumbnails[0].ObserveProperty(w => w.IsRendering),
                 desktop.ObserveProperty(w => w.IsConnecting).Select(w => !w)
             }.CombineLatest().Select(w => w.All(v => v)).ToReactiveCommand();
-            ApplyWallpaperCommand.Subscribe(_ =>
+            ApplyWallpaperCommand.Subscribe(() =>
             {
-                Task.Run(() =>
+                Task.Run(async () =>
                 {
-                    _desktop.Handshake(() =>
-                    {
-                        var rect = SelectedAreaHeight.Value != 0
-                            ? CalcRenderingRect()
-                            : new RECT {top = 0, left = 0, bottom = _desktopWindowManager.Thumbnails[0].Size.Height, right = _desktopWindowManager.Thumbnails[0].Size.Width};
-                        _desktop.ApplyWallpaper(SelectedWindow.Value.Handle, SelectedAreaHeight.Value != 0 ? CalcRenderingRect() : rect);
-                    });
+                    await _desktop.Handshake();
+                    var rect = SelectedAreaHeight.Value != 0
+                        ? CalcRenderingRect()
+                        : new RECT {top = 0, left = 0, bottom = _desktopWindowManager.Thumbnails[0].Size.Height, right = _desktopWindowManager.Thumbnails[0].Size.Width};
+                    await _desktop.ApplyWallpaper(SelectedWindow.Value.Handle, SelectedAreaHeight.Value != 0 ? CalcRenderingRect() : rect);
                 });
             }).AddTo(this);
             DiscardWallpaperCommand = new[]
@@ -185,7 +183,7 @@ namespace Robock.ViewModels.Tabs
                 SelectedWindow.Select(w => w != null),
                 desktop.ObserveProperty(w => w.IsConnecting)
             }.CombineLatest().Select(w => w.All(v => v)).ToReactiveCommand();
-            DiscardWallpaperCommand.Subscribe(_ => Task.Run(() => _desktop.DiscardWallpaper())).AddTo(this);
+            DiscardWallpaperCommand.Subscribe(() => Task.Run(async () => await _desktop.DiscardWallpaper())).AddTo(this);
             ReloadWindowsCommand = new ReactiveCommand();
             ReloadWindowsCommand.Subscribe(_ => windowManager.ForceUpdate()).AddTo(this);
         }

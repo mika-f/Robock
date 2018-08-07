@@ -1,12 +1,13 @@
 ﻿using System;
 using System.ServiceModel;
+using System.Threading.Tasks;
 
 using Robock.Shared.Win32;
 
-namespace Robock.Shared.Communication
+namespace Robock.Shared.Models
 {
-    [ServiceContract(Namespace = "robock://localhost", SessionMode = SessionMode.Required, CallbackContract = typeof(IRobockDuplexCallback))]
-    public interface IRobockDuplex
+    [ServiceContract(Namespace = "robock://localhost", SessionMode = SessionMode.Required)]
+    public interface IRobockBackgroundConnection
     {
         /// <summary>
         ///     Handshake between Robock and Robock.Background
@@ -15,27 +16,27 @@ namespace Robock.Shared.Communication
         /// <param name="y">Y</param>
         /// <param name="height">Height</param>
         /// <param name="width">Width</param>
-        [OperationContract(IsOneWay = true)]
-        void Handshake(int x, int y, int height, int width);
+        [OperationContract]
+        Task Handshake(int x, int y, int height, int width);
 
         /// <summary>
         ///     Apply wallpaper
         /// </summary>
         /// <param name="src">hWnd of source window</param>
         /// <param name="rect"></param>
-        [OperationContract(IsOneWay = true)]
-        void ApplyWallpaper(IntPtr src, RECT rect);
+        [OperationContract]
+        Task ApplyWallpaper(IntPtr src, RECT rect);
 
         /// <summary>
         ///     Discard wallpaper
         /// </summary>
-        [OperationContract(IsOneWay = true)]
-        void DiscardWallpaper();
+        [OperationContract]
+        Task DiscardWallpaper();
 
         /// <summary>
         ///     Close communication pipe
         /// </summary>
-        [OperationContract(IsOneWay = true)]
-        void Close();
+        [OperationContract]
+        Task Close();
     }
 }

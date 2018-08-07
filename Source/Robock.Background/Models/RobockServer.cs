@@ -1,20 +1,19 @@
 ﻿using System;
 using System.ServiceModel;
+using System.Threading.Tasks;
 using System.Windows;
 
-using Robock.Shared.Communication;
+using Robock.Shared.Models;
 using Robock.Shared.Win32;
 
 namespace Robock.Background.Models
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
-    public class RobockServer : IRobockDuplex, IDisposable
+    public class RobockServer : IRobockBackgroundConnection, IDisposable
     {
         private readonly BackgroundService _backgroundService;
         private readonly string _uuid;
         private ServiceHost _serviceHost;
-
-        private IRobockDuplexCallback Callback => OperationContext.Current.GetCallbackChannel<IRobockDuplexCallback>();
 
         public RobockServer()
         {
@@ -29,31 +28,33 @@ namespace Robock.Background.Models
             ((IDisposable) _serviceHost)?.Dispose();
         }
 
-        public void Handshake(int x, int y, int height, int width)
+        public Task Handshake(int x, int y, int height, int width)
         {
             _backgroundService.SetupRenderer(x, y, width, height);
 
-            Callback.HandshakeCallback();
+            return Task.CompletedTask;
         }
 
-        public void ApplyWallpaper(IntPtr src, RECT rect)
+        public Task ApplyWallpaper(IntPtr src, RECT rect)
         {
             _backgroundService.StartRender(src, rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
 
-            Callback.ApplyWallpaperCallback(true);
+            return Task.CompletedTask;
         }
 
-        public void DiscardWallpaper()
+        public Task DiscardWallpaper()
         {
             _backgroundService.StopRender();
 
-            Callback.DiscardWallpaperCallback();
+            return Task.CompletedTask;
         }
 
-        public void Close()
+        public Task Close()
         {
             DiscardWallpaper();
-            Callback.CloseCallback();
+            _backgroundService.Kill();
+
+            return Task.CompletedTask;
         }
 
         //
@@ -65,7 +66,7 @@ namespace Robock.Background.Models
             try
             {
                 _serviceHost = new ServiceHost(typeof(RobockServer));
-                _serviceHost.AddServiceEndpoint(typeof(IRobockDuplex), new NetNamedPipeBinding(), $"net.pipe://localhost/Robock.{_uuid}");
+                _serviceHost.AddServiceEndpoint(typeof(IRobockBackgroundConnection), new NetNamedPipeBinding(), $"net.pipe://localhost/Robock.{_uuid}");
                 _serviceHost.Open();
             }
             catch (Exception e)

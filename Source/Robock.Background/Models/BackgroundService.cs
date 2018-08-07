@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Reactive.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Windows.Media;
@@ -7,6 +8,8 @@ using System.Windows.Media;
 using Microsoft.Wpf.Interop.DirectX;
 
 using Robock.Shared.Win32;
+
+using Application = System.Windows.Application;
 
 // ReSharper disable LocalizableElement
 
@@ -138,6 +141,11 @@ namespace Robock.Background.Models
         {
             NativeMethods.Release();
             _dxImage.Dispose();
+        }
+
+        public void Kill()
+        {
+            Observable.Return(0).Delay(TimeSpan.FromSeconds(5)).Subscribe(_ => _dxImage.Dispatcher.Invoke(() => Application.Current.Shutdown()));
         }
 
         private (int, int) GetPreviewWindowPosition()

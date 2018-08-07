@@ -57,8 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actions\DataContextDisposeAction.cs" />
-    <Compile Include="Communication\IRobockDuplex.cs" />
-    <Compile Include="Communication\IRobockDuplexCallback.cs" />
+    <Compile Include="Models\IRobockBackgroundConnection.cs" />
     <Compile Include="Extensions\IDisposableExtensions.cs" />
     <Compile Include="Models\DesktopWindowManager.cs" />
     <Compile Include="Models\RectUtil.cs" />
@@ -81,6 +80,8 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Communication\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
