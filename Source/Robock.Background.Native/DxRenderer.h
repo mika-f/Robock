@@ -14,7 +14,6 @@ private:
     HRESULT InitRenderTarget(void* pResource);
     HRESULT LoadShader();
 
-    static HRESULT CompileShaderFromFile(LPCWSTR pFileName, LPCSTR pEntrypoint, LPCSTR pTarget, ID3D10Blob** ppCode);
     static HRESULT MsgBox(HRESULT hr, LPCWSTR lpText);
 
     int _width;

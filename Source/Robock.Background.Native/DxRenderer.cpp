@@ -254,15 +254,6 @@ HRESULT DxRenderer::LoadShader()
     return S_OK;
 }
 
-HRESULT DxRenderer::CompileShaderFromFile(const LPCWSTR pFileName, const LPCSTR pEntrypoint, const LPCSTR pTarget, ID3D10Blob** ppCode)
-{
-    ID3D10Blob* pErrorBlob;
-    const auto hr = D3DCompileFromFile(pFileName, nullptr, nullptr, pEntrypoint, pTarget, 0, 0, ppCode, &pErrorBlob);
-    SAFE_RELEASE(pErrorBlob);
-
-    return hr;
-}
-
 HRESULT DxRenderer::MsgBox(const HRESULT hr, const LPCWSTR lpText)
 {
     _com_error err(hr);
