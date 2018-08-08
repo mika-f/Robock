@@ -7,7 +7,7 @@ struct VS_INPUT
     float2 Tex: TEXCOORD;
 };
 
-float4 PS(VS_INPUT input) : SV_TARGET
+float4 PS(VS_INPUT input) : SV_Target
 {
     return tex2D.Sample(sampleLinear, input.Tex);
 }

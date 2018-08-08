@@ -4,11 +4,11 @@ struct VS_OUTPUT
     float2 Tex: TEXCOORD;
 };
 
-VS_OUTPUT VS(float Pos : POSITION, float2 Tex : TEXCOORD)
+VS_OUTPUT VS(float4 Pos : POSITION, float2 Tex : TEXCOORD)
 {
-    VS_OUTPUT vertex = (VS_OUTPUT)0;
-    vertex.Pos = Pos;
-    vertex.Tex = Tex;
+    VS_OUTPUT vs_output = (VS_OUTPUT)0;
+    vs_output.Pos = Pos;
+    vs_output.Tex = Tex;
 
-    return vertex;
+    return vs_output;
 }
