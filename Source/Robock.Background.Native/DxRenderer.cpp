@@ -192,17 +192,10 @@ HRESULT DxRenderer::InitRenderTarget(void* pResource)
 
 HRESULT DxRenderer::LoadShader()
 {
-    ID3DBlob* vsBlob;
-    auto hr = this->CompileShaderFromFile(L"shader.hlsl", "VS", "vs_5_0", &vsBlob);
+    auto size = ARRAYSIZE(g_VS);
+    auto hr = this->_device->CreateVertexShader(g_VS, size, nullptr, &this->_vertexShader);
     if (FAILED(hr))
-        return this->MsgBox(hr, L"LoadShader#CompileShaderFromFile<VS>");
-
-    hr = this->_device->CreateVertexShader(vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), nullptr, &this->_vertexShader);
-    if (FAILED(hr))
-    {
-        SAFE_RELEASE(vsBlob);
         return this->MsgBox(hr, L"LoadShader#CreateVertexShader");
-    }
 
     D3D11_INPUT_ELEMENT_DESC layout[] =
     {
@@ -211,19 +204,15 @@ HRESULT DxRenderer::LoadShader()
     };
     const UINT elements = sizeof layout / sizeof layout[0];
 
-    hr = this->_device->CreateInputLayout(layout, elements, vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &this->_vertexLayout);
+    hr = this->_device->CreateInputLayout(layout, elements, g_VS, size, &this->_vertexLayout);
     if (FAILED(hr))
         return this->MsgBox(hr, L"LoadShader#CreateInputLayout");
 
     this->_deviceContext->IASetInputLayout(this->_vertexLayout);
 
-    ID3DBlob* psBlob;
-    hr = this->CompileShaderFromFile(L"shader.hlsl", "PS", "ps_5_0", &psBlob);
-    if (FAILED(hr))
-        return this->MsgBox(hr, L"LoadShader#CompileShaderFromFile<PS>");
+    size = ARRAYSIZE(g_PS);
+    hr = this->_device->CreatePixelShader(g_PS, size, nullptr, &this->_pixelShader);
 
-    hr = this->_device->CreatePixelShader(psBlob->GetBufferPointer(), psBlob->GetBufferSize(), nullptr, &this->_pixelShader);
-    SAFE_RELEASE(vsBlob);
     if (FAILED(hr))
         return this->MsgBox(hr, L"LoadShader#CreatePixelShader");
 
