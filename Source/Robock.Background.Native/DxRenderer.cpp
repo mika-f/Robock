@@ -8,6 +8,7 @@ using namespace PackedVector;
 
 DxRenderer::DxRenderer()
 {
+    this->_currentDwnSurface = nullptr;
     this->_width = 0;
     this->_height = 0;
     this->_driverType = D3D_DRIVER_TYPE_NULL;
@@ -37,7 +38,7 @@ HRESULT DxRenderer::Render(void* phWindowSurface, void* phDwmSurface, const int 
             return this->MsgBox(hr, L"Render#InitRenderTarget");
     }
 
-    if (this->_shaderResourceView == nullptr)
+    if (this->_shaderResourceView == nullptr || this->_currentDwnSurface != phDwmSurface)
     {
         IUnknown* resource;
         hr = this->_device->OpenSharedResource(phDwmSurface, __uuidof(ID3D11Resource), reinterpret_cast<void**>(&resource));
@@ -52,6 +53,7 @@ HRESULT DxRenderer::Render(void* phWindowSurface, void* phDwmSurface, const int 
         hr = this->_device->CreateShaderResourceView(texture2D, nullptr, &this->_shaderResourceView);
         if (FAILED(hr))
             return this->MsgBox(hr, L"Render#CreateShaderResourceView");
+        this->_currentDwnSurface = phDwmSurface;
     }
 
     const float clearColor[4] = {0, 0, 0, 1}; // RGBA
@@ -72,6 +74,7 @@ HRESULT DxRenderer::Render(void* phWindowSurface, void* phDwmSurface, const int 
 
 HRESULT DxRenderer::Release()
 {
+    this->_currentDwnSurface = nullptr;
     this->_width = 0;
     this->_height = 0;
     this->_driverType = D3D_DRIVER_TYPE_NULL;

@@ -16,6 +16,7 @@ private:
 
     static HRESULT MsgBox(HRESULT hr, LPCWSTR lpText);
 
+    void* _currentDwnSurface;
     int _width;
     int _height;
 
