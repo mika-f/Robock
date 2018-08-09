@@ -145,7 +145,7 @@ namespace Robock.Background.Models
 
         public void Kill()
         {
-            Observable.Return(0).Delay(TimeSpan.FromSeconds(5)).Subscribe(_ => _dxImage.Dispatcher.Invoke(() => Application.Current.Shutdown()));
+            Observable.Return(0).Delay(TimeSpan.FromSeconds(1.5)).Subscribe(_ => _dxImage.Dispatcher.Invoke(() => Application.Current.Shutdown()));
         }
 
         private (int, int) GetPreviewWindowPosition()
