@@ -87,6 +87,7 @@ namespace Robock.Models
             }
             catch (Exception)
             {
+                StatusTextService.Instance.Status = "Heartbeat failed, disconnect from background process.";
                 if (_process == null)
                     return;
                 _disposable.Dispose();

@@ -117,7 +117,14 @@ namespace Robock.Background.Models
             GetDxSharedSurface(_srcWindowHandle, out var phSurface, out _, out _, out _, out _);
 
             // 2nd, render window using shared handle
-            NativeMethods.Render(hSurface, phSurface, _clientX, _clientY, _clientWidth, _clientHeight, isNewSurface);
+            var hr = NativeMethods.Render(hSurface, phSurface, _clientX, _clientY, _clientWidth, _clientHeight, isNewSurface);
+            if (hr == 0)
+                return;
+
+            // たまに phSurface でのリソース共有に失敗することがあるらしい
+            StopRender();
+            Release();
+            Kill();
         }
 
         public void StopRender()
