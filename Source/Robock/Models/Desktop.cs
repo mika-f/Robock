@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
@@ -19,6 +20,7 @@ namespace Robock.Models
         private readonly RobockClient _client;
         private readonly Screen _screen;
         private readonly string _uuid;
+        private IDisposable _disposable;
         private Process _process;
 
         public int No { get; }
@@ -59,6 +61,9 @@ namespace Robock.Models
             var offsetY = (SystemParameters.VirtualScreenTop < 0 ? -1 : 1) * SystemParameters.VirtualScreenTop;
 
             await _client.Handshake((int) (offsetX + X), (int) (offsetY + Y), (int) Height, (int) Width);
+
+            // 生存確認
+            _disposable = Observable.Timer(TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(10)).Subscribe(async _ => await Heartbeat());
         }
 
         public async Task ApplyWallpaper(IntPtr hWnd, RECT rect)
@@ -74,6 +79,23 @@ namespace Robock.Models
             IsConnecting = false;
         }
 
+        private async Task Heartbeat()
+        {
+            try
+            {
+                await _client.Heartbeat();
+            }
+            catch (Exception)
+            {
+                if (_process == null)
+                    return;
+                _disposable.Dispose();
+                _process.WaitForExit();
+                _process.Dispose();
+                IsConnecting = false;
+            }
+        }
+
         private async Task Close()
         {
             StatusTextService.Instance.Status = "Waiting for shutting down of background process...";
@@ -81,6 +103,7 @@ namespace Robock.Models
             if (_process == null)
                 return;
 
+            _disposable?.Dispose();
             _process.CloseMainWindow();
             _process.WaitForExit();
             _process.Dispose();

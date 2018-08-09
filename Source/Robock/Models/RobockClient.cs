@@ -49,6 +49,13 @@ namespace Robock.Models
             StatusTextService.Instance.Status = "Rendering success, Start rendering";
         }
 
+        public async Task Heartbeat()
+        {
+            if (_channel == null)
+                throw new InvalidOperationException("Invalid connection");
+            await _channel.Heartbeat();
+        }
+
         public async Task DiscardWallpaper()
         {
             if (_channel == null)

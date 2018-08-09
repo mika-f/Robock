@@ -28,6 +28,13 @@ namespace Robock.Shared.Models
         Task ApplyWallpaper(IntPtr src, RECT rect);
 
         /// <summary>
+        ///
+        /// </summary>
+        /// <returns></returns>
+        [OperationContract]
+        Task Heartbeat();
+
+        /// <summary>
         ///     Discard wallpaper
         /// </summary>
         [OperationContract]

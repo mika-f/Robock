@@ -42,6 +42,12 @@ namespace Robock.Background.Models
             return Task.CompletedTask;
         }
 
+        // 通信できればそれでよい
+        public Task Heartbeat()
+        {
+            return Task.CompletedTask;
+        }
+
         public Task DiscardWallpaper()
         {
             _backgroundService.StopRender();

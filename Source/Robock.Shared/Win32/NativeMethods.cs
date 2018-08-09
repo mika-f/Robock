@@ -115,13 +115,13 @@ namespace Robock.Shared.Win32
         #region Robock.Background.Native
 
         [DllImport("Robock.Background.Native.dll")]
-        public static extern void Init();
+        public static extern int Init();
 
         [DllImport("Robock.Background.Native.dll")]
-        public static extern void Render(IntPtr hWindowSurface, IntPtr hDwmSurface, int x, int y, int width, int height, bool isNewSurface);
+        public static extern int Render(IntPtr hWindowSurface, IntPtr hDwmSurface, int x, int y, int width, int height, bool isNewSurface);
 
         [DllImport("Robock.Background.Native.dll")]
-        public static extern void Release();
+        public static extern int Release();
 
         #endregion
     }
