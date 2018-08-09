@@ -30,7 +30,6 @@ private:
     ID3D11Buffer* _vertexBuffer{};
     ID3D11VertexShader* _vertexShader{};
     ID3D11PixelShader* _pixelShader{};
-    ID3D11Buffer* _indexBuffer{};
     ID3D11SamplerState* _samplerState{};
     ID3D11ShaderResourceView* _shaderResourceView{};
 };

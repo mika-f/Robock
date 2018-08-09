@@ -20,14 +20,13 @@ DxRenderer::DxRenderer()
     this->_vertexBuffer = nullptr;
     this->_vertexShader = nullptr;
     this->_pixelShader = nullptr;
-    this->_indexBuffer = nullptr;
     this->_samplerState = nullptr;
     this->_shaderResourceView = nullptr;
 }
 
 HRESULT DxRenderer::Render(void* phWindowSurface, void* phDwmSurface, const int x, const int y, const int width, const int height, const bool isNewSurface)
 {
-    auto hr = S_OK;
+    HRESULT hr;
 
     if (isNewSurface)
     {
@@ -86,7 +85,6 @@ HRESULT DxRenderer::Release()
     SAFE_RELEASE(this->_vertexBuffer);
     SAFE_RELEASE(this->_vertexShader);
     SAFE_RELEASE(this->_pixelShader);
-    SAFE_RELEASE(this->_indexBuffer);
     SAFE_RELEASE(this->_samplerState);
     SAFE_RELEASE(this->_shaderResourceView);
 
@@ -233,10 +231,10 @@ HRESULT DxRenderer::LoadShader()
     bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
     bufferDesc.CPUAccessFlags = 0;
     bufferDesc.MiscFlags = 0;
-    D3D11_SUBRESOURCE_DATA InitData;
-    InitData.pSysMem = vertices;
+    D3D11_SUBRESOURCE_DATA initData;
+    initData.pSysMem = vertices;
 
-    hr = this->_device->CreateBuffer(&bufferDesc, &InitData, &this->_vertexBuffer);
+    hr = this->_device->CreateBuffer(&bufferDesc, &initData, &this->_vertexBuffer);
     if (FAILED(hr))
         return this->MsgBox(hr, L"LoadShader#CreateBuffer<Vertex>");
 
