@@ -1,5 +1,6 @@
 # Robock
-[![License](https://img.shields.io/github/license/mika-f/robock.svg?style=flat-square)](./blob/develop/LICENSE)
+
+[![License](https://img.shields.io/github/license/mika-f/robock.svg?style=flat-square)](LICENSE)
 
 > Robock is experimental software. Please use it at your own risk.
 
@@ -31,4 +32,5 @@ I would like to deal with this problem, but I don't know how to fix it.
 
 ## Donation
 
+If you want to support me, you can donate cryptocurrencies here.  
 https://mochizuki.moe/donation
