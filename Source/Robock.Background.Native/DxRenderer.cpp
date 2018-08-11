@@ -59,8 +59,8 @@ HRESULT DxRenderer::Render(void* phWindowSurface, void* phDwmSurface, const int 
     this->_deviceContext->ClearRenderTargetView(this->_renderTargetView, clearColor);
 
     this->_deviceContext->VSSetShader(this->_vertexShader, nullptr, 0);
-    this->_deviceContext->PSSetShader(this->_pixelShader, nullptr, 0);
 
+    this->_deviceContext->PSSetShader(this->_pixelShader, nullptr, 0);
     this->_deviceContext->PSSetSamplers(0, 1, &this->_samplerState);
     this->_deviceContext->PSSetShaderResources(0, 1, &this->_shaderResourceView);
 
