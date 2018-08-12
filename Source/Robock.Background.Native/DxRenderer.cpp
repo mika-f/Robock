@@ -9,8 +9,10 @@ using namespace PackedVector;
 DxRenderer::DxRenderer()
 {
     this->_currentDwnSurface = nullptr;
-    this->_width = 0;
-    this->_height = 0;
+    this->_screenWidth = 0;
+    this->_screenHeight = 0;
+    this->_textureWidth = 0;
+    this->_textureHeight = 0;
     this->_driverType = D3D_DRIVER_TYPE_NULL;
     this->_featureLevel = D3D_FEATURE_LEVEL_11_0;
     this->_device = nullptr;
@@ -50,9 +52,15 @@ HRESULT DxRenderer::Render(void* phWindowSurface, void* phDwmSurface, const int 
         if (FAILED(hr))
             return this->MsgBox(hr, L"Render#QueryInterface<ID3D11Texture2D>");
 
+        D3D11_TEXTURE2D_DESC texture2DDesc;
+        texture2D->GetDesc(&texture2DDesc);
+        this->_textureWidth = texture2DDesc.Width;
+        this->_textureHeight = texture2DDesc.Height;
+
         hr = this->_device->CreateShaderResourceView(texture2D, nullptr, &this->_shaderResourceView);
         if (FAILED(hr))
             return this->MsgBox(hr, L"Render#CreateShaderResourceView");
+
         this->_currentDwnSurface = phDwmSurface;
     }
 
@@ -61,26 +69,11 @@ HRESULT DxRenderer::Render(void* phWindowSurface, void* phDwmSurface, const int 
 
     // Transform Coords
     ConstantBuffer buffer{};
-    if (height == 0)
-    {
-        buffer.Top = 0.0f;
-        buffer.Height = 3.0f;
-    }
-    else
-    {
-        buffer.Top = float(y) / this->_height;
-        buffer.Height = float(height) / this->_height;
-    }
-    if (width == 0)
-    {
-        buffer.Left = 0.0f;
-        buffer.Width = 3.0f;
-    }
-    else
-    {
-        buffer.Width = float(width) / this->_width;
-        buffer.Left = float(x) / this->_width;
-    }
+    buffer.Top = float(y) / this->_textureHeight;
+    buffer.Height = float(height) / this->_textureHeight;
+    buffer.Width = float(width) / this->_textureWidth;
+    buffer.Left = float(x) / this->_textureWidth;
+
     this->_deviceContext->UpdateSubresource(this->_constantBuffer, 0, nullptr, &buffer, 0, 0);
 
     this->_deviceContext->VSSetShader(this->_vertexShader, nullptr, 0);
@@ -100,8 +93,8 @@ HRESULT DxRenderer::Render(void* phWindowSurface, void* phDwmSurface, const int 
 HRESULT DxRenderer::Release()
 {
     this->_currentDwnSurface = nullptr;
-    this->_width = 0;
-    this->_height = 0;
+    this->_screenWidth = 0;
+    this->_screenHeight = 0;
     this->_driverType = D3D_DRIVER_TYPE_NULL;
     this->_featureLevel = D3D_FEATURE_LEVEL_11_0;
     SAFE_RELEASE(this->_device);
@@ -197,13 +190,13 @@ HRESULT DxRenderer::InitRenderTarget(void* pResource)
 
     D3D11_TEXTURE2D_DESC resourceDesc;
     output->GetDesc(&resourceDesc);
-    if (resourceDesc.Width != this->_width || resourceDesc.Height != this->_height)
+    if (resourceDesc.Width != this->_screenWidth || resourceDesc.Height != this->_screenHeight)
     {
         D3D11_VIEWPORT viewport;
-        this->_width = resourceDesc.Width;
-        this->_height = resourceDesc.Height;
-        viewport.Width = static_cast<float>(this->_width);
-        viewport.Height = static_cast<float>(this->_height);
+        this->_screenWidth = resourceDesc.Width;
+        this->_screenHeight = resourceDesc.Height;
+        viewport.Width = static_cast<float>(this->_screenWidth);
+        viewport.Height = static_cast<float>(this->_screenHeight);
         viewport.MinDepth = 0.0f;
         viewport.MaxDepth = 1.0f;
         viewport.TopLeftX = 0;

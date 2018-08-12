@@ -17,8 +17,10 @@ private:
     static HRESULT MsgBox(HRESULT hr, LPCWSTR lpText);
 
     void* _currentDwnSurface;
-    int _width;
-    int _height;
+    int _screenWidth;
+    int _screenHeight;
+    int _textureWidth;
+    int _textureHeight;
 
     D3D_DRIVER_TYPE _driverType{};
     D3D_FEATURE_LEVEL _featureLevel{};
