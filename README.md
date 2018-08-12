@@ -7,6 +7,11 @@
 Window Capture + Dynamic Wallpaper = Good Experience
 
 
+## Video
+
+[![](https://img.youtube.com/vi/3HdT_-mdNBM/0.jpg)](https://www.youtube.com/watch?v=3HdT_-mdNBM)
+
+
 ## Requirements
 
 * Windows 10 (1804 ~)
