@@ -22,6 +22,7 @@ DxRenderer::DxRenderer()
     this->_pixelShader = nullptr;
     this->_samplerState = nullptr;
     this->_shaderResourceView = nullptr;
+    this->_constantBuffer = nullptr;
 }
 
 HRESULT DxRenderer::Render(void* phWindowSurface, void* phDwmSurface, const int x, const int y, const int width, const int height, const bool isNewSurface)
@@ -58,9 +59,34 @@ HRESULT DxRenderer::Render(void* phWindowSurface, void* phDwmSurface, const int 
     const float clearColor[4] = {0, 0, 0, 1}; // RGBA
     this->_deviceContext->ClearRenderTargetView(this->_renderTargetView, clearColor);
 
+    // Transform Coords
+    ConstantBuffer buffer{};
+    if (height == 0)
+    {
+        buffer.Top = 0.0f;
+        buffer.Height = 3.0f;
+    }
+    else
+    {
+        buffer.Top = float(y) / this->_height;
+        buffer.Height = float(height) / this->_height;
+    }
+    if (width == 0)
+    {
+        buffer.Left = 0.0f;
+        buffer.Width = 3.0f;
+    }
+    else
+    {
+        buffer.Width = float(width) / this->_width;
+        buffer.Left = float(x) / this->_width;
+    }
+    this->_deviceContext->UpdateSubresource(this->_constantBuffer, 0, nullptr, &buffer, 0, 0);
+
     this->_deviceContext->VSSetShader(this->_vertexShader, nullptr, 0);
 
     this->_deviceContext->PSSetShader(this->_pixelShader, nullptr, 0);
+    this->_deviceContext->PSSetConstantBuffers(0, 1, &this->_constantBuffer);
     this->_deviceContext->PSSetSamplers(0, 1, &this->_samplerState);
     this->_deviceContext->PSSetShaderResources(0, 1, &this->_shaderResourceView);
 
@@ -87,6 +113,7 @@ HRESULT DxRenderer::Release()
     SAFE_RELEASE(this->_pixelShader);
     SAFE_RELEASE(this->_samplerState);
     SAFE_RELEASE(this->_shaderResourceView);
+    SAFE_RELEASE(this->_constantBuffer);
 
     return S_OK;
 }
@@ -243,6 +270,15 @@ HRESULT DxRenderer::LoadShader()
     this->_deviceContext->IASetVertexBuffers(0, 1, &this->_vertexBuffer, &stride, &offset);
 
     this->_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+
+    bufferDesc.Usage = D3D11_USAGE_DEFAULT;
+    bufferDesc.ByteWidth = sizeof ConstantBuffer;
+    bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+    bufferDesc.CPUAccessFlags = 0;
+
+    hr = this->_device->CreateBuffer(&bufferDesc, nullptr, &this->_constantBuffer);
+    if (FAILED(hr))
+        return this->MsgBox(hr, L"LoadShader#CreateBuffer<ConstantBuffer>");
 
     D3D11_SAMPLER_DESC samplerDesc;
     ZeroMemory(&samplerDesc, sizeof(D3D11_SAMPLER_DESC));

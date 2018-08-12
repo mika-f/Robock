@@ -32,10 +32,19 @@ private:
     ID3D11PixelShader* _pixelShader{};
     ID3D11SamplerState* _samplerState{};
     ID3D11ShaderResourceView* _shaderResourceView{};
+    ID3D11Buffer* _constantBuffer{};
 };
 
 struct SimpleVertex
 {
     DirectX::XMFLOAT3 Pos;
     DirectX::XMFLOAT2 Uv;
+};
+
+struct ConstantBuffer
+{
+    float Top;
+    float Left;
+    float Width;
+    float Height;
 };
