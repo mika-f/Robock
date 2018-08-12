@@ -186,7 +186,7 @@ HRESULT DxRenderer::InitRenderTarget(void* pResource)
 
     hr = this->_device->CreateRenderTargetView(output, &renderTargetDesc, &this->_renderTargetView);
     if (FAILED(hr))
-        return hr;
+        return this->MsgBox(hr, L"InitRenderTarget#CreateRenderTargetView");
 
     D3D11_TEXTURE2D_DESC resourceDesc;
     output->GetDesc(&resourceDesc);
