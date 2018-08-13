@@ -36,7 +36,7 @@ namespace Robock.Models
                 }
                 catch
                 {
-                    Task.Delay(TimeSpan.FromMilliseconds(100)).Wait();
+                    await Task.Delay(TimeSpan.FromMilliseconds(100));
                 }
         }
 
