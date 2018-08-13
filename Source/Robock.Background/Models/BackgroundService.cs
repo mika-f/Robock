@@ -85,7 +85,7 @@ namespace Robock.Background.Models
                 CompositionTarget.Rendering += CompositionTargetOnRendering;
             });
 
-            // 2st, find WorkerW and send 0x052C (undocumented) message to progman
+            // 2nd, find WorkerW and send 0x052C (undocumented) message to progman
             var workerW = FindWorkerW();
             if (workerW == IntPtr.Zero)
                 Debug.WriteLine("WARNING: Unknown desktop structure"); // SHELLDLL_DefView だとか WorkerW なくても動くが、ログだけ残しとく
