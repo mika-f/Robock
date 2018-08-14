@@ -149,7 +149,6 @@
     <Compile Include="Models\FakeImg.cs" />
     <Compile Include="Models\Ignores.cs" />
     <Compile Include="Models\License.cs" />
-    <Compile Include="Models\AspectHelper.cs" />
     <Compile Include="Models\RobockClient.cs" />
     <Compile Include="Models\Window.cs" />
     <Compile Include="Models\WindowManager.cs" />

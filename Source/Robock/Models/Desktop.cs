@@ -33,9 +33,9 @@ namespace Robock.Models
         public Desktop(Screen screen, int index)
         {
             _screen = screen;
-            No = index;
             _uuid = $"Background.Desktop{index}";
             _client = new RobockClient(_uuid);
+            No = index;
         }
 
         public void Dispose()
@@ -50,7 +50,7 @@ namespace Robock.Models
             }
         }
 
-        public async Task Handshake(Action action = null)
+        public async Task Handshake()
         {
             _process = Process.Start("Robock.Background.exe", $"{_uuid}");
             if (_process == null)
