@@ -35,6 +35,13 @@ namespace Robock.ViewModels
             {
                 new AboutTabViewModel()
             };
+            Tabs.ToCollectionChanged().Subscribe(w =>
+            {
+                if (!(w.Value is DesktopViewModel model) || !model.IsPrimary)
+                    return;
+                VirtualScreen.SelectedIndex.Value = w.Index;
+                model.IsSelected.Value = true;
+            });
             VirtualScreen = new VirtualScreenViewModel();
 
             // Subscribe

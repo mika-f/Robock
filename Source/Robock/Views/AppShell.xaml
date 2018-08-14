@@ -77,7 +77,7 @@
                     Background="{DynamicResource BackgroundBrushKey}"
                     BorderThickness="0"
                     ItemsSource="{Binding Tabs}"
-                    SelectedIndex="{Binding VirtualScreen.SelectedIndex.Value, Mode=OneWayToSource}">
+                    SelectedIndex="{Binding VirtualScreen.SelectedIndex.Value, Mode=TwoWay}">
             <TabControl.Resources>
                 <DataTemplate DataType="{x:Type tvm:DesktopViewModel}">
                     <Grid Margin="10">
