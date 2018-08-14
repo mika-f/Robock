@@ -89,7 +89,7 @@ namespace Robock.ViewModels.Tabs
             }).AddTo(this);
 
             // エディター
-            EditorAspectRatio = new ReactiveProperty<string>("https://placehold.mochizuki.moe/1x1/");
+            EditorAspectRatio = new ReactiveProperty<string>(FakeImg.Default);
             EditorAreaLeft = new ReactiveProperty<int>();
             EditorAreaTop = new ReactiveProperty<int>();
             EditorAreaHeight = new ReactiveProperty<int>();
@@ -105,7 +105,7 @@ namespace Robock.ViewModels.Tabs
             desktopWindowManager.Thumbnails[0].ObserveProperty(w => w.Size).Subscribe(w =>
             {
                 //
-                EditorAspectRatio.Value = $"https://placehold.mochizuki.moe/{AspectHelper.Calc(w.Height, w.Width)}/000000%2C000/000000%2C000/";
+                EditorAspectRatio.Value = FakeImg.HxW(RobockUtil.AspectRatio(w.Width, w.Height));
             }).AddTo(this);
 
             // 選択範囲
@@ -123,7 +123,7 @@ namespace Robock.ViewModels.Tabs
              .Where(w => CanRender()).Subscribe(w => Render(1)).AddTo(this);
 
             // プレビュー
-            AspectRatio = $"https://placehold.mochizuki.moe/{AspectHelper.Calc(_desktop.Height, _desktop.Width)}/000000%2C000/000000%2C000/";
+            AspectRatio = FakeImg.HxW(RobockUtil.AspectRatio(_desktop.Width, _desktop.Height));
             PreviewAreaLeft = new ReactiveProperty<int>();
             PreviewAreaTop = new ReactiveProperty<int>();
             PreviewAreaHeight = new ReactiveProperty<int>();
@@ -202,7 +202,7 @@ namespace Robock.ViewModels.Tabs
             }
             else
             {
-                var rect = RectUtil.AsRect(0, 0, _desktopWindowManager.Thumbnails[0].Size.Height, _desktopWindowManager.Thumbnails[0].Size.Width);
+                var rect = RobockUtil.AsRect(0, 0, _desktopWindowManager.Thumbnails[0].Size.Height, _desktopWindowManager.Thumbnails[0].Size.Width);
                 if (SelectedAreaHeight.Value != 0)
                     rect = CalcRenderingRect();
 
@@ -227,7 +227,7 @@ namespace Robock.ViewModels.Tabs
 
             // Grid と Image のズレが大きいと、描画領域がずれてしまうので、補正する
             var diff = new Size(EditorAreaLeft.Value - GridAreaLeft.Value, EditorAreaTop.Value - GridAreaTop.Value);
-            return RectUtil.AsRect(SelectedAreaTop.Value - diff.Height, SelectedAreaLeft.Value - diff.Width, SelectedAreaHeight.Value, SelectedAreaWidth.Value, multi);
+            return RobockUtil.AsRect(SelectedAreaTop.Value - diff.Height, SelectedAreaLeft.Value - diff.Width, SelectedAreaHeight.Value, SelectedAreaWidth.Value, multi);
         }
     }
 }

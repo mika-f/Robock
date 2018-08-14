@@ -24,7 +24,7 @@ namespace Robock.ViewModels
         {
             Desktops = new ObservableCollection<DesktopViewModel>();
             SelectedIndex = new ReactiveProperty<int>(0);
-            SelectedIndex.Where(w => w >= 0).Subscribe(w =>
+            SelectedIndex.Where(w => 0 <= w).Subscribe(w =>
             {
                 foreach (var desktop in Desktops)
                     desktop.IsSelected.Value = false;
