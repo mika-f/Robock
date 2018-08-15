@@ -1,0 +1,3 @@
+[submodule "Source\\Myst"]
+	path = Source\\Myst
+	url = git@github.com:mika-f/Myst.git

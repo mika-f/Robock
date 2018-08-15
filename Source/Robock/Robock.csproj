@@ -178,15 +178,6 @@
     <Compile Include="Views\Tabs\DesktopTab.xaml.cs">
       <DependentUpon>DesktopTab.xaml</DependentUpon>
     </Compile>
-    <Page Include="Styles\Controls.TabControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-      <DependentUpon>Controls.xaml</DependentUpon>
-    </Page>
-    <Page Include="Styles\Controls.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\AppShell.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -236,6 +227,10 @@
     <Folder Include="Converters\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Myst\Source\Myst\Myst.csproj">
+      <Project>{07b370e8-a053-4d3e-b3a1-a205e5f7cccd}</Project>
+      <Name>Myst</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Robock.Shared\Robock.Shared.csproj">
       <Project>{07becf0b-6e07-4ac5-b0c2-3eae0539d9a2}</Project>
       <Name>Robock.Shared</Name>
