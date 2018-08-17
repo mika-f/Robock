@@ -18,7 +18,7 @@ Window Capture + Dynamic Wallpaper = Good Experience
 * .NET Framework 4.7.2 ~
 * DirectX 11 ~
 * Video Card that supports Windows Display Driver Model
-* Internet Connection (Robock will connect to placehold.mochizuki.moe)
+* Internet Connection (Robock will connect to https://fakeimg.mochizuki.moe)
 
 
 ## Note
