@@ -44,7 +44,7 @@ namespace Robock.Models
         {
             if (_channel == null)
                 throw new InvalidOperationException("Invalid connection");
-            StatusTextService.Instance.Status = "Applying wallpeper...";
+            StatusTextService.Instance.Status = "Applying wallpaper...";
             await _channel.ApplyWallpaper(src, rect);
             StatusTextService.Instance.Status = "Rendering success, Start rendering";
         }
@@ -60,7 +60,7 @@ namespace Robock.Models
         {
             if (_channel == null)
                 throw new InvalidOperationException("Invalid connection");
-            StatusTextService.Instance.Status = "Discarding wallpeper...";
+            StatusTextService.Instance.Status = "Discarding wallpaper...";
             await _channel.DiscardWallpaper();
             StatusTextService.Instance.Status = "Discard wallpaper finished";
         }

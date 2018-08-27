@@ -94,7 +94,7 @@ namespace Robock.Models
             foreach (var window in Windows.ToArray().Where(w => !w.IsMarked))
                 Windows.Remove(window);
 
-            StatusTextService.Instance.Status = "Synchronizied windows";
+            StatusTextService.Instance.Status = "Synchronized windows";
         }
     }
 }
