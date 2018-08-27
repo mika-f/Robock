@@ -93,7 +93,7 @@ namespace Robock.Background.Models
             var progman = NativeMethods.FindWindow("Progman", null);
 
             // 3rd, stick myself to progman
-            NativeMethods.SetParent(_hWnd, progman);
+            NativeMethods.SetParent(_hWnd, workerW != IntPtr.Zero ? workerW : progman);
 
             // 4th, move self to rendering position
             NativeMethods.MoveWindow(_hWnd, _windowX, _windowY, _windowWidth, _windowHeight, true);
@@ -138,10 +138,13 @@ namespace Robock.Background.Models
             // 2nd, unregister composition rendering event.
             _dxImage.Dispatcher.Invoke(() => { CompositionTarget.Rendering -= CompositionTargetOnRendering; });
 
-            // 3rd, set parent to desktop (nullptr)
+            // 3rd, reset workerW
+            FindWorkerW();
+
+            // 4th, set parent to desktop (nullptr)
             NativeMethods.SetParent(_hWnd, (IntPtr) null);
 
-            // 4th, move self to outside of desktop
+            // 5th, move self to outside of desktop
             MoveToOutsideOfVirtualScreen();
         }
 
