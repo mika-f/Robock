@@ -7,6 +7,7 @@ using System.Windows.Media;
 
 using Microsoft.Wpf.Interop.DirectX;
 
+using Robock.Shared.Models;
 using Robock.Shared.Win32;
 
 using Application = System.Windows.Application;
@@ -92,7 +93,7 @@ namespace Robock.Background.Models
             var progman = NativeMethods.FindWindow("Progman", null);
 
             // 3rd, stick myself to progman
-            NativeMethods.SetParent(_hWnd, progman);
+            NativeMethods.SetParent(_hWnd, workerW == IntPtr.Zero ? progman : workerW);
 
             // 4th, move self to rendering position
             NativeMethods.MoveWindow(_hWnd, _windowX, _windowY, _windowWidth, _windowHeight, true);
@@ -172,8 +173,15 @@ namespace Robock.Background.Models
         private IntPtr FindWorkerW()
         {
             var progman = NativeMethods.FindWindow("Progman", null);
-            NativeMethods.SendMessageTimeout(progman, 0x052C, new IntPtr(0), IntPtr.Zero, SendMessageTimeoutFlags.SMTO_NORMAL, 1000, out _);
-
+            if (RobockUtil.IsOldWindows())
+            {
+                NativeMethods.SendMessageTimeout(progman, 0x052C, new IntPtr(0), IntPtr.Zero, SendMessageTimeoutFlags.SMTO_NORMAL, 1000, out _);
+            }
+            else
+            {
+                NativeMethods.SendMessageTimeout(progman, 0x052C, new IntPtr(0x0000000D), new IntPtr(0), SendMessageTimeoutFlags.SMTO_NORMAL, 1000, out _);
+                NativeMethods.SendMessageTimeout(progman, 0x052C, new IntPtr(0x0000000D), new IntPtr(1), SendMessageTimeoutFlags.SMTO_NORMAL, 1000, out _);
+            }
             var workerW = IntPtr.Zero;
             NativeMethods.EnumWindows((hWnd, lParam) =>
             {

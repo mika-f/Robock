@@ -1,5 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-
 <assembly manifestVersion="1.0" xmlns="urn:schemas-microsoft-com:asm.v1">
   <assemblyIdentity version="1.0.0.0" name="MyApplication.app" />
   <trustInfo xmlns="urn:schemas-microsoft-com:asm.v2">
@@ -24,7 +23,7 @@
 
   <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
     <application>
-      <!-- このアプリケーションがテストされ、協働するようテストされた Windows バージョンの
+      <!-- このアプリケーションがテストされ、動作するよう設計された Windows バージョンの
            一覧。適切な要素をコメント解除すると、最も互換性のある環境を Windows が
            自動的に選択します。-->
 
@@ -49,11 +48,13 @@
        示します。Windows Presentation Foundation (WPF) アプリケーションは自動的に DPI に対応し、オプトインする必要は
        ありません。さらに、この設定にオプトインする .NET Framework 4.6 を対象とする Windows Forms アプリケーションは、
        app.config ファイルで 'EnableWindowsFormsHighDpiAutoResizing' 設定を 'true' に設定する必要があります。-->
+  <!--
   <application xmlns="urn:schemas-microsoft-com:asm.v3">
     <windowsSettings>
-      <dpiAware xmlns="http://schemas.microsoft.com/SMI/2005/WindowsSettings">true/PM</dpiAware>
+      <dpiAware xmlns="http://schemas.microsoft.com/SMI/2005/WindowsSettings">true</dpiAware>
     </windowsSettings>
   </application>
+  -->
 
   <!-- Windows のコモン コントロールとダイアログのテーマを有効にします (Windows XP 以降) -->
   <!--

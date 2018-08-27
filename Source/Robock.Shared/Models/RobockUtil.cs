@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Microsoft.Win32;
+
 using Robock.Shared.Win32;
 
 namespace Robock.Shared.Models
@@ -33,6 +35,19 @@ namespace Robock.Shared.Models
                 (a, b) = (b, remainder);
             } while (Math.Abs(remainder) > 0);
             return (width / a, height / a);
+        }
+
+        /// <summary>
+        ///     Windows 10 1703 (Creators Update) 以前の場合は　true を返します。
+        /// </summary>
+        /// <returns></returns>
+        public static bool IsOldWindows()
+        {
+            if (Environment.OSVersion.Version.Major < 10)
+                return true;
+
+            var release = int.Parse(Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "ReleaseId", "1000").ToString());
+            return release < 1709;
         }
     }
 }
