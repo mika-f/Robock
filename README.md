@@ -1,6 +1,9 @@
 # Robock
 
 [![License](https://img.shields.io/github/license/mika-f/robock.svg?style=flat-square)](LICENSE)
+[![GitHub release](https://img.shields.io/github/release/mika-f/Robock.svg?style=flat-square)](https://github.com/mika-f/Robock/releases/latest)
+[![GitHub (pre-)release](https://img.shields.io/github/release/mika-f/Robock/all.svg?style=flat-square)](https://github.com/mika-f/Robock/releases/latest)
+
 
 > Robock is experimental software. Please use it at your own risk.
 
