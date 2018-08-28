@@ -111,8 +111,10 @@ HRESULT DxRenderer::Release()
     return S_OK;
 }
 
-HRESULT DxRenderer::Init()
+HRESULT DxRenderer::Init(const int width, const int height)
 {
+    this->_screenWidth = width;
+    this->_screenHeight = height;
     return this->InitDevice();
 }
 
@@ -190,19 +192,17 @@ HRESULT DxRenderer::InitRenderTarget(void* pResource)
 
     D3D11_TEXTURE2D_DESC resourceDesc;
     output->GetDesc(&resourceDesc);
-    if (resourceDesc.Width != this->_screenWidth || resourceDesc.Height != this->_screenHeight)
-    {
-        D3D11_VIEWPORT viewport;
-        this->_screenWidth = resourceDesc.Width;
-        this->_screenHeight = resourceDesc.Height;
-        viewport.Width = static_cast<float>(this->_screenWidth);
-        viewport.Height = static_cast<float>(this->_screenHeight);
-        viewport.MinDepth = 0.0f;
-        viewport.MaxDepth = 1.0f;
-        viewport.TopLeftX = 0;
-        viewport.TopLeftY = 0;
-        this->_deviceContext->RSSetViewports(1, &viewport);
-    }
+
+    D3D11_VIEWPORT viewport;
+    this->_screenWidth = resourceDesc.Width;
+    this->_screenHeight = resourceDesc.Height;
+    viewport.Width = static_cast<float>(this->_screenWidth);
+    viewport.Height = static_cast<float>(this->_screenHeight);
+    viewport.MinDepth = 0.0f;
+    viewport.MaxDepth = 1.0f;
+    viewport.TopLeftX = 0;
+    viewport.TopLeftY = 0;
+    this->_deviceContext->RSSetViewports(1, &viewport);
 
     this->_deviceContext->OMSetRenderTargets(1, &this->_renderTargetView, nullptr);
     if (output != nullptr)
@@ -237,10 +237,11 @@ HRESULT DxRenderer::LoadShader()
     if (FAILED(hr))
         return this->MsgBox(hr, L"LoadShader#CreatePixelShader");
 
+    const auto width = static_cast<float>(this->_screenWidth);
     SimpleVertex vertices[] =
     {
         {XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT2(0, 1)},
-        {XMFLOAT3(-1.0f, 1.0f, 1.0f), XMFLOAT2(0, 0)},
+        {XMFLOAT3(-1.0f - (20 / width), 1.0f, 1.0f), XMFLOAT2(0, 0)},
         {XMFLOAT3(1.0f, -1.0f, 1.0f), XMFLOAT2(1, 1)},
         {XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT2(1, 0)}
     };

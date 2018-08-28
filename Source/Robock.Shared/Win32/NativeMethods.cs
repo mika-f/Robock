@@ -29,7 +29,7 @@ namespace Robock.Shared.Win32
         public static extern IntPtr CreateCompatibleBitmap(IntPtr hdc, int nWidth, int nHeight);
 
         [DllImport("gdi32.dll")]
-        public static extern IntPtr SelectObject(IntPtr hdc, IntPtr hgdiobj);
+        public static extern IntPtr SelectObject(IntPtr hdc, IntPtr hGdiObj);
 
         [DllImport("gdi32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
@@ -115,7 +115,7 @@ namespace Robock.Shared.Win32
         #region Robock.Background.Native
 
         [DllImport("Robock.Background.Native.dll")]
-        public static extern int Init();
+        public static extern int Init(int width, int height);
 
         [DllImport("Robock.Background.Native.dll")]
         public static extern int Render(IntPtr hWindowSurface, IntPtr hDwmSurface, int x, int y, int width, int height, bool isNewSurface);

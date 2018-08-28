@@ -63,7 +63,7 @@ namespace Robock.Background.Models
             _windowHeight = height;
 
             // Initialize DirectX devices.
-            NativeMethods.Init();
+            NativeMethods.Init(_windowWidth, _windowHeight);
 
             var funcPtr = NativeMethods.GetProcAddress(NativeMethods.GetModuleHandle("user32"), "DwmGetDxSharedSurface");
             GetDxSharedSurface = Marshal.GetDelegateForFunctionPointer<DGetDxSharedSurface>(funcPtr);

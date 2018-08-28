@@ -7,7 +7,7 @@ public:
     HRESULT Release();
 
     // internal
-    HRESULT Init();
+    HRESULT Init(int width, int height);
 
 private:
     HRESULT InitDevice();
