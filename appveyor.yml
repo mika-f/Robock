@@ -1,0 +1,24 @@
+version: 1.0.0.{build}
+image: Visual Studio 2017
+configuration: Release
+platform: x64
+clone_script:
+- cmd: >-
+    git clone -q --branch=%APPVEYOR_REPO_BRANCH% https://github.com/%APPVEYOR_REPO_NAME%.git %APPVEYOR_BUILD_FOLDER%
+          && cd %APPVEYOR_BUILD_FOLDER%
+          && git checkout -qf %APPVEYOR_REPO_COMMIT%
+          && git submodule update --init --recursive
+assembly_info:
+  patch: true
+  file: '**\AssemblyInfo.*'
+  assembly_version: '{version}'
+  assembly_file_version: '{version}'
+  assembly_informational_version: '{version}'
+before_build:
+- cmd: nuget restore .\Source\
+build:
+  project: Source/Robock.sln
+  verbosity: minimal
+artifacts:
+- path: Source\Robock\bin\x64\Release\
+  name: Robock
