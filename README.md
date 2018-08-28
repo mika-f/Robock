@@ -1,6 +1,7 @@
 # Robock
 
 [![License](https://img.shields.io/github/license/mika-f/robock.svg?style=flat-square)](LICENSE)
+[![AppVeyor branch](https://img.shields.io/appveyor/ci/mika-f/Robock/develop.svg?style=flat-square)](https://ci.appveyor.com/project/mika-f/robock)
 [![GitHub release](https://img.shields.io/github/release/mika-f/Robock.svg?style=flat-square)](https://github.com/mika-f/Robock/releases/latest)
 [![GitHub (pre-)release](https://img.shields.io/github/release/mika-f/Robock/all.svg?style=flat-square)](https://github.com/mika-f/Robock/releases/latest)
 
