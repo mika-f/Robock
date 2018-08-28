@@ -1,0 +1,135 @@
+﻿<metro:MetroWindow x:Class="Robock.Views.AppShell"
+                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:actions="clr-namespace:Robock.Shared.Actions;assembly=Robock.Shared"
+                   xmlns:chrome="http://schemes.grabacr.net/winfx/2014/chrome"
+                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                   xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+                   xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                   xmlns:local="clr-namespace:Robock.Views"
+                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                   xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
+                   xmlns:prism="http://prismlibrary.com/"
+                   xmlns:tabs="clr-namespace:Robock.Views.Tabs"
+                   xmlns:tvm="clr-namespace:Robock.ViewModels.Tabs"
+                   xmlns:vm="clr-namespace:Robock.ViewModels"
+                   Title="{Binding Title.Value, Mode=OneWay}"
+                   Width="800"
+                   Height="500"
+                   MinWidth="600"
+                   MinHeight="500"
+                   d:DataContext="{d:DesignInstance vm:AppShellViewModel}"
+                   prism:ViewModelLocator.AutoWireViewModel="True"
+                   Background="{DynamicResource ThemeBrushKey}"
+                   FontFamily="Segoe UI"
+                   IsRestoringWindowPlacement="True"
+                   SnapsToDevicePixels="True"
+                   TextOptions.TextFormattingMode="Display"
+                   UseLayoutRounding="True"
+                   mc:Ignorable="d">
+    <chrome:WindowChrome.Instance>
+        <chrome:WindowChrome />
+    </chrome:WindowChrome.Instance>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closed">
+            <actions:DataContextDisposeAction />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="25" />
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0"
+                metro:MetroWindow.IsCaptionBar="True">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <metro:CaptionIcon Grid.Column="0"
+                                   Padding="4,2">
+                    <!--
+                    <Image Width="24"
+                           Height="24"
+                           RenderOptions.BitmapScalingMode="Fant"
+                           Source="../Resources/Kotoha2.ico" />
+                    -->
+                </metro:CaptionIcon>
+                <TextBlock Grid.Column="1"
+                           Margin="3,0,0,0"
+                           VerticalAlignment="Center"
+                           FontFamily="Meiryo UI"
+                           FontSize="16"
+                           Foreground="{DynamicResource ForegroundBrushKey}"
+                           Text="{Binding Title.Value}"
+                           TextTrimming="CharacterEllipsis" />
+                <StackPanel Grid.Column="2"
+                            Orientation="Horizontal">
+                    <metro:SystemButtons Margin="5,0,0,0"
+                                         VerticalAlignment="Top" />
+                </StackPanel>
+            </Grid>
+        </Border>
+        <TabControl Grid.Row="1"
+                    Background="{DynamicResource BackgroundBrushKey}"
+                    BorderThickness="0"
+                    ItemsSource="{Binding Tabs}"
+                    SelectedIndex="{Binding VirtualScreen.SelectedIndex.Value, Mode=TwoWay}">
+            <TabControl.Resources>
+                <DataTemplate DataType="{x:Type tvm:DesktopViewModel}">
+                    <Grid Margin="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <local:Monitors Grid.Row="0"
+                                        Padding="0,0,0,5"
+                                        DataContext="{Binding DataContext.VirtualScreen, RelativeSource={RelativeSource AncestorType=metro:MetroWindow}}" />
+                        <Separator Grid.Row="1" />
+                        <tabs:DesktopTab Grid.Row="2"
+                                         Margin="0,5,0,0"
+                                         DataContext="{Binding}" />
+                    </Grid>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type tvm:AboutTabViewModel}">
+                    <tabs:AboutTab Margin="10,10,0,0" />
+                </DataTemplate>
+            </TabControl.Resources>
+            <TabControl.ItemContainerStyle>
+                <Style TargetType="TabItem">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="TabItem">
+                                <ContentPresenter Margin="10,5"
+                                                  ContentSource="Header">
+                                    <ContentPresenter.ContentTemplate>
+                                        <DataTemplate DataType="tvm:TabViewModel">
+                                            <TextBlock fa:Awesome.Inline="{Binding Title}"
+                                                       Style="{StaticResource HorizontalFlatStyleTabTextBlock}" />
+                                        </DataTemplate>
+                                    </ContentPresenter.ContentTemplate>
+                                </ContentPresenter>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TabControl.ItemContainerStyle>
+        </TabControl>
+        <Grid Grid.Row="2"
+              Background="{DynamicResource AccentBrushKey}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0"
+                       Margin="10,0,0,0"
+                       VerticalAlignment="Center"
+                       Text="{Binding Status.Value, Mode=OneWay}" />
+            <metro:ResizeGrip Grid.Column="1" />
+        </Grid>
+    </Grid>
+</metro:MetroWindow>
