@@ -7,13 +7,6 @@ namespace Robock.Shared.Win32
 {
     public static class NativeMethods
     {
-        #region Shcore
-
-        [DllImport("Shcore.dll")]
-        public static extern void GetDpiForMonitor(IntPtr hMonitor, MONITOR_DPI_TYPE dpiType, out uint dpiX, out uint dpiY);
-
-        #endregion
-
         #region Kernel32
 
         [DllImport("kernel32.dll")]
@@ -83,9 +76,6 @@ namespace Robock.Shared.Win32
 
         [DllImport("user32.dll", SetLastError = true)]
         public static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
-
-        [DllImport("user32.dll")]
-        public static extern void MonitorFromWindow(IntPtr hWnd, MONITOR_DEFAULTTO dwFlags);
 
         #endregion
 
