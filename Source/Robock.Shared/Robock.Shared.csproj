@@ -77,7 +77,9 @@
     <Compile Include="Win32\RECT.cs" />
     <Compile Include="Win32\SendMessageTimeoutFlags.cs" />
     <Compile Include="Win32\SetWindowPosFlags.cs" />
+    <Compile Include="Win32\ShowWindowCommands.cs" />
     <Compile Include="Win32\TernaryRasterOperations.cs" />
+    <Compile Include="Win32\WINDOWPLACEMENT.cs" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Win32\README.txt" />
