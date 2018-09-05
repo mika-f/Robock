@@ -1,3 +1,6 @@
 [submodule "Source/Myst"]
 	path = Source/Myst
 	url = https://github.com/mika-f/Myst.git
+[submodule "Source/VirtualDesktop"]
+	path = Source/VirtualDesktop
+	url = https://github.com/Grabacr07/VirtualDesktop.git
