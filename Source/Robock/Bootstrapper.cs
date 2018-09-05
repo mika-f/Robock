@@ -1,4 +1,7 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
+
+using WindowsDesktop;
 
 using Microsoft.Practices.Unity;
 
@@ -12,6 +15,8 @@ namespace Robock
     {
         protected override DependencyObject CreateShell()
         {
+            if (!VirtualDesktop.IsSupported)
+                throw new NotSupportedException();
             return Container.Resolve<AppShell>();
         }
 
