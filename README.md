@@ -11,7 +11,7 @@
 Window Capture + Dynamic Wallpaper = Good Experience
 
 
-## Video
+## Demo
 
 [![](https://img.youtube.com/vi/3HdT_-mdNBM/0.jpg)](https://www.youtube.com/watch?v=3HdT_-mdNBM)
 
