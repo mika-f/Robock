@@ -10,10 +10,12 @@ clone_script:
           && git submodule update --init --recursive
 assembly_info:
   patch: true
-  file: '**\AssemblyInfo.*'
+  file: '**\Robock*\**\AssemblyInfo.*'
   assembly_version: '{version}'
   assembly_file_version: '{version}'
   assembly_informational_version: '{version}'
+cache:
+- Source\packages -> **\packages.config
 before_build:
 - cmd: nuget restore .\Source\
 build:
