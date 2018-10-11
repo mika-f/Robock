@@ -23,8 +23,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Robock.Background.Native", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Myst", "Myst\Source\Myst\Myst.csproj", "{07B370E8-A053-4D3E-B3A1-A205E5F7CCCD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VirtualDesktop", "VirtualDesktop\source\VirtualDesktop\VirtualDesktop.csproj", "{AB848ECD-76AA-41C0-B63D-86A8591B25AA}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -51,10 +49,6 @@ Global
 		{07B370E8-A053-4D3E-B3A1-A205E5F7CCCD}.Debug|x64.Build.0 = Debug|Any CPU
 		{07B370E8-A053-4D3E-B3A1-A205E5F7CCCD}.Release|x64.ActiveCfg = Release|Any CPU
 		{07B370E8-A053-4D3E-B3A1-A205E5F7CCCD}.Release|x64.Build.0 = Release|Any CPU
-		{AB848ECD-76AA-41C0-B63D-86A8591B25AA}.Debug|x64.ActiveCfg = Debug|x64
-		{AB848ECD-76AA-41C0-B63D-86A8591B25AA}.Debug|x64.Build.0 = Debug|x64
-		{AB848ECD-76AA-41C0-B63D-86A8591B25AA}.Release|x64.ActiveCfg = Release|x64
-		{AB848ECD-76AA-41C0-B63D-86A8591B25AA}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
