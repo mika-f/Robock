@@ -18,7 +18,7 @@ Window Capture + Dynamic Wallpaper = Good Experience
 
 ## Requirements
 
-* Windows 10 (1804 ~)
+* Windows 10 (1803 ~)
 * .NET Framework 4.7.2 ~
 * DirectX 11 ~
 * Video Card that supports Windows Display Driver Model
