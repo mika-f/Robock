@@ -64,7 +64,6 @@
     <Compile Include="Actions\DataContextDisposeAction.cs" />
     <Compile Include="Models\IRobockBackgroundConnection.cs" />
     <Compile Include="Extensions\IDisposableExtensions.cs" />
-    <Compile Include="Models\DesktopWindowManager.cs" />
     <Compile Include="Models\RobockUtil.cs" />
     <Compile Include="Models\Thumbnail.cs" />
     <Compile Include="Mvvm\ViewModel.cs" />
