@@ -240,7 +240,7 @@ HRESULT DxRenderer::LoadShader()
     const auto width = static_cast<float>(this->_screenWidth);
     SimpleVertex vertices[] =
     {
-        {XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT2(0, 1)},
+        {XMFLOAT3(-1.0f - (20 / width), -1.0f, 1.0f), XMFLOAT2(0, 1)},
         {XMFLOAT3(-1.0f - (20 / width), 1.0f, 1.0f), XMFLOAT2(0, 0)},
         {XMFLOAT3(1.0f, -1.0f, 1.0f), XMFLOAT2(1, 1)},
         {XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT2(1, 0)}

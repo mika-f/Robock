@@ -21,6 +21,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -29,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -62,7 +64,6 @@
     <Compile Include="Actions\DataContextDisposeAction.cs" />
     <Compile Include="Models\IRobockBackgroundConnection.cs" />
     <Compile Include="Extensions\IDisposableExtensions.cs" />
-    <Compile Include="Models\DesktopWindowManager.cs" />
     <Compile Include="Models\RobockUtil.cs" />
     <Compile Include="Models\Thumbnail.cs" />
     <Compile Include="Mvvm\ViewModel.cs" />
@@ -75,7 +76,9 @@
     <Compile Include="Win32\RECT.cs" />
     <Compile Include="Win32\SendMessageTimeoutFlags.cs" />
     <Compile Include="Win32\SetWindowPosFlags.cs" />
+    <Compile Include="Win32\ShowWindowCommands.cs" />
     <Compile Include="Win32\TernaryRasterOperations.cs" />
+    <Compile Include="Win32\WINDOWPLACEMENT.cs" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Win32\README.txt" />

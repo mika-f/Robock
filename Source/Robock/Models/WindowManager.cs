@@ -7,6 +7,8 @@ using System.Reactive.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
+using WindowsDesktop;
+
 using Robock.Services;
 using Robock.Shared.Win32;
 
@@ -20,6 +22,7 @@ namespace Robock.Models
         public WindowManager()
         {
             Windows = new ObservableCollection<Window>();
+            InitializeComObjects();
         }
 
         public void Dispose()
@@ -35,6 +38,18 @@ namespace Robock.Models
         public void ForceUpdate()
         {
             Observable.Return(1).Delay(TimeSpan.FromSeconds(1)).Subscribe(_ => FindWindows());
+        }
+
+        private async void InitializeComObjects()
+        {
+            try
+            {
+                await VirtualDesktopProvider.Default.Initialize();
+            }
+            catch
+            {
+                // ignored
+            }
         }
 
         private void FindWindows()
@@ -56,7 +71,7 @@ namespace Robock.Models
 
                 // Universal Windows (invisible / background)
                 NativeMethods.DwmGetWindowAttribute(hWnd, DWMWINDOWATTRIBUTE.Cloaked, out var isCloaked, Marshal.SizeOf(typeof(bool)));
-                if (isCloaked)
+                if (isCloaked && !IsVisibleWindowOnOtherDesktop(hWnd))
                     return true;
 
                 if (Ignores.IgnoreWindowTitles.Contains(title.ToString()))
@@ -95,6 +110,17 @@ namespace Robock.Models
                 Windows.Remove(window);
 
             StatusTextService.Instance.Status = "Synchronized windows";
+        }
+
+        private bool IsVisibleWindowOnOtherDesktop(IntPtr hWnd)
+        {
+            var placement = WINDOWPLACEMENT.Default;
+            NativeMethods.GetWindowPlacement(hWnd, ref placement);
+            if (placement.ShowCmd != ShowWindowCommands.Normal)
+                return false;
+
+            var desktop = VirtualDesktop.FromHwnd(hWnd);
+            return desktop != null && VirtualDesktop.Current.Id != desktop.Id;
         }
     }
 }

@@ -158,6 +158,13 @@ and limitations under the License."
                 Url = "https://github.com/Microsoft/WPFDXInterop",
                 Authors = new[] {"Microsoft"},
                 Body = License.MIT.Replace("{yyyy}", "2015").Replace("{name of copyright owner}", "Microsoft")
+            },
+            new License
+            {
+                Name = "VirtualDesktop",
+                Url = "https://github.com/Grabacr07/VirtualDesktop",
+                Authors = new[] {"Manato KAMEYA"},
+                Body = License.MIT.Replace("{yyyy}", "2015").Replace("{name of copyright owner}", "Manato KAMEYA")
             }
         }.OrderBy(w => w.Name).ToList().AsReadOnly();
 

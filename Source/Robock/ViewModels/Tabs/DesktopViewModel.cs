@@ -8,6 +8,7 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using Robock.Models;
+using Robock.Services;
 using Robock.Shared.Extensions;
 using Robock.Shared.Models;
 using Robock.Shared.Win32;
@@ -29,6 +30,7 @@ namespace Robock.ViewModels.Tabs
 
         // Editor
         public ReactiveProperty<string> EditorAspectRatio { get; }
+
         public ReactiveProperty<int> EditorAreaLeft { get; }
         public ReactiveProperty<int> EditorAreaTop { get; }
         public ReactiveProperty<int> EditorAreaHeight { get; }
@@ -36,12 +38,14 @@ namespace Robock.ViewModels.Tabs
 
         // Selected
         public ReactiveProperty<int> SelectedAreaLeft { get; }
+
         public ReactiveProperty<int> SelectedAreaTop { get; }
         public ReactiveProperty<int> SelectedAreaHeight { get; }
         public ReactiveProperty<int> SelectedAreaWidth { get; }
 
         // Preview
         public string AspectRatio { get; }
+
         public ReactiveProperty<int> PreviewAreaLeft { get; }
         public ReactiveProperty<int> PreviewAreaTop { get; }
         public ReactiveProperty<int> PreviewAreaHeight { get; }
@@ -49,6 +53,7 @@ namespace Robock.ViewModels.Tabs
 
         // Grid
         public ReactiveProperty<int> GridAreaLeft { get; }
+
         public ReactiveProperty<int> GridAreaTop { get; }
 
         public ReactiveCommand ApplyWallpaperCommand { get; }
@@ -64,7 +69,8 @@ namespace Robock.ViewModels.Tabs
         public double VirtualScreenHeight => _desktop.Height / Scale;
         public double VirtualScreenWidth => _desktop.Width / Scale;
 
-        public DesktopViewModel(Desktop desktop, WindowManager windowManager, DesktopWindowManager desktopWindowManager) : base($":Desktop: Desktop {desktop.No}")
+        public DesktopViewModel(Desktop desktop, WindowManager windowManager, DesktopWindowManager desktopWindowManager)
+            : base($":Desktop: Desktop {desktop.No}")
         {
             _desktop = desktop;
             _desktopWindowManager = desktopWindowManager;
@@ -79,13 +85,20 @@ namespace Robock.ViewModels.Tabs
             {
                 if (w && CanRender())
                 {
-                    Render(0);
+                    RenderEditor();
                 }
                 else
                 {
                     _desktopWindowManager.Stop(0);
                     _desktopWindowManager.Stop(1);
                 }
+            }).AddTo(this);
+
+            // DPI 周り
+            DpiService.Instance.ObserveProperty(w => w.CurrentDpi).Where(_ => CanRender()).Subscribe(w =>
+            {
+                RenderEditor();
+                RenderPreview();
             }).AddTo(this);
 
             // エディター
@@ -101,7 +114,7 @@ namespace Robock.ViewModels.Tabs
                 EditorAreaHeight,
                 EditorAreaWidth
             }.CombineLatest().Throttle(TimeSpan.FromMilliseconds(50))
-             .Where(w => CanRender()).Subscribe(w => Render(0)).AddTo(this);
+             .Where(w => CanRender()).Subscribe(w => RenderEditor()).AddTo(this);
             desktopWindowManager.Thumbnails[0].ObserveProperty(w => w.Size).Subscribe(w =>
             {
                 //
@@ -120,7 +133,7 @@ namespace Robock.ViewModels.Tabs
                 SelectedAreaHeight,
                 SelectedAreaWidth
             }.CombineLatest().Throttle(TimeSpan.FromMilliseconds(50))
-             .Where(w => CanRender()).Subscribe(w => Render(1)).AddTo(this);
+             .Where(w => CanRender()).Subscribe(w => RenderPreview()).AddTo(this);
 
             // プレビュー
             AspectRatio = FakeImg.HxW(RobockUtil.AspectRatio(_desktop.Width, _desktop.Height));
@@ -138,7 +151,7 @@ namespace Robock.ViewModels.Tabs
              .Where(w => CanRender()).Subscribe(w =>
              {
                  //
-                 Render(1);
+                 RenderPreview();
              });
             desktopWindowManager.Thumbnails[0]
                 .ObserveProperty(w => w.IsRendering)
@@ -146,7 +159,7 @@ namespace Robock.ViewModels.Tabs
                 .Subscribe(w =>
                 {
                     //
-                    Render(1);
+                    RenderPreview();
                 }).AddTo(this);
 
             // 親
@@ -160,7 +173,7 @@ namespace Robock.ViewModels.Tabs
             {
                 _desktopWindowManager.Stop(0);
                 _desktopWindowManager.Stop(1);
-                Render(0);
+                RenderEditor();
             }).AddTo(this);
             ApplyWallpaperCommand = new[]
             {
@@ -175,7 +188,13 @@ namespace Robock.ViewModels.Tabs
                     await _desktop.Handshake();
                     var rect = SelectedAreaHeight.Value != 0
                         ? CalcRenderingRect()
-                        : new RECT {top = 0, left = 0, bottom = _desktopWindowManager.Thumbnails[0].Size.Height, right = _desktopWindowManager.Thumbnails[0].Size.Width};
+                        : new RECT
+                        {
+                            top = 0,
+                            left = 0,
+                            bottom = _desktopWindowManager.Thumbnails[0].Size.Height,
+                            right = _desktopWindowManager.Thumbnails[0].Size.Width
+                        };
                     await _desktop.ApplyWallpaper(SelectedWindow.Value.Handle, SelectedAreaHeight.Value != 0 ? CalcRenderingRect() : rect);
                 });
             }).AddTo(this);
@@ -189,28 +208,40 @@ namespace Robock.ViewModels.Tabs
             ReloadWindowsCommand.Subscribe(_ => windowManager.ForceUpdate()).AddTo(this);
         }
 
-        private void Render(int index)
+        private void RenderEditor()
         {
             var handle = SelectedWindow.Value.Handle;
+            var (scaleX, scaleY) = (DpiService.Instance.CurrentDpi.ScaleX, DpiService.Instance.CurrentDpi.ScaleY);
 
-            if (index == 0)
-            {
-                if (_desktopWindowManager.Thumbnails[0].IsRendering)
-                    _desktopWindowManager.Rerender(0, EditorAreaLeft.Value, EditorAreaTop.Value, EditorAreaHeight.Value, EditorAreaWidth.Value);
-                else
-                    _desktopWindowManager.Start(0, handle, EditorAreaLeft.Value, EditorAreaTop.Value, EditorAreaHeight.Value, EditorAreaWidth.Value);
-            }
+            var left = EditorAreaLeft.Value * scaleX;
+            var top = EditorAreaTop.Value * scaleY;
+            var height = EditorAreaHeight.Value * scaleY;
+            var width = EditorAreaWidth.Value * scaleX;
+
+            if (_desktopWindowManager.Thumbnails[0].IsRendering)
+                _desktopWindowManager.Rerender(0, (int) left, (int) top, (int) height, (int) width);
             else
-            {
-                var rect = RobockUtil.AsRect(0, 0, _desktopWindowManager.Thumbnails[0].Size.Height, _desktopWindowManager.Thumbnails[0].Size.Width);
-                if (SelectedAreaHeight.Value != 0)
-                    rect = CalcRenderingRect();
+                _desktopWindowManager.Start(0, handle, (int) left, (int) top, (int) height, (int) width);
+        }
 
-                if (_desktopWindowManager.Thumbnails[1].IsRendering)
-                    _desktopWindowManager.Rerender(1, PreviewAreaLeft.Value, PreviewAreaTop.Value, PreviewAreaHeight.Value, PreviewAreaWidth.Value, rect);
-                else
-                    _desktopWindowManager.Start(1, handle, PreviewAreaLeft.Value, PreviewAreaTop.Value, PreviewAreaHeight.Value, PreviewAreaWidth.Value, rect);
-            }
+        private void RenderPreview()
+        {
+            var handle = SelectedWindow.Value.Handle;
+            var (scaleX, scaleY) = (DpiService.Instance.CurrentDpi.ScaleX, DpiService.Instance.CurrentDpi.ScaleY);
+
+            var rect = RobockUtil.AsRect(0, 0, _desktopWindowManager.Thumbnails[0].Size.Height, _desktopWindowManager.Thumbnails[0].Size.Width);
+            if (SelectedAreaHeight.Value != 0)
+                rect = CalcRenderingRect();
+
+            var left = PreviewAreaLeft.Value * scaleX;
+            var top = PreviewAreaTop.Value * scaleY;
+            var height = PreviewAreaHeight.Value * scaleY;
+            var width = PreviewAreaWidth.Value * scaleX;
+
+            if (_desktopWindowManager.Thumbnails[1].IsRendering)
+                _desktopWindowManager.Rerender(1, (int) left, (int) top, (int) height, (int) width, rect);
+            else
+                _desktopWindowManager.Start(1, handle, (int) left, (int) top, (int) height, (int) width, rect);
         }
 
         private bool CanRender()
@@ -227,7 +258,8 @@ namespace Robock.ViewModels.Tabs
 
             // Grid と Image のズレが大きいと、描画領域がずれてしまうので、補正する
             var diff = new Size(EditorAreaLeft.Value - GridAreaLeft.Value, EditorAreaTop.Value - GridAreaTop.Value);
-            return RobockUtil.AsRect(SelectedAreaTop.Value - diff.Height, SelectedAreaLeft.Value - diff.Width, SelectedAreaHeight.Value, SelectedAreaWidth.Value, multi);
+            return RobockUtil.AsRect(SelectedAreaTop.Value - diff.Height, SelectedAreaLeft.Value - diff.Width, SelectedAreaHeight.Value, SelectedAreaWidth.Value,
+                                     multi);
         }
     }
 }

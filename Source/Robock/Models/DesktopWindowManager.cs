@@ -5,11 +5,12 @@ using System.Windows.Interop;
 
 using Prism.Mvvm;
 
+using Robock.Shared.Models;
 using Robock.Shared.Win32;
 
 using Size = System.Drawing.Size;
 
-namespace Robock.Shared.Models
+namespace Robock.Models
 {
     /// <summary>
     ///     Desktop Window Manager Wrapper Class

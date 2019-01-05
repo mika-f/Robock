@@ -1,20 +1,24 @@
 # Robock
 
 [![License](https://img.shields.io/github/license/mika-f/robock.svg?style=flat-square)](LICENSE)
+[![AppVeyor branch](https://img.shields.io/appveyor/ci/mika-f/Robock/develop.svg?style=flat-square)](https://ci.appveyor.com/project/mika-f/robock)
+[![GitHub release](https://img.shields.io/github/release/mika-f/Robock.svg?style=flat-square)](https://github.com/mika-f/Robock/releases/latest)
+[![GitHub (pre-)release](https://img.shields.io/github/release/mika-f/Robock/all.svg?style=flat-square)](https://github.com/mika-f/Robock/releases/latest)
+
 
 > Robock is experimental software. Please use it at your own risk.
 
 Window Capture + Dynamic Wallpaper = Good Experience
 
 
-## Video
+## Demo
 
 [![](https://img.youtube.com/vi/3HdT_-mdNBM/0.jpg)](https://www.youtube.com/watch?v=3HdT_-mdNBM)
 
 
 ## Requirements
 
-* Windows 10 (1804 ~)
+* Windows 10 (1803 ~)
 * .NET Framework 4.7.2 ~
 * DirectX 11 ~
 * Video Card that supports Windows Display Driver Model
