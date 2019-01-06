@@ -23,7 +23,7 @@ namespace Robock.Behaviors
             DependencyProperty.Register(nameof(Width), typeof(int), typeof(RectangleSelectorBehavior), new FrameworkPropertyMetadata(WidthPropertyChanged));
 
         public static readonly DependencyProperty RectangleProperty =
-            DependencyProperty.Register(nameof(Rectangle), typeof(Rectangle), typeof(RectangleSelectorBehavior));
+            DependencyProperty.Register(nameof(Rectangle), typeof(Rectangle), typeof(RectangleSelectorBehavior), new FrameworkPropertyMetadata(RectanglePropertyChanged));
 
         private IDisposable _disposable;
 
@@ -81,6 +81,9 @@ namespace Robock.Behaviors
         {
             if (!(d is RectangleSelectorBehavior behavior))
                 return;
+            if (behavior.Rectangle == null)
+                return;
+
             behavior.Rectangle.Height = (int) e.NewValue;
             behavior.UpdateRenderStatus();
         }
@@ -89,8 +92,22 @@ namespace Robock.Behaviors
         {
             if (!(d is RectangleSelectorBehavior behavior))
                 return;
+            if (behavior.Rectangle == null)
+                return;
+
             behavior.Rectangle.Width = (int) e.NewValue;
             behavior.UpdateRenderStatus();
+        }
+
+        private static void RectanglePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (!(d is RectangleSelectorBehavior behavior))
+                return;
+
+            // 描画が一瞬ずれた状態で表示されるため (このあと Left/Top の更新で描画されるので OK)
+            behavior.Rectangle.Visibility = Visibility.Hidden;
+            behavior.Rectangle.Height = behavior.Height;
+            behavior.Rectangle.Width = behavior.Width;
         }
 
         protected override void OnAttached()
