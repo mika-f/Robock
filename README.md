@@ -42,4 +42,7 @@ I would like to deal with this problem, but I don't know how to fix it.
 ## Donation
 
 If you want to support me, you can donate cryptocurrencies here.  
-https://mochizuki.moe/donation
+
+BTC: `3HJ2ddoZSPfCCY742dnG9NvjBb9QuVMBR9`
+ETH: `0xC925668E7431d4635Dc9670C934A19c2206b2819`
+MONA: `MC4x87u1ffmhsRhHof1sHz8UAtNtKCTQut`
