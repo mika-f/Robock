@@ -27,7 +27,7 @@ namespace Robock.ViewModels
 
         private ICommand _openHyperlinkCommand;
 
-        public ICommand OpenHyperlinkCommand => _openHyperlinkCommand ?? (_openHyperlinkCommand = new DelegateCommand(OpenHyperlink));
+        public ICommand OpenHyperlinkCommand => _openHyperlinkCommand ??= new DelegateCommand(OpenHyperlink);
 
         private void OpenHyperlink()
         {

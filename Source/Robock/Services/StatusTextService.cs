@@ -7,7 +7,7 @@ namespace Robock.Services
         private static StatusTextService _instance;
 
         private string _status;
-        public static StatusTextService Instance => _instance ?? (_instance = new StatusTextService());
+        public static StatusTextService Instance => _instance ??= new StatusTextService();
 
         public string Status
         {

@@ -8,7 +8,6 @@ using Reactive.Bindings.Extensions;
 using Robock.Models;
 using Robock.Services;
 using Robock.Shared.Extensions;
-using Robock.Shared.Models;
 using Robock.Shared.Mvvm;
 using Robock.ViewModels.Tabs;
 

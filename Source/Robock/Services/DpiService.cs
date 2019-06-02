@@ -14,7 +14,7 @@ namespace Robock.Services
         private readonly Window _window;
 
         private Dpi _currentDpi;
-        public static DpiService Instance => _instance ?? (_instance = new DpiService());
+        public static DpiService Instance => _instance ??= new DpiService();
 
         public Dpi CurrentDpi
         {
