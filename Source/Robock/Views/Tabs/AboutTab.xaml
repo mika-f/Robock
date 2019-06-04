@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:behaviors="clr-namespace:Robock.Behaviors"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:prism="http://prismlibrary.com/"
              xmlns:vm="clr-namespace:Robock.ViewModels.Tabs"
@@ -37,8 +37,7 @@
             <TextBlock Text="{Binding Copyright}" />
         </StackPanel>
         <StackPanel Grid.Row="2">
-            <TextBlock FontSize="16"
-                       Text="Third-party Notices" />
+            <TextBlock FontSize="16" Text="Third-party Notices" />
             <Separator />
         </StackPanel>
         <TabControl Grid.Row="3"
@@ -53,10 +52,8 @@
                             <ColumnDefinition Width="250" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <ScrollViewer Grid.Column="0"
-                                      VerticalScrollBarVisibility="Auto">
-                            <StackPanel IsItemsHost="True"
-                                        Orientation="Vertical" />
+                        <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto">
+                            <StackPanel IsItemsHost="True" Orientation="Vertical" />
                         </ScrollViewer>
                         <ContentPresenter Grid.Column="1"
                                           Content="{TemplateBinding TabControl.SelectedContent}"
@@ -67,8 +64,7 @@
                 </ControlTemplate>
             </TabControl.Template>
             <TabControl.Resources>
-                <Style BasedOn="{StaticResource FlatStyleTabItem}"
-                       TargetType="{x:Type TabItem}" />
+                <Style BasedOn="{StaticResource FlatStyleTabItem}" TargetType="{x:Type TabItem}" />
             </TabControl.Resources>
             <TabControl.ItemTemplate>
                 <DataTemplate>
@@ -84,8 +80,7 @@
                         <i:Interaction.Behaviors>
                             <behaviors:ScrollToTopBehavior />
                         </i:Interaction.Behaviors>
-                        <StackPanel Margin="10,5"
-                                    Orientation="Vertical">
+                        <StackPanel Margin="10,5" Orientation="Vertical">
                             <StackPanel.Resources>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="Foreground" Value="{DynamicResource ForegroundBrushKey}" />
@@ -96,8 +91,7 @@
                                        TextTrimming="CharacterEllipsis" />
                             <TextBlock>
                                 <Run>Project Home :</Run>
-                                <Hyperlink Command="{Binding OpenHyperlinkCommand}"
-                                           NavigateUri="{Binding Url, Mode=OneWay}">
+                                <Hyperlink Command="{Binding OpenHyperlinkCommand}" NavigateUri="{Binding Url, Mode=OneWay}">
                                     <Run Text="{Binding Url, Mode=OneWay}" />
                                 </Hyperlink>
                             </TextBlock>
@@ -106,8 +100,7 @@
                                 <Run Text="{Binding Authors, Mode=OneWay}" />
                             </TextBlock>
                             <Separator />
-                            <TextBlock Text="{Binding LicenseBody, Mode=OneWay}"
-                                       TextWrapping="WrapWithOverflow" />
+                            <TextBlock Text="{Binding LicenseBody, Mode=OneWay}" TextWrapping="WrapWithOverflow" />
                         </StackPanel>
                     </ScrollViewer>
                 </DataTemplate>

@@ -5,7 +5,7 @@
                    xmlns:chrome="http://schemes.grabacr.net/winfx/2014/chrome"
                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                    xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
-                   xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                   xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                    xmlns:local="clr-namespace:Robock.Views"
                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                    xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
@@ -41,16 +41,14 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="25" />
         </Grid.RowDefinitions>
-        <Border Grid.Row="0"
-                metro:MetroWindow.IsCaptionBar="True">
+        <Border Grid.Row="0" metro:MetroWindow.IsCaptionBar="True">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <metro:CaptionIcon Grid.Column="0"
-                                   Padding="4,2">
+                <metro:CaptionIcon Grid.Column="0" Padding="4,2">
                     <!--
                     <Image Width="24"
                            Height="24"
@@ -66,10 +64,8 @@
                            Foreground="{DynamicResource ForegroundBrushKey}"
                            Text="{Binding Title.Value}"
                            TextTrimming="CharacterEllipsis" />
-                <StackPanel Grid.Column="2"
-                            Orientation="Horizontal">
-                    <metro:SystemButtons Margin="5,0,0,0"
-                                         VerticalAlignment="Top" />
+                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                    <metro:SystemButtons Margin="5,0,0,0" VerticalAlignment="Top" />
                 </StackPanel>
             </Grid>
         </Border>
@@ -104,12 +100,10 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="TabItem">
-                                <ContentPresenter Margin="10,5"
-                                                  ContentSource="Header">
+                                <ContentPresenter Margin="10,5" ContentSource="Header">
                                     <ContentPresenter.ContentTemplate>
                                         <DataTemplate DataType="tvm:TabViewModel">
-                                            <TextBlock fa:Awesome.Inline="{Binding Title}"
-                                                       Style="{StaticResource HorizontalFlatStyleTabTextBlock}" />
+                                            <TextBlock fa:Awesome.Inline="{Binding Title}" Style="{StaticResource HorizontalFlatStyleTabTextBlock}" />
                                         </DataTemplate>
                                     </ContentPresenter.ContentTemplate>
                                 </ContentPresenter>
@@ -119,8 +113,7 @@
                 </Style>
             </TabControl.ItemContainerStyle>
         </TabControl>
-        <Grid Grid.Row="2"
-              Background="{DynamicResource AccentBrushKey}">
+        <Grid Grid.Row="2" Background="{DynamicResource AccentBrushKey}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />

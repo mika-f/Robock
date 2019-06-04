@@ -4,7 +4,7 @@
              xmlns:behaviors="clr-namespace:Robock.Behaviors"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
-             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
              xmlns:tvm="clr-namespace:Robock.ViewModels.Tabs"
@@ -48,8 +48,7 @@
                     Grid.ColumnSpan="2"
                     Height="24"
                     Orientation="Horizontal">
-            <TextBlock VerticalAlignment="Center"
-                       Text="Window to render as wallpaper : " />
+            <TextBlock VerticalAlignment="Center" Text="Window to render as wallpaper : " />
             <metro:PromptComboBox Width="250"
                                   IsEditable="False"
                                   ItemsSource="{Binding Windows}"
@@ -84,8 +83,7 @@
                        Text="Live Editor:" />
             <Grid Grid.Row="1">
                 <i:Interaction.Behaviors>
-                    <behaviors:ControlPositionBindingBehavior Left="{Binding GridAreaLeft.Value, Mode=OneWayToSource}"
-                                                              Top="{Binding GridAreaTop.Value, Mode=OneWayToSource}" />
+                    <behaviors:ControlPositionBindingBehavior Left="{Binding GridAreaLeft.Value, Mode=OneWayToSource}" Top="{Binding GridAreaTop.Value, Mode=OneWayToSource}" />
                     <behaviors:RectangleSelectorBehavior Width="{Binding SelectedAreaWidth.Value, Mode=TwoWay}"
                                                          Height="{Binding SelectedAreaHeight.Value, Mode=TwoWay}"
                                                          Left="{Binding SelectedAreaLeft.Value, Mode=TwoWay}"

@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Reactive.Linq;
 using System.Windows;
-using System.Windows.Interactivity;
 using System.Windows.Media;
+
+using Microsoft.Xaml.Behaviors;
 
 namespace Robock.Behaviors
 {

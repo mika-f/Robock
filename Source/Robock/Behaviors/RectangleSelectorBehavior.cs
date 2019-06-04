@@ -3,8 +3,9 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Interactivity;
 using System.Windows.Shapes;
+
+using Microsoft.Xaml.Behaviors;
 
 namespace Robock.Behaviors
 {
