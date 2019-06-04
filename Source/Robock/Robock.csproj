@@ -124,9 +124,6 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="VirtualDesktop, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\VirtualDesktop.3.0.0-beta1\lib\net47\VirtualDesktop.dll</HintPath>
-    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -231,6 +228,10 @@
     <ProjectReference Include="..\Robock.Shared\Robock.Shared.csproj">
       <Project>{07becf0b-6e07-4ac5-b0c2-3eae0539d9a2}</Project>
       <Name>Robock.Shared</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VirtualDesktop\source\VirtualDesktop\VirtualDesktop.csproj">
+      <Project>{ab848ecd-76aa-41c0-b63d-86a8591b25aa}</Project>
+      <Name>VirtualDesktop</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
