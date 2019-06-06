@@ -220,10 +220,6 @@
     <Folder Include="Converters\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Myst\Source\Myst\Myst.csproj">
-      <Project>{07b370e8-a053-4d3e-b3a1-a205e5f7cccd}</Project>
-      <Name>Myst</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Robock.Shared\Robock.Shared.csproj">
       <Project>{07becf0b-6e07-4ac5-b0c2-3eae0539d9a2}</Project>
       <Name>Robock.Shared</Name>

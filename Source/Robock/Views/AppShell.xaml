@@ -100,13 +100,39 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="TabItem">
-                                <ContentPresenter Margin="10,5" ContentSource="Header">
-                                    <ContentPresenter.ContentTemplate>
-                                        <DataTemplate DataType="tvm:TabViewModel">
-                                            <TextBlock fa:Awesome.Inline="{Binding Title}" Style="{StaticResource HorizontalFlatStyleTabTextBlock}" />
-                                        </DataTemplate>
-                                    </ContentPresenter.ContentTemplate>
-                                </ContentPresenter>
+                                <Border Padding="10,0" BorderThickness="0,0,0,4">
+                                    <ContentPresenter Margin="0,5" ContentSource="Header">
+                                        <ContentPresenter.ContentTemplate>
+                                            <DataTemplate DataType="tvm:TabViewModel">
+                                                <TextBlock fa:Awesome.Inline="{Binding Title}" FontSize="14">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Setter Property="Foreground" Value="{DynamicResource ForegroundBrushKey}" />
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=TabItem}}" Value="True">
+                                                                    <Setter Property="Foreground" Value="{DynamicResource ActiveForegroundBrushKey}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=TabItem}}" Value="True">
+                                                                    <Setter Property="Foreground" Value="{DynamicResource ActiveForegroundBrushKey}" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                            </DataTemplate>
+                                        </ContentPresenter.ContentTemplate>
+                                    </ContentPresenter>
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="BorderBrush" Value="{DynamicResource HighlightBorderBrushKey}" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=TabItem}}" Value="True">
+                                                    <Setter Property="BorderBrush" Value="{DynamicResource AccentBrushKey}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                </Border>
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
