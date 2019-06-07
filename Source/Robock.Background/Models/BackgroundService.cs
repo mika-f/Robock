@@ -7,8 +7,8 @@ using System.Windows.Media;
 
 using Microsoft.Wpf.Interop.DirectX;
 
+using Robock.Interop.Win32;
 using Robock.Shared.Models;
-using Robock.Shared.Win32;
 
 using Application = System.Windows.Application;
 

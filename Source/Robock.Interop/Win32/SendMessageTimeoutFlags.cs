@@ -3,7 +3,7 @@
 // ReSharper disable UnusedMember.Global
 // ReSharper disable InconsistentNaming
 
-namespace Robock.Shared.Win32
+namespace Robock.Interop.Win32
 {
     [Flags]
     public enum SendMessageTimeoutFlags : uint

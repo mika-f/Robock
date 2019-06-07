@@ -5,8 +5,8 @@ using System.Windows.Interop;
 
 using Prism.Mvvm;
 
+using Robock.Interop.Win32;
 using Robock.Shared.Models;
-using Robock.Shared.Win32;
 
 using Size = System.Drawing.Size;
 
@@ -88,7 +88,7 @@ namespace Robock.Models
                 fVisible = true,
                 dwFlags = (int) (DWM_TNP.DWM_TNP_VISIBLE | DWM_TNP.DWM_TNP_OPACITY | DWM_TNP.DWM_TNP_RECTDESTINATION | DWM_TNP.DWM_TNP_SOURCECLIENTAREAONLY),
                 opacity = (byte) (255 / (index == 0 ? 2 : 1)),
-                rcDestination = new RECT {left = left, top = top, right = left + width, bottom = top + height},
+                rcDestination = new RECT { left = left, top = top, right = left + width, bottom = top + height },
                 fSourceClientAreaOnly = true
             };
 

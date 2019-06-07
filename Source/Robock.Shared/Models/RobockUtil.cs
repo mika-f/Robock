@@ -2,7 +2,7 @@
 
 using Microsoft.Win32;
 
-using Robock.Shared.Win32;
+using Robock.Interop.Win32;
 
 namespace Robock.Shared.Models
 {

@@ -216,10 +216,12 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Converters\" />
-  </ItemGroup>
-  <ItemGroup>
+    <ProjectReference Include="..\Robock.Interop\Robock.Interop.csproj">
+      <Project>{fd01ac6a-9863-487f-8f9c-9866306ceac6}</Project>
+      <Name>Robock.Interop</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Robock.Shared\Robock.Shared.csproj">
       <Project>{07becf0b-6e07-4ac5-b0c2-3eae0539d9a2}</Project>
       <Name>Robock.Shared</Name>

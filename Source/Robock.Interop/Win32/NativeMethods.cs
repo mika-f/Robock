@@ -3,43 +3,15 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Robock.Shared.Win32
+namespace Robock.Interop.Win32
 {
     public static class NativeMethods
     {
-        #region Kernel32
-
-        [DllImport("kernel32.dll")]
-        public static extern uint GetLastError();
-
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
-        public static extern IntPtr GetModuleHandle(string lpModuleName);
-
-        [DllImport("kernel32.dll", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true)]
-        public static extern IntPtr GetProcAddress(IntPtr hModule, string procName);
-
-        #endregion
-
-        #region Dwmapi
-
-        [DllImport("dwmapi.dll", SetLastError = true)]
-        public static extern int DwmRegisterThumbnail(IntPtr dest, IntPtr src, out IntPtr thumb);
-
-        [DllImport("dwmapi.dll")]
-        public static extern int DwmUnregisterThumbnail(IntPtr thumb);
-
-        [DllImport("dwmapi.dll", PreserveSig = false)]
-        public static extern void DwmQueryThumbnailSourceSize(IntPtr hThumbnail, out Size size);
-
-        [DllImport("dwmapi.dll", PreserveSig = true)]
-        public static extern int DwmUpdateThumbnailProperties(IntPtr hThumbnail, ref DWM_THUMBNAIL_PROPERTIES props);
-
-        [DllImport("dwmapi.dll")]
-        public static extern int DwmGetWindowAttribute(IntPtr hwnd, DWMWINDOWATTRIBUTE dwAttribute, out bool pvAttribute, int cbAttribute);
-
-        #endregion
-
         #region User32
+
+        [DllImport("user32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool GetWindowPlacement(IntPtr hWnd, ref WINDOWPLACEMENT lpwndpl);
 
         public delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
 
@@ -77,21 +49,52 @@ namespace Robock.Shared.Win32
         [DllImport("user32.dll", SetLastError = true)]
         public static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
 
-        [DllImport("user32.dll", SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool GetWindowPlacement(IntPtr hWnd, ref WINDOWPLACEMENT lpwndpl);
+        #endregion
+
+        #region Kernel32
+
+        [DllImport("kernel32.dll")]
+        public static extern uint GetLastError();
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
+        public static extern IntPtr GetModuleHandle(string lpModuleName);
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true)]
+        public static extern IntPtr GetProcAddress(IntPtr hModule, string procName);
+
+        #endregion
+
+        #region Dwmapi
+
+        [DllImport("dwmapi.dll", SetLastError = true)]
+        public static extern int DwmRegisterThumbnail(IntPtr dest, IntPtr src, out IntPtr thumb);
+
+        [DllImport("dwmapi.dll")]
+        public static extern int DwmUnregisterThumbnail(IntPtr thumb);
+
+        [DllImport("dwmapi.dll", PreserveSig = false)]
+        public static extern void DwmQueryThumbnailSourceSize(IntPtr hThumbnail, out Size size);
+
+        [DllImport("dwmapi.dll", PreserveSig = true)]
+        public static extern int DwmUpdateThumbnailProperties(IntPtr hThumbnail, ref DWM_THUMBNAIL_PROPERTIES props);
+
+        [DllImport("dwmapi.dll")]
+        public static extern int DwmGetWindowAttribute(IntPtr hwnd, DWMWINDOWATTRIBUTE dwAttribute, out bool pvAttribute, int cbAttribute);
 
         #endregion
 
         #region Robock.Background.Native
 
         [DllImport("Robock.Background.Native.dll")]
+        [Obsolete]
         public static extern int Init(int width, int height);
 
         [DllImport("Robock.Background.Native.dll")]
+        [Obsolete]
         public static extern int Render(IntPtr hWindowSurface, IntPtr hDwmSurface, int x, int y, int width, int height, bool isNewSurface);
 
         [DllImport("Robock.Background.Native.dll")]
+        [Obsolete]
         public static extern int Release();
 
         #endregion

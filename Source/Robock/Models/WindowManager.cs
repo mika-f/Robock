@@ -9,8 +9,8 @@ using System.Text;
 
 using WindowsDesktop;
 
+using Robock.Interop.Win32;
 using Robock.Services;
-using Robock.Shared.Win32;
 
 namespace Robock.Models
 {

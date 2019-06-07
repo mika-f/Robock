@@ -4,7 +4,7 @@
 // ReSharper disable  InconsistentNaming
 // ReSharper disable MemberCanBePrivate.Global
 
-namespace Robock.Shared.Win32
+namespace Robock.Interop.Win32
 {
     [StructLayout(LayoutKind.Sequential)]
     public struct DWM_THUMBNAIL_PROPERTIES

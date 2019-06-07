@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Robock.Shared.Win32
+namespace Robock.Interop.Win32
 {
     [Flags]
     public enum DeviceContextValues : uint

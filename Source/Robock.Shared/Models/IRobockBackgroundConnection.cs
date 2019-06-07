@@ -2,7 +2,7 @@
 using System.ServiceModel;
 using System.Threading.Tasks;
 
-using Robock.Shared.Win32;
+using Robock.Interop.Win32;
 
 namespace Robock.Shared.Models
 {
@@ -28,7 +28,6 @@ namespace Robock.Shared.Models
         Task ApplyWallpaper(IntPtr src, RECT rect);
 
         /// <summary>
-        ///
         /// </summary>
         /// <returns></returns>
         [OperationContract]

@@ -3,9 +3,9 @@ using System.Diagnostics;
 using System.ServiceModel;
 using System.Threading.Tasks;
 
+using Robock.Interop.Win32;
 using Robock.Services;
 using Robock.Shared.Models;
-using Robock.Shared.Win32;
 
 namespace Robock.Models
 {

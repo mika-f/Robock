@@ -1,12 +1,11 @@
 ﻿using System;
+using System.Drawing;
 using System.Runtime.InteropServices;
-using System.Windows;
 
-// ReSharper disable FieldCanBeMadeReadOnly.Global
-// ReSharper disable  InconsistentNaming
-// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable InconsistentNaming
+// ReSharper disable once IdentifierTypo
 
-namespace Robock.Shared.Win32
+namespace Robock.Interop.Win32
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]

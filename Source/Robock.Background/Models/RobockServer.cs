@@ -3,8 +3,8 @@ using System.ServiceModel;
 using System.Threading.Tasks;
 using System.Windows;
 
+using Robock.Interop.Win32;
 using Robock.Shared.Models;
-using Robock.Shared.Win32;
 
 namespace Robock.Background.Models
 {
