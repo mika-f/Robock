@@ -57,24 +57,30 @@ namespace Robock.Models
             var windows = new List<Window>();
             StatusTextService.Instance.Status = "Synchronizing visible windows...";
 
-            NativeMethods.EnumWindows((hWnd, lParam) =>
+            NativeMethods.EnumWindows((hWnd, _) =>
             {
-                // Filter by Window is visible
+                // remove invisible windows
                 if (!NativeMethods.IsWindowVisible(hWnd))
                     return true;
 
-                // Filter by Window Title
+                // remove null_or_whitespace title windows
                 var title = new StringBuilder(1024);
                 NativeMethods.GetWindowText(hWnd, title, title.Capacity);
                 if (string.IsNullOrWhiteSpace(title.ToString()))
                     return true; // Skipped
 
-                // Universal Windows (invisible / background)
+                // remove UWP (invisible / background) windows
                 NativeMethods.DwmGetWindowAttribute(hWnd, DWMWINDOWATTRIBUTE.Cloaked, out var isCloaked, Marshal.SizeOf(typeof(bool)));
                 if (isCloaked && !IsVisibleWindowOnOtherDesktop(hWnd))
                     return true;
 
+                // remove blacklisted windows
                 if (Ignores.IgnoreWindowTitles.Contains(title.ToString()))
+                    return true;
+
+                // remove popup windows
+                var ws = NativeMethods.GetWindowLongPtr(hWnd, (int) GWL.GWL_STYLE);
+                if ((ws.ToInt64() & (long) WindowStyles.WS_POPUP) != 0)
                     return true;
 
                 NativeMethods.GetWindowThreadProcessId(hWnd, out var processId);
