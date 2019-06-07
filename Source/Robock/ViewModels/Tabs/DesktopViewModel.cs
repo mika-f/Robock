@@ -80,7 +80,7 @@ namespace Robock.ViewModels.Tabs
             _offsetY = (SystemParameters.VirtualScreenTop < 0 ? -1 : 1) * SystemParameters.VirtualScreenTop;
 
             // タブの選択状態
-            IsSelected = new ReactiveProperty<bool>(false);
+            IsSelected = new ReactiveProperty<bool>(desktop.IsPrimary);
             IsSelected.Subscribe(w =>
             {
                 if (w && CanRender())
@@ -246,7 +246,7 @@ namespace Robock.ViewModels.Tabs
 
         private bool CanRender()
         {
-            if (!IsSelected.Value || SelectedWindow.Value == null)
+            if (!IsSelected.Value || SelectedWindow?.Value == null)
                 return false;
             return PreviewAreaHeight.Value != 0 && PreviewAreaWidth.Value != 0;
         }
