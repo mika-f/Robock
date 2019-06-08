@@ -43,6 +43,9 @@ namespace Robock.Models
             No = index;
 
             var identity = WindowsIdentity.GetCurrent();
+            if (identity.User == null)
+                throw new NotSupportedException();
+
             _watcher = new ManagementEventWatcher
             {
                 Query = new EventQuery($@"SELECT * FROM RegistryValueChangeEvent WHERE Hive = 'HKEY_USERS' AND KeyPath = '{identity.User.Value}\\Control Panel\\Desktop' AND ValueName = 'Wallpaper'")
