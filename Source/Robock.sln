@@ -21,9 +21,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Robock.Background", "Robock
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Robock.Background.Native", "Robock.Background.Native\Robock.Background.Native.vcxproj", "{9EA33D1B-E569-4E0C-BB36-1BCC899FF1E3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VirtualDesktop", "VirtualDesktop\source\VirtualDesktop\VirtualDesktop.csproj", "{AB848ECD-76AA-41C0-B63D-86A8591B25AA}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Robock.Interop", "Robock.Interop\Robock.Interop.csproj", "{FD01AC6A-9863-487F-8F9C-9866306CEAC6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VirtualDesktop", "..\deps\VirtualDesktop\source\VirtualDesktop\VirtualDesktop.csproj", "{AB848ECD-76AA-41C0-B63D-86A8591B25AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,14 +47,14 @@ Global
 		{9EA33D1B-E569-4E0C-BB36-1BCC899FF1E3}.Debug|x64.Build.0 = Debug|x64
 		{9EA33D1B-E569-4E0C-BB36-1BCC899FF1E3}.Release|x64.ActiveCfg = Release|x64
 		{9EA33D1B-E569-4E0C-BB36-1BCC899FF1E3}.Release|x64.Build.0 = Release|x64
-		{AB848ECD-76AA-41C0-B63D-86A8591B25AA}.Debug|x64.ActiveCfg = Debug|x64
-		{AB848ECD-76AA-41C0-B63D-86A8591B25AA}.Debug|x64.Build.0 = Debug|x64
-		{AB848ECD-76AA-41C0-B63D-86A8591B25AA}.Release|x64.ActiveCfg = Release|x64
-		{AB848ECD-76AA-41C0-B63D-86A8591B25AA}.Release|x64.Build.0 = Release|x64
 		{FD01AC6A-9863-487F-8F9C-9866306CEAC6}.Debug|x64.ActiveCfg = Debug|x64
 		{FD01AC6A-9863-487F-8F9C-9866306CEAC6}.Debug|x64.Build.0 = Debug|x64
 		{FD01AC6A-9863-487F-8F9C-9866306CEAC6}.Release|x64.ActiveCfg = Release|x64
 		{FD01AC6A-9863-487F-8F9C-9866306CEAC6}.Release|x64.Build.0 = Release|x64
+		{AB848ECD-76AA-41C0-B63D-86A8591B25AA}.Debug|x64.ActiveCfg = Debug|x64
+		{AB848ECD-76AA-41C0-B63D-86A8591B25AA}.Debug|x64.Build.0 = Debug|x64
+		{AB848ECD-76AA-41C0-B63D-86A8591B25AA}.Release|x64.ActiveCfg = Release|x64
+		{AB848ECD-76AA-41C0-B63D-86A8591B25AA}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
