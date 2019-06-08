@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Management;
 using System.Reactive.Linq;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
+
+using Microsoft.Win32;
 
 using Prism.Mvvm;
 
@@ -20,6 +24,7 @@ namespace Robock.Models
         private readonly RobockClient _client;
         private readonly Screen _screen;
         private readonly string _uuid;
+        private readonly ManagementEventWatcher _watcher;
         private IDisposable _disposable;
         private Process _process;
 
@@ -36,6 +41,16 @@ namespace Robock.Models
             _uuid = $"Background.Desktop{index}";
             _client = new RobockClient(_uuid);
             No = index;
+
+            var identity = WindowsIdentity.GetCurrent();
+            _watcher = new ManagementEventWatcher
+            {
+                Query = new EventQuery($@"SELECT * FROM RegistryValueChangeEvent WHERE Hive = 'HKEY_USERS' AND KeyPath = '{identity.User.Value}\\Control Panel\\Desktop' AND ValueName = 'Wallpaper'")
+            };
+            _watcher.EventArrived += (sender, e) => GetCurrentWallpaper();
+            _watcher.Start();
+
+            GetCurrentWallpaper();
         }
 
         public void Dispose()
@@ -47,6 +62,11 @@ namespace Robock.Models
             catch (Exception e)
             {
                 Debug.WriteLine(e.Message);
+            }
+            finally
+            {
+                _watcher.Stop();
+                _watcher.Dispose();
             }
         }
 
@@ -111,6 +131,15 @@ namespace Robock.Models
             StatusTextService.Instance.Status = "Shutdown successful";
         }
 
+        private void GetCurrentWallpaper()
+        {
+            // fetch wallpaper path from registry
+            using var registry = Registry.CurrentUser.OpenSubKey(@"Control Panel\Desktop");
+            Wallpaper = registry?.GetValue("Wallpaper", null) as string;
+
+            registry?.Close();
+        }
+
         #region IsConnecting
 
         private bool _isConnecting;
@@ -119,6 +148,18 @@ namespace Robock.Models
         {
             get => _isConnecting;
             set => SetProperty(ref _isConnecting, value);
+        }
+
+        #endregion
+
+        #region Wallpaper
+
+        private string _wallpaper;
+
+        public string Wallpaper
+        {
+            get => _wallpaper;
+            private set => SetProperty(ref _wallpaper, value);
         }
 
         #endregion

@@ -61,8 +61,12 @@ namespace Robock.ViewModels.Tabs
         public ReactiveCommand ReloadWindowsCommand { get; }
 
         public string DesktopName => $"Desktop {_desktop.No}";
-        public string Resolution => $"{_desktop.Width}x{_desktop.Height}";
+        public double Width => _desktop.Width;
+        public double Height => _desktop.Height;
+        public string Resolution => $"{Width}x{Height}";
         public bool IsPrimary => _desktop.IsPrimary;
+
+        public ReadOnlyReactiveProperty<string> Wallpaper { get; }
 
         public double VirtualScreenX => (_offsetX + _desktop.X) / Scale;
         public double VirtualScreenY => (_offsetY + _desktop.Y) / Scale;
@@ -78,6 +82,8 @@ namespace Robock.ViewModels.Tabs
             // 仮想スクリーン周りの計算
             _offsetX = (SystemParameters.VirtualScreenLeft < 0 ? -1 : 1) * SystemParameters.VirtualScreenLeft;
             _offsetY = (SystemParameters.VirtualScreenTop < 0 ? -1 : 1) * SystemParameters.VirtualScreenTop;
+
+            Wallpaper = _desktop.ObserveProperty(w => w.Wallpaper).ToReadOnlyReactiveProperty().AddTo(this);
 
             // タブの選択状態
             IsSelected = new ReactiveProperty<bool>(desktop.IsPrimary);
