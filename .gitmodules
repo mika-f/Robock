@@ -1,3 +1,7 @@
 [submodule "deps/VirtualDesktop"]
 	path = deps/VirtualDesktop
 	url = https://github.com/mika-f/VirtualDesktop.git
+[submodule "deps/MetroRadiance"]
+	path = deps/MetroRadiance
+	url = https://github.com/mika-f/MetroRadiance.git
+	branch = support-vs2019

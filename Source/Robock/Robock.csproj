@@ -43,15 +43,6 @@
     <Reference Include="FontAwesome.Sharp, Version=5.8.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\FontAwesome.Sharp.5.8.3\lib\net40\FontAwesome.Sharp.dll</HintPath>
     </Reference>
-    <Reference Include="MetroRadiance, Version=2.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MetroRadiance.2.4.0\lib\net46\MetroRadiance.dll</HintPath>
-    </Reference>
-    <Reference Include="MetroRadiance.Chrome, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MetroRadiance.Chrome.2.2.0\lib\net46\MetroRadiance.Chrome.dll</HintPath>
-    </Reference>
-    <Reference Include="MetroRadiance.Core, Version=2.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MetroRadiance.Core.2.4.0\lib\net46\MetroRadiance.Core.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
@@ -132,6 +123,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Behaviors\AdjustControlSizeToParentBehavior.cs" />
     <Compile Include="Behaviors\ControlPositionBindingBehavior.cs" />
     <Compile Include="Behaviors\RectangleSelectorBehavior.cs" />
     <Compile Include="Behaviors\ScrollToTopBehavior.cs" />
@@ -218,6 +210,18 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="..\..\deps\MetroRadiance\source\MetroRadiance.Chrome\MetroRadiance.Chrome.csproj">
+      <Project>{21b4ad15-d9fa-4873-bfad-1eeefbc6c264}</Project>
+      <Name>MetroRadiance.Chrome</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\deps\MetroRadiance\source\MetroRadiance.Core\MetroRadiance.Core.csproj">
+      <Project>{a6b0a741-5be0-479d-b813-e65672350057}</Project>
+      <Name>MetroRadiance.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\deps\MetroRadiance\source\MetroRadiance\MetroRadiance.csproj">
+      <Project>{0af0b9ff-d981-4d0f-a41f-c3ab6fe2f16d}</Project>
+      <Name>MetroRadiance</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\deps\VirtualDesktop\source\VirtualDesktop\VirtualDesktop.csproj">
       <Project>{ab848ecd-76aa-41c0-b63d-86a8591b25aa}</Project>
       <Name>VirtualDesktop</Name>

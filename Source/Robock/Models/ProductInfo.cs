@@ -66,22 +66,22 @@ to represent the company, product, or service to which they refer.**"
             },
             new License
             {
-                Name = "MetroRadiance",
-                Url = "https://github.com/Grabacr07/MetroRadiance",
+                Name = "MetroRadiance (Forked)",
+                Url = "https://github.com/mika-f/MetroRadiance",
                 Authors = new[] { "Manato KAMEYA" },
                 Body = License.MIT.Replace("{yyyy}", "2014").Replace("{name of copyright owner}", "Manato KAMEYA")
             },
             new License
             {
-                Name = "MetroRadiance.Chrome",
-                Url = "https://github.com/Grabacr07/MetroRadiance",
+                Name = "MetroRadiance.Chrome (Forked)",
+                Url = "https://github.com/mika-f/MetroRadiance",
                 Authors = new[] { "Manato KAMEYA" },
                 Body = License.MIT.Replace("{yyyy}", "2014").Replace("{name of copyright owner}", "Manato KAMEYA")
             },
             new License
             {
-                Name = "MetroRadiance.Core",
-                Url = "https://github.com/Grabacr07/MetroRadiance",
+                Name = "MetroRadiance.Core (Forked)",
+                Url = "https://github.com/mika-f/MetroRadiance",
                 Authors = new[] { "Manato KAMEYA" },
                 Body = License.MIT.Replace("{yyyy}", "2014").Replace("{name of copyright owner}", "Manato KAMEYA")
             },
