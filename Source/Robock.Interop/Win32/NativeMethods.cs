@@ -7,7 +7,17 @@ namespace Robock.Interop.Win32
 {
     public static class NativeMethods
     {
+        static NativeMethods()
+        {
+            var ptr = GetProcAddress(GetModuleHandle("user32"), "DwmGetDxSharedSurface");
+            DwmGetDxSharedSurface = Marshal.GetDelegateForFunctionPointer<DwmGetSharedSurfaceDelegate>(ptr);
+        }
+
         #region User32
+
+        public delegate bool DwmGetSharedSurfaceDelegate(IntPtr hWnd, out IntPtr phSurface, out long pAdapterLuid, out long pFmtWindow, out long pPresentFlags, out long pWin32KUpdateId);
+
+        public static DwmGetSharedSurfaceDelegate DwmGetDxSharedSurface { get; }
 
         [DllImport("user32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
