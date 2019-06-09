@@ -12,9 +12,11 @@ namespace Robock.Behaviors
 {
     /// <summary>
     ///     Microsoft.Wpf.Interop.DirectX との相互運用をごにょごにょするやつ
+    ///     NOTE: メモリリーク起こしてるかも？
     /// </summary>
     public class DxInteropBehavior : Behavior<D3D11Image>
     {
+        private bool _isVisible;
         private TimeSpan _lastRenderingTime;
 
         protected override void OnAttached()
@@ -94,14 +96,16 @@ namespace Robock.Behaviors
                 return;
 
             var visibility = (Visibility) e.NewValue;
-            if (visibility != Visibility.Visible)
-            {
-                CompositionTarget.Rendering -= behavior.CompositionTargetOnRendering;
-            }
-            else
+            behavior._isVisible = visibility == Visibility.Visible;
+            if (behavior._isVisible)
             {
                 behavior.Renderer?.Initialize();
                 CompositionTarget.Rendering += behavior.CompositionTargetOnRendering;
+            }
+            else
+            {
+                CompositionTarget.Rendering -= behavior.CompositionTargetOnRendering;
+                behavior.Renderer?.Dispose();
             }
         }
 
@@ -109,12 +113,31 @@ namespace Robock.Behaviors
 
         #region Renderer
 
-        public static readonly DependencyProperty RendererProperty = DependencyProperty.Register(nameof(Renderer), typeof(IRenderer), typeof(DxInteropBehavior));
+        public static readonly DependencyProperty RendererProperty = DependencyProperty.Register(nameof(Renderer), typeof(IRenderer), typeof(DxInteropBehavior), new PropertyMetadata(OnRendererChanged));
 
         public IRenderer Renderer
         {
             get => (IRenderer) GetValue(RendererProperty);
             set => SetValue(RendererProperty, value);
+        }
+
+        private static void OnRendererChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (!(d is DxInteropBehavior behavior))
+                return;
+
+            if (e.NewValue == null)
+            {
+                CompositionTarget.Rendering -= behavior.CompositionTargetOnRendering;
+                behavior.Renderer?.Dispose();
+            }
+            else
+            {
+                if (!behavior._isVisible)
+                    return;
+                behavior.Renderer?.Initialize();
+                CompositionTarget.Rendering += behavior.CompositionTargetOnRendering;
+            }
         }
 
         #endregion

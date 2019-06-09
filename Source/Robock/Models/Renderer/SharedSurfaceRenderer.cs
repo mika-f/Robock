@@ -32,12 +32,15 @@ namespace Robock.Models.Renderer
 
         public void Dispose()
         {
-            _renderTargetView?.Dispose();
-            _vertexes?.Dispose();
-            _layout?.Dispose();
-            _pixelShader?.Dispose();
-            _vertexShader?.Dispose();
-            _device?.Dispose();
+            Utilities.Dispose(ref _renderTargetView);
+            Utilities.Dispose(ref _vertexes);
+            Utilities.Dispose(ref _layout);
+            Utilities.Dispose(ref _pixelShader);
+            Utilities.Dispose(ref _vertexShader);
+
+            _device.ImmediateContext.ClearState();
+            _device.ImmediateContext.Dispose();
+            Utilities.Dispose(ref _device);
         }
 
         public void Initialize()
