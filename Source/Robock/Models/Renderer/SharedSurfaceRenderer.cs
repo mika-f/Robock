@@ -20,8 +20,10 @@ namespace Robock.Models.Renderer
         private readonly IntPtr _hWnd;
         private Device _device;
         private InputLayout _layout;
+        private IntPtr _phSurface;
         private PixelShader _pixelShader;
         private RenderTargetView _renderTargetView;
+        private Texture2D _surfaceTexture;
         private Buffer _vertexes;
         private VertexShader _vertexShader;
 
@@ -32,6 +34,7 @@ namespace Robock.Models.Renderer
 
         public void Dispose()
         {
+            Utilities.Dispose(ref _surfaceTexture);
             Utilities.Dispose(ref _renderTargetView);
             Utilities.Dispose(ref _vertexes);
             Utilities.Dispose(ref _layout);
@@ -95,8 +98,12 @@ namespace Robock.Models.Renderer
             NativeMethods.DwmGetDxSharedSurface(_hWnd, out var phSurface, out _, out _, out _, out _);
             if (phSurface == IntPtr.Zero)
                 return; // window lost
-
-            using var surfaceTexture = _device.OpenSharedResource<Texture2D>(phSurface);
+            if (_phSurface != phSurface)
+            {
+                _phSurface = phSurface;
+                Utilities.Dispose(ref _surfaceTexture);
+                _surfaceTexture = _device.OpenSharedResource<Texture2D>(_phSurface);
+            }
 
             var texture2dDescription = new Texture2DDescription
             {
@@ -104,14 +111,14 @@ namespace Robock.Models.Renderer
                 BindFlags = BindFlags.ShaderResource | BindFlags.RenderTarget,
                 CpuAccessFlags = CpuAccessFlags.None,
                 Format = Format.B8G8R8A8_UNorm,
-                Height = surfaceTexture.Description.Height,
+                Height = _surfaceTexture.Description.Height,
                 MipLevels = 1,
                 SampleDescription = new SampleDescription(1, 0),
                 Usage = ResourceUsage.Default,
-                Width = surfaceTexture.Description.Width
+                Width = _surfaceTexture.Description.Width
             };
             using var texture2d = new Texture2D(_device, texture2dDescription);
-            _device.ImmediateContext.CopyResource(surfaceTexture, texture2d);
+            _device.ImmediateContext.CopyResource(_surfaceTexture, texture2d);
 
             _device.ImmediateContext.ClearRenderTargetView(_renderTargetView, new RawColor4(1, 1, 1, 1));
 

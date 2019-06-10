@@ -16,6 +16,7 @@ namespace Robock.Behaviors
     /// </summary>
     public class DxInteropBehavior : Behavior<D3D11Image>
     {
+        private long _counter = 0;
         private bool _isVisible;
         private TimeSpan _lastRenderingTime;
 
@@ -37,7 +38,10 @@ namespace Robock.Behaviors
 
         private void CompositionTargetOnRendering(object sender, EventArgs e)
         {
-            if (!(e is RenderingEventArgs args) || _lastRenderingTime == args.RenderingTime)
+            var args = (RenderingEventArgs) e;
+            if (_lastRenderingTime == args.RenderingTime)
+                return;
+            if (args.RenderingTime - _lastRenderingTime <= TimeSpan.FromMilliseconds(30))
                 return;
 
             AssociatedObject.RequestRender();
