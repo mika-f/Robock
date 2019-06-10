@@ -150,6 +150,7 @@
     <Compile Include="Behaviors\DraggableControlOnCanvasBehavior.cs" />
     <Compile Include="Behaviors\DxInteropBehavior.cs" />
     <Compile Include="Behaviors\RectangleSelectorBehavior.cs" />
+    <Compile Include="Behaviors\ResetCanvasPositionOnVisibilityChangedBehavior.cs" />
     <Compile Include="Behaviors\ScrollToTopBehavior.cs" />
     <Compile Include="Models\Desktop.cs" />
     <Compile Include="Models\DesktopManager.cs" />

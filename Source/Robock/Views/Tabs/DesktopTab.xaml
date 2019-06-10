@@ -49,22 +49,23 @@
                             </i:Interaction.Behaviors>
                         </RectangleGeometry>
                     </Canvas.Clip>
-                    <Thumb Canvas.Left="-2.5" Canvas.Top="-2.5">
+                    <Thumb Canvas.Left="-2.5"
+                           Canvas.Top="-2.5"
+                           Visibility="{Binding IsSelectedWindow.Value, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <i:Interaction.Behaviors>
                             <behaviors:DraggableControlOnCanvasBehavior />
+                            <behaviors:ResetCanvasPositionOnVisibilityChangedBehavior />
                         </i:Interaction.Behaviors>
                         <Thumb.Template>
                             <ControlTemplate>
-                                <Border BorderBrush="{DynamicResource AccentActiveBrushKey}"
-                                        BorderThickness="2.5"
-                                        Visibility="{Binding IsSelectedWindow.Value, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <Border BorderBrush="{DynamicResource AccentActiveBrushKey}" BorderThickness="2.5">
                                     <Image Width="{Binding Width, RelativeSource={RelativeSource AncestorType=Grid}, Mode=OneWay}" Height="{Binding Height, RelativeSource={RelativeSource AncestorType=Grid}, Mode=OneWay}">
                                         <Image.Source>
                                             <dxinterop:D3D11Image>
                                                 <i:Interaction.Behaviors>
                                                     <behaviors:DxInteropBehavior Parent="{Binding RelativeSource={RelativeSource AncestorType=Border}}"
                                                                                  Renderer="{Binding Renderer.Value, Mode=OneWay}"
-                                                                                 State="{Binding Path=Visibility, RelativeSource={RelativeSource AncestorType=Border}}" />
+                                                                                 State="{Binding Path=Visibility, RelativeSource={RelativeSource AncestorType=Thumb}}" />
                                                 </i:Interaction.Behaviors>
                                             </dxinterop:D3D11Image>
                                         </Image.Source>
