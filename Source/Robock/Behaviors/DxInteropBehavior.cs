@@ -42,7 +42,7 @@ namespace Robock.Behaviors
             if (_lastRenderingTime == args.RenderingTime)
                 return;
             if (args.RenderingTime - _lastRenderingTime <= TimeSpan.FromMilliseconds(30))
-                return;
+                return; // SwapChain で描画できないせいかとても重いので、最大 30fps でてればそれでいいよ...
 
             AssociatedObject.RequestRender();
             _lastRenderingTime = args.RenderingTime;
