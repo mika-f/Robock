@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:behaviors="clr-namespace:Robock.Behaviors"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:dxinterop="clr-namespace:Microsoft.Wpf.Interop.DirectX;assembly=Microsoft.Wpf.Interop.DirectX"
              xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -21,117 +22,120 @@
             </Style>
         </Grid.Resources>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="125" />
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <StackPanel Grid.Row="0"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="2"
-                    Margin="0,0,0,5"
-                    Orientation="Horizontal">
-            <Button Width="150"
-                    Margin="0,0,10,0"
-                    Command="{Binding ApplyWallpaperCommand}"
-                    Content="Apply Wallpaper" />
-            <Button Width="150"
-                    Command="{Binding DiscardWallpaperCommand}"
-                    Content="Discard Wallpaper" />
-        </StackPanel>
-        <StackPanel Grid.Row="1"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="2"
-                    Height="24"
-                    Orientation="Horizontal">
-            <TextBlock VerticalAlignment="Center" Text="Window to render as wallpaper : " />
-            <metro:PromptComboBox Width="250"
-                                  IsEditable="False"
-                                  ItemsSource="{Binding Windows}"
-                                  Prompt="Select window for wallpaper"
-                                  SelectedItem="{Binding SelectedWindow.Value, Mode=TwoWay}">
-                <metro:PromptComboBox.ItemTemplate>
-                    <DataTemplate DataType="vm:WindowViewModel">
-                        <TextBlock VerticalAlignment="Center"
-                                   Text="{Binding Title.Value, Mode=OneWay}"
-                                   TextTrimming="CharacterEllipsis" />
-                    </DataTemplate>
-                </metro:PromptComboBox.ItemTemplate>
-            </metro:PromptComboBox>
-            <Button Command="{Binding ReloadWindowsCommand}">
-                <TextBlock fa:Awesome.Inline=":SyncAlt:" />
-            </Button>
-        </StackPanel>
-        <TextBlock Grid.Row="2"
-                   Grid.Column="0"
-                   Grid.ColumnSpan="2"
-                   Margin="0,5,0,10"
-                   Text="Select the square range from live editor that you want to use as wallpaper : " />
-        <Grid Grid.Row="3"
-              Grid.Column="0"
-              Margin="0,2.5,5,0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition />
-            </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0"
-                       Margin="0,0,0,5"
-                       Text="Live Editor:" />
-            <Grid Grid.Row="1">
-                <i:Interaction.Behaviors>
-                    <behaviors:ControlPositionBindingBehavior Left="{Binding GridAreaLeft.Value, Mode=OneWayToSource}" Top="{Binding GridAreaTop.Value, Mode=OneWayToSource}" />
-                    <behaviors:RectangleSelectorBehavior Width="{Binding SelectedAreaWidth.Value, Mode=TwoWay}"
-                                                         Height="{Binding SelectedAreaHeight.Value, Mode=TwoWay}"
-                                                         Left="{Binding SelectedAreaLeft.Value, Mode=TwoWay}"
-                                                         Rectangle="{Binding ElementName=Rectangle}"
-                                                         Top="{Binding SelectedAreaTop.Value, Mode=TwoWay}" />
-                </i:Interaction.Behaviors>
-                <Image HorizontalAlignment="Center"
-                       Source="{Binding EditorAspectRatio.Value, Mode=OneWay}"
-                       Stretch="Uniform">
-                    <i:Interaction.Behaviors>
-                        <behaviors:ControlPositionBindingBehavior Width="{Binding EditorAreaWidth.Value, Mode=OneWayToSource}"
-                                                                  Height="{Binding EditorAreaHeight.Value, Mode=OneWayToSource}"
-                                                                  Left="{Binding EditorAreaLeft.Value, Mode=OneWayToSource}"
-                                                                  Top="{Binding EditorAreaTop.Value, Mode=OneWayToSource}" />
-                    </i:Interaction.Behaviors>
-                </Image>
-                <Rectangle x:Name="Rectangle"
-                           HorizontalAlignment="Left"
-                           VerticalAlignment="Top"
-                           Fill="{DynamicResource AccentForegroundBrushKey}"
-                           Opacity="1"
-                           Stroke="{DynamicResource AccentBrushKey}"
-                           StrokeThickness="2"
-                           Visibility="{Binding IsSelected.Value, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
+        <Grid x:Name="Grid"
+              Grid.Row="0"
+              Margin="0,5">
+            <Grid Background="Black">
+                <i:Interaction.Behaviors>
+                    <behaviors:AdjustControlSizeToParentBehavior AttachTo="{Binding ElementName=Grid}"
+                                                                 BaseHeight="{Binding Height}"
+                                                                 BaseWidth="{Binding Width}" />
+                </i:Interaction.Behaviors>
+                <Image RenderOptions.BitmapScalingMode="Unspecified"
+                       RenderOptions.EdgeMode="Unspecified"
+                       Source="{Binding Wallpaper.Value, Mode=OneWay}" />
+                <Border Visibility="{Binding IsSelectedWindow.Value, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Grid>
+                        <Image>
+                            <Image.Source>
+                                <dxinterop:D3D11Image>
+                                    <i:Interaction.Behaviors>
+                                        <behaviors:DxInteropBehavior Parent="{Binding RelativeSource={RelativeSource AncestorType=Border}}"
+                                                                     Renderer="{Binding Renderer.Value, Mode=OneWay}"
+                                                                     State="{Binding Path=Visibility, RelativeSource={RelativeSource AncestorType=Border}}" />
+                                    </i:Interaction.Behaviors>
+                                </dxinterop:D3D11Image>
+                            </Image.Source>
+                        </Image>
+                        <Border BorderBrush="{DynamicResource AccentBrushKey}" BorderThickness="2.5" />
+                    </Grid>
+                </Border>
             </Grid>
         </Grid>
-        <Grid Grid.Row="3"
-              Grid.Column="1"
-              Margin="5,2.5,0,0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition />
-            </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0"
-                       Margin="0,0,0,5"
-                       Text="Live Preview:" />
-            <Image Grid.Row="1"
-                   HorizontalAlignment="Center"
-                   Source="{Binding AspectRatio, Mode=OneWay}"
-                   Stretch="Uniform">
-                <i:Interaction.Behaviors>
-                    <behaviors:ControlPositionBindingBehavior Width="{Binding PreviewAreaWidth.Value, Mode=OneWayToSource}"
-                                                              Height="{Binding PreviewAreaHeight.Value, Mode=OneWayToSource}"
-                                                              Left="{Binding PreviewAreaLeft.Value, Mode=OneWayToSource}"
-                                                              Top="{Binding PreviewAreaTop.Value, Mode=OneWayToSource}" />
-                </i:Interaction.Behaviors>
-            </Image>
+        <Separator Grid.Row="1" />
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.5*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0"
+                        Margin="0,0,10,0"
+                        Orientation="Vertical">
+                <TextBlock FontSize="16" Text="キャプチャソース" />
+
+                <Grid Margin="0,2.5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="30" />
+                        <ColumnDefinition Width="30" />
+                    </Grid.ColumnDefinitions>
+                    <metro:PromptComboBox Grid.Column="0"
+                                          Height="25"
+                                          HorizontalAlignment="Stretch"
+                                          IsEditable="False"
+                                          ItemsSource="{Binding Windows}"
+                                          Prompt="キャプチャーする Window を選択してください"
+                                          SelectedItem="{Binding SelectedWindow.Value, Mode=TwoWay}">
+                        <metro:PromptComboBox.ItemTemplate>
+                            <DataTemplate DataType="vm:WindowViewModel">
+                                <TextBlock VerticalAlignment="Center"
+                                           Text="{Binding Title.Value, Mode=OneWay}"
+                                           TextTrimming="CharacterEllipsis" />
+                            </DataTemplate>
+                        </metro:PromptComboBox.ItemTemplate>
+                    </metro:PromptComboBox>
+                    <Button Grid.Column="1"
+                            Height="25"
+                            Command="{Binding ReloadWindowsCommand}"
+                            ToolTip="Window リストを更新">
+                        <TextBlock fa:Awesome.Inline=":SyncAlt:" />
+                    </Button>
+                    <Button Grid.Column="2"
+                            Height="25"
+                            Command="{Binding ClearSelectCommand}"
+                            ToolTip="選択をクリア">
+                        <TextBlock fa:Awesome.Inline=":Times:" />
+                    </Button>
+                </Grid>
+            </StackPanel>
+
+            <StackPanel Grid.Column="1"
+                        Margin="0,0,10,0"
+                        Orientation="Vertical">
+                <TextBlock FontSize="16" Text="オプション" />
+                <!--  TODO  -->
+                <CheckBox Height="25"
+                          Margin="0,2.5"
+                          Content="相互運用 API を使用する"
+                          IsEnabled="False"
+                          ToolTipService.ShowOnDisabled="True">
+                    <CheckBox.ToolTip>
+                        <TextBlock>
+                            UWP 用に提供されている API を使用してキャプチャーを行います。<LineBreak />
+                            Windows 10 October 2018 Update 以降でのみ使用可能です。</TextBlock>
+                    </CheckBox.ToolTip>
+                </CheckBox>
+            </StackPanel>
+
+            <StackPanel Grid.Column="2" Orientation="Vertical">
+                <TextBlock FontSize="16" Text="操作" />
+                <Button Height="25"
+                        Margin="0,2.5"
+                        Command="{Binding ApplyWallpaperCommand}"
+                        Content="描画開始" />
+                <Button Height="25"
+                        Margin="0,2.5"
+                        Command="{Binding DiscardWallpaperCommand}"
+                        Content="終了" />
+            </StackPanel>
         </Grid>
     </Grid>
 </UserControl>

@@ -9,6 +9,7 @@ using Reactive.Bindings.Extensions;
 
 using Robock.Interop.Win32;
 using Robock.Models;
+using Robock.Models.Renderer;
 using Robock.Services;
 using Robock.Shared.Extensions;
 using Robock.Shared.Models;
@@ -59,19 +60,20 @@ namespace Robock.ViewModels.Tabs
         public ReactiveCommand ApplyWallpaperCommand { get; }
         public ReactiveCommand DiscardWallpaperCommand { get; }
         public ReactiveCommand ReloadWindowsCommand { get; }
+        public ReactiveCommand ClearSelectCommand { get; }
 
         public string DesktopName => $"Desktop {_desktop.No}";
         public double Width => _desktop.Width;
         public double Height => _desktop.Height;
         public string Resolution => $"{Width}x{Height}";
         public bool IsPrimary => _desktop.IsPrimary;
-
-        public ReadOnlyReactiveProperty<string> Wallpaper { get; }
-
         public double VirtualScreenX => (_offsetX + _desktop.X) / Scale;
         public double VirtualScreenY => (_offsetY + _desktop.Y) / Scale;
         public double VirtualScreenHeight => _desktop.Height / Scale;
         public double VirtualScreenWidth => _desktop.Width / Scale;
+        public ReadOnlyReactiveProperty<IRenderer> Renderer { get; }
+        public ReadOnlyReactiveProperty<string> Wallpaper { get; }
+        public ReadOnlyReactiveProperty<bool> IsSelectedWindow { get; }
 
         public DesktopViewModel(Desktop desktop, WindowManager windowManager, DesktopWindowManager desktopWindowManager)
             : base($":Desktop: Desktop {desktop.No}")
@@ -181,6 +183,8 @@ namespace Robock.ViewModels.Tabs
                 _desktopWindowManager.Stop(1);
                 RenderEditor();
             }).AddTo(this);
+            IsSelectedWindow = SelectedWindow.Select(w => w != null).ToReadOnlyReactiveProperty().AddTo(this);
+            Renderer = IsSelectedWindow.Do(_ => Renderer?.Value?.Dispose()).Select(w => w ? (IRenderer) new SharedSurfaceRenderer(SelectedWindow.Value.Handle) : null).ToReadOnlyReactiveProperty().AddTo(this);
             ApplyWallpaperCommand = new[]
             {
                 SelectedWindow.Select(w => w != null),
@@ -212,6 +216,8 @@ namespace Robock.ViewModels.Tabs
             DiscardWallpaperCommand.Subscribe(() => Task.Run(async () => await _desktop.DiscardWallpaper())).AddTo(this);
             ReloadWindowsCommand = new ReactiveCommand();
             ReloadWindowsCommand.Subscribe(_ => windowManager.ForceUpdate()).AddTo(this);
+            ClearSelectCommand = SelectedWindow.Select(w => w != null).ToReactiveCommand();
+            ClearSelectCommand.Subscribe(_ => SelectedWindow.Value = null).AddTo(this);
         }
 
         private void RenderEditor()

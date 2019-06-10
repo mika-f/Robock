@@ -13,7 +13,6 @@ namespace Robock.Behaviors
         protected override void OnAttached()
         {
             base.OnAttached();
-
             AttachTo.SizeChanged += AttachedParentOnSizeChanged;
         }
 
