@@ -16,7 +16,6 @@ namespace Robock.Behaviors
     /// </summary>
     public class DxInteropBehavior : Behavior<D3D11Image>
     {
-        private long _counter = 0;
         private bool _isVisible;
         private TimeSpan _lastRenderingTime;
 

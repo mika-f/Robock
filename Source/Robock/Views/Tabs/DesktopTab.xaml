@@ -49,23 +49,31 @@
                             </i:Interaction.Behaviors>
                         </RectangleGeometry>
                     </Canvas.Clip>
-                    <Border Canvas.Left="-120.5"
-                            Canvas.Top="-112.5"
-                            BorderBrush="{DynamicResource AccentActiveBrushKey}"
-                            BorderThickness="2.5"
-                            Visibility="{Binding IsSelectedWindow.Value, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <Image Width="{Binding Width, RelativeSource={RelativeSource AncestorType=Grid}, Mode=OneWay}" Height="{Binding Height, RelativeSource={RelativeSource AncestorType=Grid}, Mode=OneWay}">
-                            <Image.Source>
-                                <dxinterop:D3D11Image>
-                                    <i:Interaction.Behaviors>
-                                        <behaviors:DxInteropBehavior Parent="{Binding RelativeSource={RelativeSource AncestorType=Border}}"
-                                                                     Renderer="{Binding Renderer.Value, Mode=OneWay}"
-                                                                     State="{Binding Path=Visibility, RelativeSource={RelativeSource AncestorType=Border}}" />
-                                    </i:Interaction.Behaviors>
-                                </dxinterop:D3D11Image>
-                            </Image.Source>
-                        </Image>
-                    </Border>
+                    <Thumb Canvas.Left="-2.5" Canvas.Top="-2.5">
+                        <i:Interaction.Behaviors>
+                            <behaviors:DraggableControlOnCanvasBehavior />
+                        </i:Interaction.Behaviors>
+                        <Thumb.Template>
+                            <ControlTemplate>
+                                <Border BorderBrush="{DynamicResource AccentActiveBrushKey}"
+                                        BorderThickness="2.5"
+                                        Visibility="{Binding IsSelectedWindow.Value, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                    <Image Width="{Binding Width, RelativeSource={RelativeSource AncestorType=Grid}, Mode=OneWay}" Height="{Binding Height, RelativeSource={RelativeSource AncestorType=Grid}, Mode=OneWay}">
+                                        <Image.Source>
+                                            <dxinterop:D3D11Image>
+                                                <i:Interaction.Behaviors>
+                                                    <behaviors:DxInteropBehavior Parent="{Binding RelativeSource={RelativeSource AncestorType=Border}}"
+                                                                                 Renderer="{Binding Renderer.Value, Mode=OneWay}"
+                                                                                 State="{Binding Path=Visibility, RelativeSource={RelativeSource AncestorType=Border}}" />
+                                                </i:Interaction.Behaviors>
+                                            </dxinterop:D3D11Image>
+                                        </Image.Source>
+                                    </Image>
+                                </Border>
+
+                            </ControlTemplate>
+                        </Thumb.Template>
+                    </Thumb>
                 </Canvas>
             </Grid>
         </Grid>
