@@ -30,7 +30,7 @@
         <Grid x:Name="Grid"
               Grid.Row="0"
               Margin="0,5">
-            <Grid Background="Black">
+            <Grid x:Name="InnerGrid" Background="Black">
                 <i:Interaction.Behaviors>
                     <behaviors:AdjustControlSizeToParentBehavior AttachTo="{Binding ElementName=Grid}"
                                                                  BaseHeight="{Binding Height}"
@@ -39,9 +39,22 @@
                 <Image RenderOptions.BitmapScalingMode="Unspecified"
                        RenderOptions.EdgeMode="Unspecified"
                        Source="{Binding Wallpaper.Value, Mode=OneWay}" />
-                <Border Visibility="{Binding IsSelectedWindow.Value, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <Grid>
-                        <Image>
+                <Canvas Background="Transparent">
+                    <Canvas.Clip>
+                        <RectangleGeometry>
+                            <i:Interaction.Behaviors>
+                                <behaviors:AdjustRectSizeByParentControlBehavior AttachTo="{Binding ElementName=InnerGrid}"
+                                                                                 OffsetX="-2.5"
+                                                                                 OffsetY="-2.5" />
+                            </i:Interaction.Behaviors>
+                        </RectangleGeometry>
+                    </Canvas.Clip>
+                    <Border Canvas.Left="-120.5"
+                            Canvas.Top="-112.5"
+                            BorderBrush="{DynamicResource AccentActiveBrushKey}"
+                            BorderThickness="2.5"
+                            Visibility="{Binding IsSelectedWindow.Value, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <Image Width="{Binding Width, RelativeSource={RelativeSource AncestorType=Grid}, Mode=OneWay}" Height="{Binding Height, RelativeSource={RelativeSource AncestorType=Grid}, Mode=OneWay}">
                             <Image.Source>
                                 <dxinterop:D3D11Image>
                                     <i:Interaction.Behaviors>
@@ -52,11 +65,11 @@
                                 </dxinterop:D3D11Image>
                             </Image.Source>
                         </Image>
-                        <Border BorderBrush="{DynamicResource AccentBrushKey}" BorderThickness="2.5" />
-                    </Grid>
-                </Border>
+                    </Border>
+                </Canvas>
             </Grid>
         </Grid>
+
         <Separator Grid.Row="1" />
 
         <Grid Grid.Row="2">
