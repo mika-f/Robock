@@ -27,11 +27,25 @@ steps:
     restoreSolution: '$(solution)'
 
 - task: VSBuild@1
+  displayName: 'Build dependencies (MetroRadiance)'
+  inputs:
+    solution: 'deps/MetroRadiance/source/*.sln'
+    platform: 'Any CPU'
+    configuration: '$(buildConfiguration)'
+
+- task: VSBuild@1
+  displayName: 'Build dependencies (VirtualDesktop)'
+  inputs:
+    solution: 'deps/VirtualDesktop/source/*.sln'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+- task: VSBuild@1
+  displayName: 'Build Robock'
   inputs:
     solution: '$(solution)'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
-    restoreNugetPackages: true
 
 - task: VSTest@2
   inputs:
