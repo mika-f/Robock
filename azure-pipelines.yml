@@ -50,3 +50,25 @@ steps:
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
+
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: 'Source/Robock/bin/$(buildPlatform)/$(buildConfiguration)'
+    Contents: '**'
+    TargetFolder: '$(Build.BinariesDirectory)/Robock'
+    CleanTargetFolder: true
+    OverWrite: true
+
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: '$(Build.BinariesDirectory)/Robock'
+    includeRootFolder: true
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/Robock-nightly-$(Build.BuildNumber).zip'
+    replaceExistingArchive: true
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'Robock (x64)'
+    publishLocation: 'Container'
