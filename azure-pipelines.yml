@@ -11,7 +11,7 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
-  solution: '**/*.sln'
+  solution: 'Source/*.sln'
   buildPlatform: 'x64'
   buildConfiguration: 'Release'
 
@@ -20,7 +20,7 @@ steps:
 
 - task: CmdLine@2
   inputs:
-    script: git submodule update --init --recursive
+    script: git submodule update --init --recursive 2>&1
 
 - task: NuGetCommand@2
   inputs:
@@ -32,7 +32,6 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
     restoreNugetPackages: true
-    msbuildArchitecture: x64
 
 - task: VSTest@2
   inputs:
