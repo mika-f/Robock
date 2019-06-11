@@ -146,6 +146,7 @@
     </ApplicationDefinition>
     <Compile Include="Behaviors\AdjustControlSizeToParentBehavior.cs" />
     <Compile Include="Behaviors\AdjustRectSizeByParentControlBehavior.cs" />
+    <Compile Include="Behaviors\CanvasBindingBehavior.cs" />
     <Compile Include="Behaviors\ControlPositionBindingBehavior.cs" />
     <Compile Include="Behaviors\DraggableControlOnCanvasBehavior.cs" />
     <Compile Include="Behaviors\DxInteropBehavior.cs" />

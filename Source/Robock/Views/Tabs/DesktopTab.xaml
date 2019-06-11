@@ -24,7 +24,7 @@
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="125" />
+            <RowDefinition Height="130" />
         </Grid.RowDefinitions>
 
         <Grid x:Name="Grid"
@@ -49,16 +49,19 @@
                             </i:Interaction.Behaviors>
                         </RectangleGeometry>
                     </Canvas.Clip>
-                    <Thumb Canvas.Left="-2.5"
-                           Canvas.Top="-2.5"
+                    <Thumb Canvas.Left="{Binding RenderLeft.Value, Mode=OneWayToSource}"
+                           Canvas.Top="{Binding RenderTop.Value, Mode=OneWayToSource}"
                            Visibility="{Binding IsSelectedWindow.Value, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <i:Interaction.Behaviors>
+                            <behaviors:CanvasBindingBehavior Left="{Binding RenderLeft.Value, Mode=OneWay}" Top="{Binding RenderTop.Value, Mode=OneWay}" />
                             <behaviors:DraggableControlOnCanvasBehavior />
                             <behaviors:ResetCanvasPositionOnVisibilityChangedBehavior />
                         </i:Interaction.Behaviors>
                         <Thumb.Template>
                             <ControlTemplate>
-                                <Border BorderBrush="{DynamicResource AccentActiveBrushKey}" BorderThickness="2.5">
+                                <Border Background="Black"
+                                        BorderBrush="{DynamicResource AccentActiveBrushKey}"
+                                        BorderThickness="2.5">
                                     <Image Width="{Binding Width, RelativeSource={RelativeSource AncestorType=Grid}, Mode=OneWay}" Height="{Binding Height, RelativeSource={RelativeSource AncestorType=Grid}, Mode=OneWay}">
                                         <Image.Source>
                                             <dxinterop:D3D11Image>
@@ -81,55 +84,158 @@
 
         <Separator Grid.Row="1" />
 
-        <Grid Grid.Row="2">
+        <Grid Grid.Row="2" Margin="0,5,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1.5*" />
                 <ColumnDefinition Width="1*" />
                 <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
             </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Column="0"
-                        Margin="0,0,10,0"
-                        Orientation="Vertical">
-                <TextBlock FontSize="16" Text="キャプチャソース" />
+            <Grid Grid.Column="0" Margin="0,0,10,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0" Orientation="Vertical">
+                    <TextBlock FontSize="16" Text="キャプチャソース" />
+
+                    <Grid Margin="0,2.5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="30" />
+                            <ColumnDefinition Width="30" />
+                        </Grid.ColumnDefinitions>
+                        <metro:PromptComboBox Grid.Column="0"
+                                              Height="25"
+                                              HorizontalAlignment="Stretch"
+                                              IsEditable="False"
+                                              ItemsSource="{Binding Windows}"
+                                              Prompt="キャプチャーする Window を選択してください"
+                                              SelectedItem="{Binding SelectedWindow.Value, Mode=TwoWay}">
+                            <metro:PromptComboBox.ItemTemplate>
+                                <DataTemplate DataType="vm:WindowViewModel">
+                                    <TextBlock VerticalAlignment="Center"
+                                               Text="{Binding Title.Value, Mode=OneWay}"
+                                               TextTrimming="CharacterEllipsis" />
+                                </DataTemplate>
+                            </metro:PromptComboBox.ItemTemplate>
+                        </metro:PromptComboBox>
+                        <Button Grid.Column="1"
+                                Height="25"
+                                Command="{Binding ReloadWindowsCommand}"
+                                ToolTip="Window リストを更新">
+                            <TextBlock fa:Awesome.Inline=":SyncAlt:" />
+                        </Button>
+                        <Button Grid.Column="2"
+                                Height="25"
+                                Command="{Binding ClearSelectCommand}"
+                                ToolTip="選択をクリア">
+                            <TextBlock fa:Awesome.Inline=":Times:" />
+                        </Button>
+                    </Grid>
+                </StackPanel>
+                <StackPanel Grid.Row="1" Orientation="Vertical">
+                    <TextBlock FontSize="16" Text="拡大率" />
+                    <StackPanel Margin="0,2.5" Orientation="Horizontal">
+                        <metro:PromptTextBox IsEnabled="False"
+                                             Text="4.72"
+                                             ToolTipService.ShowOnDisabled="True">
+                            <metro:PromptTextBox.ToolTip>
+                                <TextBlock>
+                                    <!--    -->
+                                    プレビュー画面に対しての、描画時の拡大率です。<LineBreak />
+                                    プレビューの値に対して、表示されている倍率がかけられた値が使用されます。
+                                    <!--    -->
+                                </TextBlock>
+                            </metro:PromptTextBox.ToolTip>
+                        </metro:PromptTextBox>
+                        <TextBlock Padding="5,0,0,0"
+                                   VerticalAlignment="Center"
+                                   Text="倍" />
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+
+            <StackPanel Grid.Column="1" Margin="0,0,10,0">
+                <TextBlock FontSize="16" Text="描画位置" />
 
                 <Grid Margin="0,2.5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25" />
+                        <RowDefinition Height="25" />
+                        <RowDefinition Height="25" />
+                        <RowDefinition Height="25" />
+                    </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50" />
                         <ColumnDefinition />
-                        <ColumnDefinition Width="30" />
-                        <ColumnDefinition Width="30" />
                     </Grid.ColumnDefinitions>
-                    <metro:PromptComboBox Grid.Column="0"
-                                          Height="25"
-                                          HorizontalAlignment="Stretch"
-                                          IsEditable="False"
-                                          ItemsSource="{Binding Windows}"
-                                          Prompt="キャプチャーする Window を選択してください"
-                                          SelectedItem="{Binding SelectedWindow.Value, Mode=TwoWay}">
-                        <metro:PromptComboBox.ItemTemplate>
-                            <DataTemplate DataType="vm:WindowViewModel">
-                                <TextBlock VerticalAlignment="Center"
-                                           Text="{Binding Title.Value, Mode=OneWay}"
-                                           TextTrimming="CharacterEllipsis" />
-                            </DataTemplate>
-                        </metro:PromptComboBox.ItemTemplate>
-                    </metro:PromptComboBox>
-                    <Button Grid.Column="1"
-                            Height="25"
-                            Command="{Binding ReloadWindowsCommand}"
-                            ToolTip="Window リストを更新">
-                        <TextBlock fa:Awesome.Inline=":SyncAlt:" />
-                    </Button>
-                    <Button Grid.Column="2"
-                            Height="25"
-                            Command="{Binding ClearSelectCommand}"
-                            ToolTip="選択をクリア">
-                        <TextBlock fa:Awesome.Inline=":Times:" />
-                    </Button>
+
+                    <TextBlock Grid.Row="0"
+                               Grid.Column="0"
+                               VerticalAlignment="Center"
+                               FontSize="12"
+                               Text="トップ : " />
+                    <metro:PromptTextBox Grid.Row="0"
+                                         Grid.Column="1"
+                                         Height="25"
+                                         Prompt="0"
+                                         Text="{Binding RenderTop.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        <metro:PromptTextBox.ToolTip>
+                            <TextBlock>
+                                <!--    -->
+                                キャプチャーしたい範囲の左上Y座標を指定します。<LineBreak />
+                                ここで設定する値は、プレビュー画面上での相対値です。描画時には絶対値に変換されます。
+                                <!--    -->
+                            </TextBlock>
+                        </metro:PromptTextBox.ToolTip>
+                    </metro:PromptTextBox>
+
+                    <TextBlock Grid.Row="1"
+                               Grid.Column="0"
+                               VerticalAlignment="Center"
+                               FontSize="12"
+                               Text="レフト : " />
+                    <metro:PromptTextBox Grid.Row="1"
+                                         Grid.Column="1"
+                                         Height="25"
+                                         Prompt="0"
+                                         Text="{Binding RenderLeft.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        <metro:PromptTextBox.ToolTip>
+                            <TextBlock>
+                                <!--    -->
+                                キャプチャーしたい範囲の左上X座標を指定します。<LineBreak />
+                                ここで設定する値は、プレビュー画面上での相対値です。描画時には絶対値に変換されます。
+                                <!--    -->
+                            </TextBlock>
+                        </metro:PromptTextBox.ToolTip>
+                    </metro:PromptTextBox>
+
+                    <TextBlock Grid.Row="2"
+                               Grid.Column="0"
+                               VerticalAlignment="Center"
+                               FontSize="12"
+                               Text="高さ : " />
+                    <metro:PromptTextBox Grid.Row="2"
+                                         Grid.Column="1"
+                                         Height="25"
+                                         Prompt="1080" />
+
+                    <TextBlock Grid.Row="3"
+                               Grid.Column="0"
+                               VerticalAlignment="Center"
+                               FontSize="12"
+                               Text="横幅 : " />
+                    <metro:PromptTextBox Grid.Row="3"
+                                         Grid.Column="1"
+                                         Height="25"
+                                         Prompt="1920" />
+
                 </Grid>
             </StackPanel>
 
-            <StackPanel Grid.Column="1"
+            <StackPanel Grid.Column="2"
                         Margin="0,0,10,0"
                         Orientation="Vertical">
                 <TextBlock FontSize="16" Text="オプション" />
@@ -141,13 +247,16 @@
                           ToolTipService.ShowOnDisabled="True">
                     <CheckBox.ToolTip>
                         <TextBlock>
+                            <!--    -->
                             UWP 用に提供されている API を使用してキャプチャーを行います。<LineBreak />
-                            Windows 10 October 2018 Update 以降でのみ使用可能です。</TextBlock>
+                            Windows 10 October 2018 Update 以降でのみ使用可能です。
+                            <!--    -->
+                        </TextBlock>
                     </CheckBox.ToolTip>
                 </CheckBox>
             </StackPanel>
 
-            <StackPanel Grid.Column="2" Orientation="Vertical">
+            <StackPanel Grid.Column="3" Orientation="Vertical">
                 <TextBlock FontSize="16" Text="操作" />
                 <Button Height="25"
                         Margin="0,2.5"
