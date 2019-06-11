@@ -11,7 +11,6 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
-  solution: 'Source/*.sln'
   buildPlatform: 'x64'
   buildConfiguration: 'Release'
 
@@ -24,7 +23,7 @@ steps:
 
 - task: NuGetCommand@2
   inputs:
-    restoreSolution: '$(solution)'
+    restoreSolution: '**/*.sln'
 
 - task: VSBuild@1
   displayName: 'Build dependencies (MetroRadiance)'
@@ -43,7 +42,7 @@ steps:
 - task: VSBuild@1
   displayName: 'Build Robock'
   inputs:
-    solution: '$(solution)'
+    solution: 'Source/*.sln'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
