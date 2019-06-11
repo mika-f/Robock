@@ -19,8 +19,8 @@ cache:
 before_build:
 - cmd: >-
     nuget restore .\Source\
-    nuget restore .\deps\MetroRadiance\source\
-    nuget restore .\deps\VirtualDesktop\source\
+          && nuget restore .\deps\MetroRadiance\source\
+          && nuget restore .\deps\VirtualDesktop\source\
 build:
   project: Source/Robock.sln
   verbosity: minimal
