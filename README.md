@@ -2,6 +2,7 @@
 
 [![License](https://img.shields.io/github/license/mika-f/robock.svg?style=flat-square)](LICENSE)
 [![AppVeyor branch](https://img.shields.io/appveyor/ci/mika-f/Robock/develop.svg?style=flat-square)](https://ci.appveyor.com/project/mika-f/robock)
+[![Azure DevOps builds (branch)](https://img.shields.io/azure-devops/build/mika-f/Robock/1/develop.svg?style=flat-square)](https://dev.azure.com/mika-f/Robock/_build?definitionId=1)
 [![GitHub release](https://img.shields.io/github/release/mika-f/Robock.svg?style=flat-square)](https://github.com/mika-f/Robock/releases/latest)
 [![GitHub (pre-)release](https://img.shields.io/github/release/mika-f/Robock/all.svg?style=flat-square)](https://github.com/mika-f/Robock/releases/latest)
 
