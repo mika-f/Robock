@@ -53,8 +53,7 @@ steps:
 
 - task: CopyFiles@2
   inputs:
-    SourceFolder: '$(Build.SourcesDirectory)/Source/Robock/bin/$(buildPlatform)/$(buildConfiguration)'
-    Contents: '**/*.{config,dll,exe,fx}'
+    Contents: 'Source/Robock/bin/**'
     TargetFolder: '$(Build.BinariesDirectory)'
     CleanTargetFolder: true
     OverWrite: true
