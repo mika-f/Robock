@@ -53,7 +53,8 @@ steps:
 
 - task: CopyFiles@2
   inputs:
-    Contents: 'Source/Robock/bin/**'
+    SourceFolder: 'Source/Robock/bin/$(buildPlatform)/$(buildConfiguration)'
+    Contents: '**'
     TargetFolder: '$(Build.BinariesDirectory)'
     CleanTargetFolder: true
     OverWrite: true
@@ -63,7 +64,7 @@ steps:
     rootFolderOrFile: '$(Build.BinariesDirectory)'
     includeRootFolder: true
     archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/Robock-nightly-$(Build.BuildId).zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/Robock-nightly-$(Build.BuildNumber).zip'
     replaceExistingArchive: true
 
 - task: PublishBuildArtifacts@1
