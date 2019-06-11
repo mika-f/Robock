@@ -5,17 +5,22 @@
 
 trigger:
 - develop
+- feature/*
 
 pool:
   vmImage: 'windows-latest'
 
 variables:
   solution: '**/*.sln'
-  buildPlatform: 'Any CPU'
+  buildPlatform: 'x64'
   buildConfiguration: 'Release'
 
 steps:
 - task: NuGetToolInstaller@0
+
+- task: CmdLine@2
+  inputs:
+    script: git submodule update --init --recursive
 
 - task: NuGetCommand@2
   inputs:
@@ -26,6 +31,8 @@ steps:
     solution: '$(solution)'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
+    restoreNugetPackages: true
+    msbuildArchitecture: x64
 
 - task: VSTest@2
   inputs:
