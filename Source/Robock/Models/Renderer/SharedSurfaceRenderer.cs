@@ -98,7 +98,7 @@ namespace Robock.Models.Renderer
             NativeMethods.DwmGetDxSharedSurface(_hWnd, out var phSurface, out _, out _, out _, out _);
             if (phSurface == IntPtr.Zero)
                 return; // window lost
-            if (_phSurface != phSurface)
+            if (_phSurface != phSurface || _surfaceTexture == null)
             {
                 _phSurface = phSurface;
                 Utilities.Dispose(ref _surfaceTexture);
