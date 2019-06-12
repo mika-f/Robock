@@ -30,7 +30,10 @@
         <Grid x:Name="Grid"
               Grid.Row="0"
               Margin="0,5">
-            <Grid x:Name="InnerGrid" Background="Black">
+            <Grid x:Name="InnerGrid"
+                  Width="{Binding PreviewWidth.Value, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"
+                  Height="{Binding PreviewHeight.Value, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"
+                  Background="Black">
                 <i:Interaction.Behaviors>
                     <behaviors:AdjustControlSizeToParentBehavior AttachTo="{Binding ElementName=Grid}"
                                                                  BaseHeight="{Binding Height}"
@@ -74,7 +77,6 @@
                                         </Image.Source>
                                     </Image>
                                 </Border>
-
                             </ControlTemplate>
                         </Thumb.Template>
                     </Thumb>
@@ -139,7 +141,7 @@
                     <TextBlock FontSize="16" Text="拡大率" />
                     <StackPanel Margin="0,2.5" Orientation="Horizontal">
                         <metro:PromptTextBox IsEnabled="False"
-                                             Text="4.72"
+                                             Text="{Binding RenderScale.Value, Mode=OneWay}"
                                              ToolTipService.ShowOnDisabled="True">
                             <metro:PromptTextBox.ToolTip>
                                 <TextBlock>

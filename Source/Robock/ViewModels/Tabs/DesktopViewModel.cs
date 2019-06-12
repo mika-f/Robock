@@ -23,10 +23,13 @@ namespace Robock.ViewModels.Tabs
 
         public ReactiveProperty<bool> IsSelected { get; }
         public ReactiveProperty<WindowViewModel> SelectedWindow { get; }
+        public ReactiveProperty<double> PreviewHeight { get; set; }
+        public ReactiveProperty<double> PreviewWidth { get; set; }
         public ReactiveProperty<double> RenderTop { get; set; }
         public ReactiveProperty<double> RenderLeft { get; set; }
         public ReactiveProperty<double> RenderHeight { get; set; }
         public ReactiveProperty<double> RenderWidth { get; set; }
+        public ReactiveProperty<double> RenderScale { get; set; }
         public ReadOnlyReactiveCollection<WindowViewModel> Windows { get; }
 
         public ReactiveCommand ApplyWallpaperCommand { get; }
@@ -55,16 +58,28 @@ namespace Robock.ViewModels.Tabs
             _offsetX = (SystemParameters.VirtualScreenLeft < 0 ? -1 : 1) * SystemParameters.VirtualScreenLeft;
             _offsetY = (SystemParameters.VirtualScreenTop < 0 ? -1 : 1) * SystemParameters.VirtualScreenTop;
 
+            PreviewHeight = new ReactiveProperty<double>();
+            PreviewWidth = new ReactiveProperty<double>();
             RenderTop = new ReactiveProperty<double>(-2.5);
             RenderLeft = new ReactiveProperty<double>(-2.5);
             RenderHeight = new ReactiveProperty<double>();
             RenderWidth = new ReactiveProperty<double>();
+            RenderScale = new[]
+            {
+                PreviewHeight,
+                PreviewWidth
+            }.CombineLatest()
+             .Where(w => Math.Abs(_desktop.Height / w[0] - _desktop.Width / w[1]) <= 0)
+             .Select(w => _desktop.Height / w[0])
+             .ToReactiveProperty().AddTo(this);
             Wallpaper = _desktop.ObserveProperty(w => w.Wallpaper).ToReadOnlyReactiveProperty().AddTo(this);
             IsSelected = new ReactiveProperty<bool>(desktop.IsPrimary);
             Windows = windowManager.Windows.ToReadOnlyReactiveCollection(w => new WindowViewModel(w));
             SelectedWindow = new ReactiveProperty<WindowViewModel>();
             IsSelectedWindow = SelectedWindow.Select(w => w != null).ToReadOnlyReactiveProperty().AddTo(this);
-            Renderer = IsSelectedWindow.Do(_ => Renderer?.Value?.Dispose()).Select(w => w ? (IRenderer) new SharedSurfaceRenderer(SelectedWindow.Value.Handle) : null).ToReadOnlyReactiveProperty().AddTo(this);
+            Renderer = IsSelectedWindow.Do(_ => Renderer?.Value?.Dispose())
+                                       .Select(w => w ? (IRenderer) new SharedSurfaceRenderer(SelectedWindow.Value.Handle) : null)
+                                       .ToReadOnlyReactiveProperty().AddTo(this);
             ApplyWallpaperCommand = new[]
             {
                 SelectedWindow.Select(w => w != null),
