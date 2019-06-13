@@ -160,6 +160,7 @@
     <Compile Include="Models\Ignores.cs" />
     <Compile Include="Models\License.cs" />
     <Compile Include="Models\Renderer\BaseRenderer.cs" />
+    <Compile Include="Models\Renderer\BitBltRenderer.cs" />
     <Compile Include="Models\Renderer\IRenderer.cs" />
     <Compile Include="Models\Renderer\SharedSurfaceRenderer.cs" />
     <Compile Include="Models\RobockClient.cs" />
