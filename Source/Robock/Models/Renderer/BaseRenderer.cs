@@ -86,6 +86,7 @@ namespace Robock.Models.Renderer
         {
             if (isNewSurface)
             {
+                Utilities.Dispose(ref _renderTargetView);
                 _device.ImmediateContext.OutputMerger.SetRenderTargets(null, (RenderTargetView) null);
                 InitializeRenderTarget(hSurface);
             }

@@ -78,7 +78,7 @@ namespace Robock.ViewModels.Tabs
             SelectedWindow = new ReactiveProperty<WindowViewModel>();
             IsSelectedWindow = SelectedWindow.Select(w => w != null).ToReadOnlyReactiveProperty().AddTo(this);
             Renderer = IsSelectedWindow.Do(_ => Renderer?.Value?.Dispose())
-                                       .Select(w => w ? (IRenderer) new SharedSurfaceRenderer(SelectedWindow.Value.Handle) : null)
+                                       .Select(w => w ? (IRenderer) new BitBltRenderer(SelectedWindow.Value.Handle) : null)
                                        .ToReadOnlyReactiveProperty().AddTo(this);
             ApplyWallpaperCommand = new[]
             {

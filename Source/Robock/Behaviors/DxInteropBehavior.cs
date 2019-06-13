@@ -43,6 +43,7 @@ namespace Robock.Behaviors
             if (args.RenderingTime - _lastRenderingTime <= TimeSpan.FromMilliseconds(30))
                 return; // SwapChain で描画できないせいかとても重いので、最大 30fps でてればそれでいいよ...
 
+            // そもそもテクスチャの共有自体が重いらしいので、パフォーマンスの問題がある
             AssociatedObject.RequestRender();
             _lastRenderingTime = args.RenderingTime;
         }
