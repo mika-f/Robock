@@ -108,7 +108,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Bootstrapper.cs" />
     <Compile Include="Views\Monitors.xaml.cs">
       <DependentUpon>Monitors.xaml</DependentUpon>
     </Compile>
@@ -207,7 +206,7 @@
       <Version>1.0.1</Version>
     </PackageReference>
     <PackageReference Include="Prism.Unity">
-      <Version>6.3.0</Version>
+      <Version>7.1.0.431</Version>
     </PackageReference>
     <PackageReference Include="ReactiveProperty">
       <Version>5.3.2</Version>
