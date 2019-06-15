@@ -17,6 +17,7 @@ namespace Robock.ViewModels.Dialogs
         private readonly CaptureSourceManager _captureSourceManager;
         public ReadOnlyReactiveCollection<CaptureSourceViewModel> CaptureSources { get; }
         public ReactiveProperty<Rect> RenderPosition { get; }
+        public ReactiveProperty<CaptureSourceViewModel> SelectedSource { get; }
         public ReactiveCommand SelectCommand { get; }
         public ReactiveCommand CancelCommand { get; }
 
@@ -27,10 +28,11 @@ namespace Robock.ViewModels.Dialogs
             CaptureSources.ToCollectionChanged().Throttle(TimeSpan.FromMilliseconds(100)).Subscribe(_ => UpdateChildDisplayPosition()).AddTo(this);
             RenderPosition = new ReactiveProperty<Rect>();
             RenderPosition.Where(w => !w.IsEmpty).Subscribe(_ => UpdateChildDisplayPosition()).AddTo(this);
+            SelectedSource = new ReactiveProperty<CaptureSourceViewModel>();
             SelectCommand = new ReactiveCommand();
-            SelectCommand.Subscribe(_ => RequestClose?.Invoke(null)).AddTo(this);
+            SelectCommand.Subscribe(_ => RequestClose?.Invoke(new DialogResult(ButtonResult.OK, new DialogParameters { { "CaptureSource", SelectedSource.Value?.CaptureSource } }))).AddTo(this);
             CancelCommand = new ReactiveCommand();
-            CancelCommand.Subscribe(_ => RequestClose?.Invoke(null)).AddTo(this);
+            CancelCommand.Subscribe(_ => RequestClose?.Invoke(new DialogResult(ButtonResult.Cancel))).AddTo(this);
         }
 
         public bool CanCloseDialog()

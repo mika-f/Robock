@@ -33,40 +33,44 @@
             <RowDefinition Height="60" />
         </Grid.RowDefinitions>
 
-        <ScrollViewer Grid.Row="0">
+        <ListBox Grid.Row="0"
+                 Background="{DynamicResource BackgroundBrushKey}"
+                 BorderThickness="0"
+                 ItemsSource="{Binding CaptureSources, Mode=OneWay}"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 SelectedItem="{Binding SelectedSource.Value, Mode=OneWayToSource}">
             <i:Interaction.Behaviors>
                 <behaviors:BindingAbsolutePositionToViewModelBehavior Position="{Binding RenderPosition.Value, Mode=OneWayToSource}" />
             </i:Interaction.Behaviors>
-            <ItemsControl ItemsSource="{Binding CaptureSources, Mode=OneWay}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel Orientation="Horizontal" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="rvm:CaptureSourceViewModel">
-                        <Grid Width="{Binding Width}" Margin="10,5">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition />
-                            </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0"
-                                       Margin="0,0,0,4"
-                                       FontSize="14"
-                                       Text="{Binding Title.Value, Mode=OneWay}"
-                                       TextTrimming="CharacterEllipsis" />
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="rvm:CaptureSourceViewModel">
+                    <Grid Width="{Binding Width}" Margin="10,5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0"
+                                   Margin="0,0,0,4"
+                                   FontSize="14"
+                                   Foreground="{DynamicResource ForegroundBrushKey}"
+                                   Text="{Binding Title.Value, Mode=OneWay}"
+                                   TextTrimming="CharacterEllipsis" />
 
-                            <ContentControl Grid.Row="1" Height="{Binding Height}">
-                                <i:Interaction.Behaviors>
-                                    <behaviors:BindingAbsolutePositionToViewModelBehavior Position="{Binding RenderPosition.Value, Mode=OneWayToSource}" />
-                                    <behaviors:BindingWindowHandleToViewModelBehavior Handle="{Binding WindowHandle.Value, Mode=OneWayToSource}" />
-                                </i:Interaction.Behaviors>
-                            </ContentControl>
-                        </Grid>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
+                        <ContentControl Grid.Row="1" Height="{Binding Height}">
+                            <i:Interaction.Behaviors>
+                                <behaviors:BindingAbsolutePositionToViewModelBehavior Position="{Binding RenderPosition.Value, Mode=OneWayToSource}" />
+                                <behaviors:BindingWindowHandleToViewModelBehavior Handle="{Binding WindowHandle.Value, Mode=OneWayToSource}" />
+                            </i:Interaction.Behaviors>
+                        </ContentControl>
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ListBox>
 
         <StackPanel Grid.Row="1"
                     Margin="10,0"
