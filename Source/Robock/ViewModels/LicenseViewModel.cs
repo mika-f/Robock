@@ -4,7 +4,7 @@ using System.Windows.Input;
 using Prism.Commands;
 
 using Robock.Models;
-using Robock.Shared.Mvvm;
+using Robock.Mvvm;
 
 namespace Robock.ViewModels
 {

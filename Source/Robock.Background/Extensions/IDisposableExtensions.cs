@@ -1,8 +1,8 @@
 ﻿using System;
 
-using Robock.Shared.Mvvm;
+using Robock.Background.Mvvm;
 
-namespace Robock.Shared.Extensions
+namespace Robock.Background.Extensions
 {
     // ReSharper disable once InconsistentNaming
     public static class IDisposableExtensions

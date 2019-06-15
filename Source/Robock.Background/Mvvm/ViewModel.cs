@@ -3,7 +3,7 @@ using System.Reactive.Disposables;
 
 using Prism.Mvvm;
 
-namespace Robock.Shared.Mvvm
+namespace Robock.Background.Mvvm
 {
     public class ViewModel : BindableBase, IDisposable
     {

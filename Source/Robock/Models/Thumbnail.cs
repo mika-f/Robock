@@ -3,7 +3,7 @@ using System.Drawing;
 
 using Prism.Mvvm;
 
-namespace Robock.Shared.Models
+namespace Robock.Models
 {
     public class Thumbnail : BindableBase
     {

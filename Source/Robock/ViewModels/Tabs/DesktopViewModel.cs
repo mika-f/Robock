@@ -7,9 +7,9 @@ using System.Windows;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using Robock.Extensions;
 using Robock.Models;
 using Robock.Models.Renderer;
-using Robock.Shared.Extensions;
 
 namespace Robock.ViewModels.Tabs
 {

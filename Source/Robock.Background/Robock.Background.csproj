@@ -118,8 +118,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Extensions\IDisposableExtensions.cs" />
     <Compile Include="Models\BackgroundService.cs" />
     <Compile Include="Models\RobockServer.cs" />
+    <Compile Include="Mvvm\ViewModel.cs" />
     <Compile Include="ViewModels\AppShellViewModel.cs" />
     <Compile Include="Views\AppShell.xaml.cs">
       <DependentUpon>AppShell.xaml</DependentUpon>

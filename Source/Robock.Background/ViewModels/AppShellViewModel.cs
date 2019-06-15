@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Reactive.Linq;
 
+using Robock.Background.Extensions;
 using Robock.Background.Models;
-using Robock.Shared.Extensions;
-using Robock.Shared.Mvvm;
+using Robock.Background.Mvvm;
 
 namespace Robock.Background.ViewModels
 {
