@@ -9,6 +9,7 @@ using Prism.Ioc;
 using Prism.Unity;
 
 using Robock.Views;
+using Robock.Views.Dialogs;
 
 namespace Robock
 {
@@ -28,7 +29,7 @@ namespace Robock
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            //
+            containerRegistry.RegisterDialogWindow<MetroDialogWindow>();
         }
 
         protected override Window CreateShell()
