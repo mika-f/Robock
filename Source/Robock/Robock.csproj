@@ -72,10 +72,8 @@
     <Compile Include="Behaviors\AdjustControlSizeToParentBehavior.cs" />
     <Compile Include="Behaviors\AdjustRectSizeByParentControlBehavior.cs" />
     <Compile Include="Behaviors\CanvasBindingBehavior.cs" />
-    <Compile Include="Behaviors\ControlPositionBindingBehavior.cs" />
     <Compile Include="Behaviors\DraggableControlOnCanvasBehavior.cs" />
     <Compile Include="Behaviors\DxInteropBehavior.cs" />
-    <Compile Include="Behaviors\RectangleSelectorBehavior.cs" />
     <Compile Include="Behaviors\ResetCanvasPositionOnVisibilityChangedBehavior.cs" />
     <Compile Include="Behaviors\ScrollToTopBehavior.cs" />
     <Compile Include="Extensions\IDisposableExtensions.cs" />
@@ -83,7 +81,6 @@
     <Compile Include="Models\DesktopManager.cs" />
     <Compile Include="Models\DesktopWindowManager.cs" />
     <Compile Include="Models\FakeImg.cs" />
-    <Compile Include="Models\Ignores.cs" />
     <Compile Include="Models\License.cs" />
     <Compile Include="Models\Renderer\BaseRenderer.cs" />
     <Compile Include="Models\Renderer\BitBltRenderer.cs" />
@@ -94,9 +91,7 @@
     <Compile Include="Models\Window.cs" />
     <Compile Include="Models\ProductInfo.cs" />
     <Compile Include="Mvvm\ViewModel.cs" />
-    <Compile Include="Services\CaptureSourceService.cs" />
     <Compile Include="Services\DpiService.cs" />
-    <Compile Include="Services\Interfaces\ICaptureSourceService.cs" />
     <Compile Include="Services\Interfaces\IDpiService.cs" />
     <Compile Include="Services\Interfaces\IStatusService.cs" />
     <Compile Include="Services\StatusService.cs" />
