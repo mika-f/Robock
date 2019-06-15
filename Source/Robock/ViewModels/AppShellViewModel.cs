@@ -50,7 +50,5 @@ namespace Robock.ViewModels
 
             desktopManager.Initialize();
         }
-
-        public void Initialize() { }
     }
 }

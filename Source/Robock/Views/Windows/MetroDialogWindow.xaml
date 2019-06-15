@@ -9,6 +9,7 @@
                    Background="{DynamicResource ThemeBrushKey}"
                    FontFamily="Segoe UI"
                    ResizeMode="NoResize"
+                   ShowInTaskbar="False"
                    SizeToContent="Manual"
                    SnapsToDevicePixels="True"
                    TextOptions.TextFormattingMode="Display"

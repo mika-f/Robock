@@ -3,6 +3,8 @@ using System.Windows;
 
 using Microsoft.Xaml.Behaviors;
 
+using Robock.Models;
+
 namespace Robock.Behaviors
 {
     /// <summary>
@@ -28,21 +30,10 @@ namespace Robock.Behaviors
             if (size.IsEmpty || Math.Abs(BaseWidth) <= 0 || Math.Abs(BaseHeight) <= 0)
                 return;
 
-            var (x, y) = GetAspectRatio((int) BaseWidth, (int) BaseHeight);
+            var (x, y) = Utils.GetAspectRatio((int) BaseWidth, (int) BaseHeight);
             var (width, height) = (Math.Floor(size.Width / x), Math.Floor(size.Height / y));
             AssociatedObject.Width = x * Math.Min(width, height);
             AssociatedObject.Height = y * Math.Min(width, height);
-        }
-
-        private (int, int) GetAspectRatio(int x, int y)
-        {
-            int CalcGcd(int a, int b)
-            {
-                return b == 0 ? a : CalcGcd(b, a % b);
-            }
-
-            var gcd = CalcGcd(x, y);
-            return (x / gcd, y / gcd);
         }
 
         #region AttachTo

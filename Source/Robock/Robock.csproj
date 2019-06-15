@@ -71,15 +71,20 @@
     </ApplicationDefinition>
     <Compile Include="Behaviors\AdjustControlSizeToParentBehavior.cs" />
     <Compile Include="Behaviors\AdjustRectSizeByParentControlBehavior.cs" />
+    <Compile Include="Behaviors\BindingAbsolutePositionToViewModelBehavior.cs" />
+    <Compile Include="Behaviors\BindingWindowHandleToViewModelBehavior.cs" />
     <Compile Include="Behaviors\CanvasBindingBehavior.cs" />
     <Compile Include="Behaviors\DraggableControlOnCanvasBehavior.cs" />
     <Compile Include="Behaviors\DxInteropBehavior.cs" />
     <Compile Include="Behaviors\ResetCanvasPositionOnVisibilityChangedBehavior.cs" />
     <Compile Include="Behaviors\ScrollToTopBehavior.cs" />
+    <Compile Include="Converters\AbsoluteToRelativeConverter.cs" />
     <Compile Include="Extensions\IDisposableExtensions.cs" />
+    <Compile Include="Models\CaptureSourceManager.cs" />
+    <Compile Include="Models\CaptureSources\ICaptureSource.cs" />
+    <Compile Include="Models\CaptureSources\Window.cs" />
     <Compile Include="Models\Desktop.cs" />
     <Compile Include="Models\DesktopManager.cs" />
-    <Compile Include="Models\DesktopWindowManager.cs" />
     <Compile Include="Models\FakeImg.cs" />
     <Compile Include="Models\License.cs" />
     <Compile Include="Models\Renderer\BaseRenderer.cs" />
@@ -88,6 +93,7 @@
     <Compile Include="Models\Renderer\SharedSurfaceRenderer.cs" />
     <Compile Include="Models\RobockClient.cs" />
     <Compile Include="Models\Thumbnail.cs" />
+    <Compile Include="Models\Utils.cs" />
     <Compile Include="Models\Window.cs" />
     <Compile Include="Models\ProductInfo.cs" />
     <Compile Include="Mvvm\ViewModel.cs" />
@@ -96,6 +102,7 @@
     <Compile Include="Services\Interfaces\IStatusService.cs" />
     <Compile Include="Services\StatusService.cs" />
     <Compile Include="ViewModels\AppShellViewModel.cs" />
+    <Compile Include="ViewModels\CaptureSourceViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\WindowPickerDialogViewModel.cs" />
     <Compile Include="ViewModels\WindowViewModel.cs" />
     <Compile Include="ViewModels\Tabs\DesktopViewModel.cs" />

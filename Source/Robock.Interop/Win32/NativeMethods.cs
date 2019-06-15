@@ -13,6 +13,9 @@ namespace Robock.Interop.Win32
             DwmGetDxSharedSurface = Marshal.GetDelegateForFunctionPointer<DwmGetSharedSurfaceDelegate>(ptr);
         }
 
+        [DllImport("d3d11.dll", EntryPoint = "CreateDirect3D11DeviceFromDXGIDevice", SetLastError = true, CharSet = CharSet.Unicode, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
+        public static extern uint CreateDirect3D11DeviceFromDXGIDevice(IntPtr dxgiDevice, out IntPtr graphicsDevice);
+
         #region User32
 
         public delegate bool DwmGetSharedSurfaceDelegate(IntPtr hWnd, out IntPtr phSurface, out long pAdapterLuid, out long pFmtWindow, out long pPresentFlags, out long pWin32KUpdateId);
@@ -122,8 +125,11 @@ namespace Robock.Interop.Win32
         [DllImport("dwmapi.dll", PreserveSig = true)]
         public static extern int DwmUpdateThumbnailProperties(IntPtr hThumbnail, ref DWM_THUMBNAIL_PROPERTIES props);
 
-        [DllImport("dwmapi.dll")]
-        public static extern int DwmGetWindowAttribute(IntPtr hwnd, DWMWINDOWATTRIBUTE dwAttribute, out bool pvAttribute, int cbAttribute);
+        [DllImport("dwmapi.dll", EntryPoint = "DwmGetWindowAttribute")]
+        public static extern int DwmGetWindowAttributeBool(IntPtr hwnd, DWMWINDOWATTRIBUTE dwAttribute, out bool pvAttribute, int cbAttribute);
+
+        [DllImport("dwmapi.dll", EntryPoint = "DwmGetWindowAttribute")]
+        public static extern int DwmGetWindowAttributeRect(IntPtr hwnd, DWMWINDOWATTRIBUTE dwAttribute, out RECT pvAttribute, int cbAttribute);
 
         #endregion
 
