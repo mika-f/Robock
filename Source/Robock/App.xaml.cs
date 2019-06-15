@@ -8,8 +8,11 @@ using MetroRadiance.UI;
 using Prism.Ioc;
 using Prism.Unity;
 
+using Robock.Services;
+using Robock.Services.Interfaces;
 using Robock.Views;
 using Robock.Views.Dialogs;
+using Robock.Views.Windows;
 
 namespace Robock
 {
@@ -29,6 +32,9 @@ namespace Robock
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
+            containerRegistry.Register<ICaptureSourceService, CaptureSourceService>();
+            containerRegistry.Register<IDpiService, DpiService>();
+            containerRegistry.Register<IStatusService, StatusService>();
             containerRegistry.RegisterDialogWindow<MetroDialogWindow>();
         }
 

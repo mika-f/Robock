@@ -8,7 +8,7 @@ using Reactive.Bindings.Extensions;
 
 using Robock.Extensions;
 using Robock.Mvvm;
-using Robock.Services;
+using Robock.Services.Interfaces;
 using Robock.ViewModels.Tabs;
 
 namespace Robock.ViewModels
@@ -20,10 +20,10 @@ namespace Robock.ViewModels
         public ObservableCollection<DesktopViewModel> Desktops { get; }
         public ReactiveProperty<int> SelectedIndex { get; }
 
-        public ReactiveProperty<double> VirtualScreenWidth { get; }
-        public ReactiveProperty<double> VirtualScreenHeight { get; }
+        public ReadOnlyReactiveProperty<double> VirtualScreenWidth { get; }
+        public ReadOnlyReactiveProperty<double> VirtualScreenHeight { get; }
 
-        public VirtualScreenViewModel()
+        public VirtualScreenViewModel(IDpiService dpiService)
         {
             Desktops = new ObservableCollection<DesktopViewModel>();
             SelectedIndex = new ReactiveProperty<int>(0);
@@ -35,13 +35,8 @@ namespace Robock.ViewModels
                     return;
                 Desktops[w].IsSelected.Value = true;
             }).AddTo(this);
-            VirtualScreenWidth = new ReactiveProperty<double>(SystemParameters.VirtualScreenWidth / Scale * DpiService.Instance.CurrentDpi.ScaleY);
-            VirtualScreenHeight = new ReactiveProperty<double>(SystemParameters.VirtualScreenHeight / Scale * DpiService.Instance.CurrentDpi.ScaleX);
-            DpiService.Instance.ObserveProperty(w => w.CurrentDpi).Subscribe(w =>
-            {
-                VirtualScreenWidth.Value = SystemParameters.VirtualScreenWidth / Scale * DpiService.Instance.CurrentDpi.ScaleY;
-                VirtualScreenHeight.Value = SystemParameters.VirtualScreenHeight / Scale * DpiService.Instance.CurrentDpi.ScaleX;
-            }).AddTo(this);
+            VirtualScreenWidth = dpiService.ObserveProperty(w => w.CurrentDpi).Select(w => SystemParameters.VirtualScreenWidth / Scale * w.ScaleY).ToReadOnlyReactiveProperty().AddTo(this);
+            VirtualScreenHeight = dpiService.ObserveProperty(w => w.CurrentDpi).Select(w => SystemParameters.VirtualScreenHeight / Scale * w.ScaleX).ToReadOnlyReactiveProperty().AddTo(this);
         }
     }
 }

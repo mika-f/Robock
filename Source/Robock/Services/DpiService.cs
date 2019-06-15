@@ -6,23 +6,17 @@ using MetroRadiance.Interop;
 
 using Prism.Mvvm;
 
+using Robock.Services.Interfaces;
+
 namespace Robock.Services
 {
-    public class DpiService : BindableBase
+    public class DpiService : BindableBase, IDpiService
     {
-        private static DpiService _instance;
         private readonly Window _window;
 
         private Dpi _currentDpi;
-        public static DpiService Instance => _instance ??= new DpiService();
 
-        public Dpi CurrentDpi
-        {
-            get => _currentDpi;
-            set => SetProperty(ref _currentDpi, value);
-        }
-
-        private DpiService()
+        public DpiService()
         {
             if (!PerMonitorDpi.IsSupported)
                 throw new NotSupportedException();
@@ -33,6 +27,12 @@ namespace Robock.Services
 
             CurrentDpi = PerMonitorDpi.GetDpi(new WindowInteropHelper(_window).Handle);
             _window.DpiChanged += OnDpiChanged;
+        }
+
+        public Dpi CurrentDpi
+        {
+            get => _currentDpi;
+            set => SetProperty(ref _currentDpi, value);
         }
 
         private void OnDpiChanged(object sender, DpiChangedEventArgs e)

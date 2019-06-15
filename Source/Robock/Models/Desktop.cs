@@ -12,7 +12,6 @@ using Microsoft.Win32;
 using Prism.Mvvm;
 
 using Robock.Interop.Win32;
-using Robock.Services;
 
 namespace Robock.Models
 {
@@ -110,7 +109,6 @@ namespace Robock.Models
             }
             catch (Exception)
             {
-                StatusTextService.Instance.Status = "Heartbeat failed, disconnect from background process.";
                 if (_process == null)
                     return;
                 _disposable.Dispose();
@@ -122,7 +120,6 @@ namespace Robock.Models
 
         private async Task Close()
         {
-            StatusTextService.Instance.Status = "Waiting for shutting down of background process...";
             await _client.Close();
             if (_process == null)
                 return;
@@ -131,7 +128,6 @@ namespace Robock.Models
             _process.CloseMainWindow();
             _process.WaitForExit();
             _process.Dispose();
-            StatusTextService.Instance.Status = "Shutdown successful";
         }
 
         private void GetCurrentWallpaper()
