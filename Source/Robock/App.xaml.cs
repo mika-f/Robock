@@ -24,16 +24,14 @@ namespace Robock
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            base.OnStartup(e);
-
             ShutdownMode = ShutdownMode.OnMainWindowClose;
-
             ThemeService.Current.Register(this, Theme.Windows, Accent.Windows);
+
+            base.OnStartup(e);
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.Register<ICaptureSourceService, CaptureSourceService>();
             containerRegistry.Register<IDpiService, DpiService>();
             containerRegistry.Register<IStatusService, StatusService>();
             containerRegistry.RegisterDialogWindow<MetroDialogWindow>();
