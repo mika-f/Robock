@@ -111,7 +111,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Views\Monitors.xaml.cs">
+    <Compile Include="Views\Partial\Monitors.xaml.cs">
       <DependentUpon>Monitors.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\AboutTab.xaml.cs">
