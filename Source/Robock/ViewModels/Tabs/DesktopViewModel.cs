@@ -4,12 +4,15 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
+using Prism.Services.Dialogs;
+
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 using Robock.Extensions;
 using Robock.Models;
 using Robock.Models.Renderer;
+using Robock.Views.Dialogs;
 
 namespace Robock.ViewModels.Tabs
 {
@@ -18,11 +21,13 @@ namespace Robock.ViewModels.Tabs
         private const double Scale = 15;
 
         private readonly Desktop _desktop;
+        private readonly IDialogService _dialogService;
         private readonly double _offsetX;
         private readonly double _offsetY;
 
         public ReactiveProperty<bool> IsSelected { get; }
         public ReactiveProperty<WindowViewModel> SelectedWindow { get; }
+        public ReadOnlyReactiveProperty<string> CaptureSourceName { get; }
         public ReactiveProperty<double> PreviewHeight { get; set; }
         public ReactiveProperty<double> PreviewWidth { get; set; }
         public ReactiveProperty<double> RenderTop { get; set; }
@@ -30,11 +35,10 @@ namespace Robock.ViewModels.Tabs
         public ReactiveProperty<double> RenderHeight { get; set; }
         public ReactiveProperty<double> RenderWidth { get; set; }
         public ReactiveProperty<double> RenderScale { get; set; }
-        public ReadOnlyReactiveCollection<WindowViewModel> Windows { get; }
 
         public ReactiveCommand ApplyWallpaperCommand { get; }
         public ReactiveCommand DiscardWallpaperCommand { get; }
-        public ReactiveCommand ReloadWindowsCommand { get; }
+        public ReactiveCommand SelectCaptureSourceCommand { get; }
         public ReactiveCommand ClearSelectCommand { get; }
 
         public string DesktopName => $"Desktop {_desktop.No}";
@@ -49,10 +53,11 @@ namespace Robock.ViewModels.Tabs
         public ReadOnlyReactiveProperty<string> Wallpaper { get; }
         public ReadOnlyReactiveProperty<bool> IsSelectedWindow { get; }
 
-        public DesktopViewModel(Desktop desktop, WindowManager windowManager, DesktopWindowManager _)
+        public DesktopViewModel(Desktop desktop, IDialogService dialogService)
             : base($":Desktop: Desktop {desktop.No}")
         {
             _desktop = desktop;
+            _dialogService = dialogService;
 
             // 仮想スクリーン周りの計算
             _offsetX = (SystemParameters.VirtualScreenLeft < 0 ? -1 : 1) * SystemParameters.VirtualScreenLeft;
@@ -74,8 +79,8 @@ namespace Robock.ViewModels.Tabs
              .ToReactiveProperty().AddTo(this);
             Wallpaper = _desktop.ObserveProperty(w => w.Wallpaper).ToReadOnlyReactiveProperty().AddTo(this);
             IsSelected = new ReactiveProperty<bool>(desktop.IsPrimary);
-            Windows = windowManager.Windows.ToReadOnlyReactiveCollection(w => new WindowViewModel(w));
             SelectedWindow = new ReactiveProperty<WindowViewModel>();
+            CaptureSourceName = SelectedWindow.Select(w => w?.Title?.Value ?? "キャプチャーするウィンドウを選択してください").ToReadOnlyReactiveProperty().AddTo(this);
             IsSelectedWindow = SelectedWindow.Select(w => w != null).ToReadOnlyReactiveProperty().AddTo(this);
             Renderer = IsSelectedWindow.Do(_ => Renderer?.Value?.Dispose())
                                        .Select(w => w ? (IRenderer) new BitBltRenderer(SelectedWindow.Value.Handle) : null)
@@ -95,8 +100,15 @@ namespace Robock.ViewModels.Tabs
                 desktop.ObserveProperty(w => w.IsConnecting)
             }.CombineLatest().Select(w => w.All(v => v)).ToReactiveCommand();
             DiscardWallpaperCommand.Subscribe(() => Task.Run(async () => await _desktop.DiscardWallpaper())).AddTo(this);
-            ReloadWindowsCommand = new ReactiveCommand();
-            ReloadWindowsCommand.Subscribe(_ => windowManager.ForceUpdate()).AddTo(this);
+            SelectCaptureSourceCommand = new ReactiveCommand();
+            SelectCaptureSourceCommand.Subscribe(_ =>
+            {
+                //
+                _dialogService.ShowDialog(nameof(WindowPickerDialog), new DialogParameters(), result =>
+                {
+                    //
+                });
+            }).AddTo(this);
             ClearSelectCommand = SelectedWindow.Select(w => w != null).ToReactiveCommand();
             ClearSelectCommand.Subscribe(_ => SelectedWindow.Value = null).AddTo(this);
         }

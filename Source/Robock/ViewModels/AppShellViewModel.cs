@@ -41,7 +41,7 @@ namespace Robock.ViewModels
                 if (w.Action != NotifyCollectionChangedAction.Add || !(w.NewItems[0] is Desktop desktop))
                     return;
 
-                var viewModel = new DesktopViewModel(desktop, processManager, _desktopWindowManager).AddTo(this);
+                var viewModel = new DesktopViewModel(desktop, dialogService).AddTo(this);
                 Tabs.Insert(desktop.No - 1, viewModel);
                 VirtualScreen.Desktops.Insert(desktop.No - 1, viewModel);
                 if (desktop.IsPrimary)

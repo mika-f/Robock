@@ -8,8 +8,8 @@
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
+             xmlns:prism="http://prismlibrary.com/"
              xmlns:tvm="clr-namespace:Robock.ViewModels.Tabs"
-             xmlns:vm="clr-namespace:Robock.ViewModels"
              d:DataContext="{d:DesignInstance tvm:DesktopViewModel}"
              d:DesignHeight="450"
              d:DesignWidth="800"
@@ -105,29 +105,18 @@
                     <Grid Margin="0,2.5">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
-                            <ColumnDefinition Width="30" />
+                            <ColumnDefinition Width="120" />
                             <ColumnDefinition Width="30" />
                         </Grid.ColumnDefinitions>
-                        <metro:PromptComboBox Grid.Column="0"
-                                              Height="25"
-                                              HorizontalAlignment="Stretch"
-                                              IsEditable="False"
-                                              ItemsSource="{Binding Windows}"
-                                              Prompt="キャプチャーする Window を選択してください"
-                                              SelectedItem="{Binding SelectedWindow.Value, Mode=TwoWay}">
-                            <metro:PromptComboBox.ItemTemplate>
-                                <DataTemplate DataType="vm:WindowViewModel">
-                                    <TextBlock VerticalAlignment="Center"
-                                               Text="{Binding Title.Value, Mode=OneWay}"
-                                               TextTrimming="CharacterEllipsis" />
-                                </DataTemplate>
-                            </metro:PromptComboBox.ItemTemplate>
-                        </metro:PromptComboBox>
+                        <metro:PromptTextBox Grid.Column="0"
+                                             Height="25"
+                                             HorizontalAlignment="Stretch"
+                                             IsEnabled="False"
+                                             Text="{Binding CaptureSourceName.Value, Mode=OneWay}" />
                         <Button Grid.Column="1"
                                 Height="25"
-                                Command="{Binding ReloadWindowsCommand}"
-                                ToolTip="Window リストを更新">
-                            <TextBlock fa:Awesome.Inline=":SyncAlt:" />
+                                Command="{Binding SelectCaptureSourceCommand}">
+                            <TextBlock fa:Awesome.Inline=":MousePointer: Window を選択" />
                         </Button>
                         <Button Grid.Column="2"
                                 Height="25"
@@ -241,21 +230,40 @@
                         Margin="0,0,10,0"
                         Orientation="Vertical">
                 <TextBlock FontSize="16" Text="オプション" />
+                <Grid Margin="0,2.5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25" />
+                        <RowDefinition Height="25" />
+                        <RowDefinition Height="25" />
+                        <RowDefinition Height="25" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="75" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Row="0"
+                               Grid.Column="0"
+                               VerticalAlignment="Center"
+                               Text="描画形式 : " />
+                    <metro:PromptComboBox Grid.Row="0"
+                                          Grid.Column="1"
+                                          Height="25"
+                                          Prompt="描画形式を選択してください"
+                                          ToolTipService.ShowOnDisabled="True">
+                        <metro:PromptComboBox.ToolTip>
+                            <TextBlock>
+                                <!--    -->
+                                プレビューおよび背景に描画するための方法を選択します。<LineBreak />
+                                デフォルトで最適なものが選択されていますが、描画されない場合などに変更することが出来ます。
+                                <!--    -->
+                            </TextBlock>
+                        </metro:PromptComboBox.ToolTip>
+                    </metro:PromptComboBox>
+
+                </Grid>
                 <!--  TODO  -->
-                <CheckBox Height="25"
-                          Margin="0,2.5"
-                          Content="相互運用 API を使用する"
-                          IsEnabled="False"
-                          ToolTipService.ShowOnDisabled="True">
-                    <CheckBox.ToolTip>
-                        <TextBlock>
-                            <!--    -->
-                            UWP 用に提供されている API を使用してキャプチャーを行います。<LineBreak />
-                            Windows 10 October 2018 Update 以降でのみ使用可能です。
-                            <!--    -->
-                        </TextBlock>
-                    </CheckBox.ToolTip>
-                </CheckBox>
+                <StackPanel Margin="0,2.5" Orientation="Horizontal" />
             </StackPanel>
 
             <StackPanel Grid.Column="3" Orientation="Vertical">

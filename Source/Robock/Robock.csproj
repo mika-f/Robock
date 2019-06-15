@@ -101,6 +101,7 @@
     <Compile Include="Services\Interfaces\IStatusService.cs" />
     <Compile Include="Services\StatusService.cs" />
     <Compile Include="ViewModels\AppShellViewModel.cs" />
+    <Compile Include="ViewModels\Dialogs\WindowPickerDialogViewModel.cs" />
     <Compile Include="ViewModels\WindowViewModel.cs" />
     <Compile Include="ViewModels\Tabs\DesktopViewModel.cs" />
     <Compile Include="ViewModels\LicenseViewModel.cs" />
@@ -113,6 +114,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\Dialogs\WindowPickerDialog.xaml.cs">
+      <DependentUpon>WindowPickerDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Partial\Monitors.xaml.cs">
       <DependentUpon>Monitors.xaml</DependentUpon>
@@ -127,6 +131,10 @@
       <DependentUpon>MetroDialogWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="Views\AppShell.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Dialogs\WindowPickerDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -10,6 +10,7 @@ using Prism.Unity;
 
 using Robock.Services;
 using Robock.Services.Interfaces;
+using Robock.ViewModels.Dialogs;
 using Robock.Views;
 using Robock.Views.Dialogs;
 using Robock.Views.Windows;
@@ -36,6 +37,7 @@ namespace Robock
             containerRegistry.Register<IDpiService, DpiService>();
             containerRegistry.Register<IStatusService, StatusService>();
             containerRegistry.RegisterDialogWindow<MetroDialogWindow>();
+            containerRegistry.RegisterDialog<WindowPickerDialog, WindowPickerDialogViewModel>(nameof(WindowPickerDialog));
         }
 
         protected override Window CreateShell()
