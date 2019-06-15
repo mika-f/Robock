@@ -6,9 +6,9 @@
                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                    xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
                    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-                   xmlns:local="clr-namespace:Robock.Views"
                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                    xmlns:metro="http://schemes.grabacr.net/winfx/2014/controls"
+                   xmlns:partial="clr-namespace:Robock.Views.Partial"
                    xmlns:prism="http://prismlibrary.com/"
                    xmlns:tabs="clr-namespace:Robock.Views.Tabs"
                    xmlns:tvm="clr-namespace:Robock.ViewModels.Tabs"
@@ -82,9 +82,9 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition />
                         </Grid.RowDefinitions>
-                        <local:Monitors Grid.Row="0"
-                                        Padding="0,0,0,5"
-                                        DataContext="{Binding DataContext.VirtualScreen, RelativeSource={RelativeSource AncestorType=metro:MetroWindow}}" />
+                        <partial:Monitors Grid.Row="0"
+                                          Padding="0,0,0,5"
+                                          DataContext="{Binding DataContext.VirtualScreen, RelativeSource={RelativeSource AncestorType=metro:MetroWindow}}" />
                         <Separator Grid.Row="1" />
                         <tabs:DesktopTab Grid.Row="2"
                                          Margin="0,5,0,0"

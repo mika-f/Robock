@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace Robock.Views
+namespace Robock.Views.Partial
 {
     /// <summary>
     ///     Monitors.xaml の相互作用ロジック
