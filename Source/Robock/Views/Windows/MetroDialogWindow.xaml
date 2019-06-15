@@ -30,16 +30,8 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <metro:CaptionIcon Grid.Column="0" Padding="4,2">
-                    <!--
-                    <Image Width="24"
-                           Height="24"
-                           RenderOptions.BitmapScalingMode="Fant"
-                           Source="../Resources/Kotoha2.ico" />
-                    -->
-                </metro:CaptionIcon>
                 <TextBlock Grid.Column="1"
-                           Margin="3,0,0,0"
+                           Margin="4,0,0,0"
                            VerticalAlignment="Center"
                            FontFamily="Meiryo UI"
                            FontSize="16"
