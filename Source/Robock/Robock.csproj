@@ -94,6 +94,7 @@
     <Compile Include="Models\RobockClient.cs" />
     <Compile Include="Models\Thumbnail.cs" />
     <Compile Include="Models\Utils.cs" />
+    <Compile Include="Models\Vertex.cs" />
     <Compile Include="Models\Window.cs" />
     <Compile Include="Models\ProductInfo.cs" />
     <Compile Include="Mvvm\ViewModel.cs" />

@@ -148,10 +148,4 @@ namespace Robock.Models.Renderer
 
         protected abstract Texture2D TryGetNextFrameAsTexture2D();
     }
-
-    internal struct Vertex
-    {
-        public RawVector3 Position;
-        public RawVector2 TexCoord;
-    }
 }
