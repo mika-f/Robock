@@ -30,7 +30,7 @@ namespace Robock.ViewModels.Dialogs
             RenderPosition.Where(w => !w.IsEmpty).Subscribe(_ => UpdateChildDisplayPosition()).AddTo(this);
             SelectedSource = new ReactiveProperty<CaptureSourceViewModel>();
             SelectCommand = new ReactiveCommand();
-            SelectCommand.Subscribe(_ => RequestClose?.Invoke(new DialogResult(ButtonResult.OK, new DialogParameters { { "CaptureSource", SelectedSource.Value?.CaptureSource } }))).AddTo(this);
+            SelectCommand.Subscribe(_ => RequestClose?.Invoke(new DialogResult(ButtonResult.OK, new DialogParameters { { "CaptureSource", SelectedSource.Value?.CaptureSource?.Clone() } }))).AddTo(this);
             CancelCommand = new ReactiveCommand();
             CancelCommand.Subscribe(_ => RequestClose?.Invoke(new DialogResult(ButtonResult.Cancel))).AddTo(this);
         }

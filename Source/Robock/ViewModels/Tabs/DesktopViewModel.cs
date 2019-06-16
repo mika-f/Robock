@@ -37,7 +37,6 @@ namespace Robock.ViewModels.Tabs
         public ReactiveProperty<bool> IsSelected { get; }
         public ReactiveProperty<ICaptureSource> CaptureSource { get; }
         public ReadOnlyReactiveProperty<bool> IsCaptureSourceSelected { get; }
-        public ReadOnlyReactiveProperty<string> CaptureSourceName { get; }
         public ReactiveProperty<double> PreviewHeight { get; set; }
         public ReactiveProperty<double> PreviewWidth { get; set; }
         public ReactiveProperty<double> RenderTop { get; set; }
@@ -79,7 +78,6 @@ namespace Robock.ViewModels.Tabs
             IsSelected = new ReactiveProperty<bool>(desktop.IsPrimary);
             CaptureSource = new ReactiveProperty<ICaptureSource>();
             IsCaptureSourceSelected = CaptureSource.Select(w => w != null).ToReadOnlyReactiveProperty().AddTo(this);
-            CaptureSourceName = CaptureSource.Select(w => w?.Name ?? "キャプチャーするウィンドウを選択してください").ToReadOnlyReactiveProperty().AddTo(this);
             Renderer = IsCaptureSourceSelected.Do(_ => Renderer?.Value?.Dispose())
                                               .Select(w => w ? (IRenderer) new BitBltRenderer(IntPtr.Zero) : null)
                                               .ToReadOnlyReactiveProperty().AddTo(this);
@@ -103,8 +101,8 @@ namespace Robock.ViewModels.Tabs
             {
                 dialogService.ShowDialog(nameof(WindowPickerDialog), new DialogParameters(), r =>
                 {
-                    if(r.Parameters.ContainsKey("CaptureSource"))
-                    CaptureSource.Value = r.Parameters.GetValue<ICaptureSource>("CaptureSource");
+                    if (r.Parameters.ContainsKey("CaptureSource"))
+                        CaptureSource.Value = r.Parameters.GetValue<ICaptureSource>("CaptureSource");
                 });
             }).AddTo(this);
             ClearSelectCommand = CaptureSource.Select(w => w != null).ToReactiveCommand();

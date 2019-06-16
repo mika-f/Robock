@@ -86,6 +86,11 @@ namespace Robock.Models.CaptureSources
             NativeMethods.DwmUpdateThumbnailProperties(_hThumb, ref thumbnailProps);
         }
 
+        public ICaptureSource Clone()
+        {
+            return new Window(_hWnd);
+        }
+
         private void Update()
         {
             var sb = new StringBuilder(1024);

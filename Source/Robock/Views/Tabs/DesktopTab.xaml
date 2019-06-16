@@ -112,8 +112,8 @@
                                              Height="25"
                                              HorizontalAlignment="Stretch"
                                              IsEnabled="False"
-                                             Text="{Binding CaptureSourceName.Value, Mode=OneWay}"
-                                             ToolTip="{Binding CaptureSourceName.Value, Mode=OneWay}"
+                                             Text="{Binding CaptureSource.Value.Name, Mode=OneWay, FallbackValue='キャプチャーするウィンドウを選択してください'}"
+                                             ToolTip="{Binding CaptureSource.Value.Name, Mode=OneWay, FallbackValue='キャプチャーするウィンドウを選択してください'}"
                                              ToolTipService.ShowOnDisabled="{Binding IsCaptureSourceSelected.Value, Mode=OneWay}" />
                         <Button Grid.Column="1"
                                 Height="25"
