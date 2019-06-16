@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Reactive.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -73,16 +72,7 @@ namespace Robock.Models.CaptureSources
                 destination.bottom = (int) available.Bottom;
             }
 
-            if (Name == "ピクチャ")
-            {
-                Debug.WriteLine("=================");
-                Debug.WriteLine(position);
-                Debug.WriteLine(available);
-                Debug.WriteLine($"Is Invisible : ${position.Bottom <= available.Top}");
-            }
-
             var isVisible = position.Bottom >= available.Top && position.Top <= available.Bottom;
-
             var thumbnailProps = new DWM_THUMBNAIL_PROPERTIES
             {
                 fVisible = isVisible ? 1 : 0, // 動いてない？

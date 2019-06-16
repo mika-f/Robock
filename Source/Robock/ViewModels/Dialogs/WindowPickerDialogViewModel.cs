@@ -23,7 +23,7 @@ namespace Robock.ViewModels.Dialogs
 
         public WindowPickerDialogViewModel()
         {
-            _captureSourceManager = new CaptureSourceManager();
+            _captureSourceManager = new CaptureSourceManager().AddTo(this);
             CaptureSources = _captureSourceManager.CaptureSources.ToReadOnlyReactiveCollection(w => new CaptureSourceViewModel(w).AddTo(this)).AddTo(this);
             CaptureSources.ToCollectionChanged().Throttle(TimeSpan.FromMilliseconds(100)).Subscribe(_ => UpdateChildDisplayPosition()).AddTo(this);
             RenderPosition = new ReactiveProperty<Rect>();
