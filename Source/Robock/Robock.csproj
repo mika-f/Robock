@@ -85,17 +85,14 @@
     <Compile Include="Models\CaptureSources\Window.cs" />
     <Compile Include="Models\Desktop.cs" />
     <Compile Include="Models\DesktopManager.cs" />
-    <Compile Include="Models\FakeImg.cs" />
     <Compile Include="Models\License.cs" />
     <Compile Include="Models\Renderer\BaseRenderer.cs" />
     <Compile Include="Models\Renderer\BitBltRenderer.cs" />
     <Compile Include="Models\Renderer\IRenderer.cs" />
     <Compile Include="Models\Renderer\SharedSurfaceRenderer.cs" />
     <Compile Include="Models\RobockClient.cs" />
-    <Compile Include="Models\Thumbnail.cs" />
     <Compile Include="Models\Utils.cs" />
     <Compile Include="Models\Vertex.cs" />
-    <Compile Include="Models\Window.cs" />
     <Compile Include="Models\ProductInfo.cs" />
     <Compile Include="Mvvm\ViewModel.cs" />
     <Compile Include="Services\DpiService.cs" />
@@ -105,7 +102,6 @@
     <Compile Include="ViewModels\AppShellViewModel.cs" />
     <Compile Include="ViewModels\CaptureSourceViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\WindowPickerDialogViewModel.cs" />
-    <Compile Include="ViewModels\WindowViewModel.cs" />
     <Compile Include="ViewModels\Tabs\DesktopViewModel.cs" />
     <Compile Include="ViewModels\LicenseViewModel.cs" />
     <Compile Include="ViewModels\Tabs\AboutTabViewModel.cs" />
