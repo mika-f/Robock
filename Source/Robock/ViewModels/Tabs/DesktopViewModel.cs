@@ -42,9 +42,9 @@ namespace Robock.ViewModels.Tabs
         public ReactiveProperty<double> PreviewWidth { get; set; }
         public ReactiveProperty<double> RenderTop { get; set; }
         public ReactiveProperty<double> RenderLeft { get; set; }
-        public ReactiveProperty<double> RenderHeight { get; set; }
-        public ReactiveProperty<double> RenderWidth { get; set; }
-        public ReactiveProperty<double> RenderScale { get; set; }
+        public ReactiveProperty<double> RenderHeight { get; }
+        public ReactiveProperty<double> RenderWidth { get; }
+        public ReactiveProperty<double> RenderScale { get; }
 
         public ReactiveCommand ApplyWallpaperCommand { get; }
         public ReactiveCommand DiscardWallpaperCommand { get; }
@@ -53,7 +53,6 @@ namespace Robock.ViewModels.Tabs
 
         public ReadOnlyReactiveProperty<IRenderer> Renderer { get; }
         public ReadOnlyReactiveProperty<string> Wallpaper { get; }
-        public ReadOnlyReactiveProperty<bool> IsSelectedWindow { get; }
 
         public DesktopViewModel(Desktop desktop, IDialogService dialogService)
             : base($":Desktop: Desktop {desktop.No}")
@@ -88,7 +87,7 @@ namespace Robock.ViewModels.Tabs
             {
                 CaptureSource.Select(w => w != null),
                 desktop.ObserveProperty(w => w.IsConnecting).Select(w => !w)
-            }.CombineLatest().Select(w => w.All(v => v)).ToReactiveCommand();
+            }.CombineLatest().Select(w => w.All(v => v)).ToReactiveCommand().AddTo(this);
             ApplyWallpaperCommand.Subscribe(() =>
             {
                 // TODO
@@ -97,13 +96,16 @@ namespace Robock.ViewModels.Tabs
             {
                 CaptureSource.Select(w => w != null),
                 desktop.ObserveProperty(w => w.IsConnecting)
-            }.CombineLatest().Select(w => w.All(v => v)).ToReactiveCommand();
+            }.CombineLatest().Select(w => w.All(v => v)).ToReactiveCommand().AddTo(this);
             DiscardWallpaperCommand.Subscribe(() => Task.Run(async () => await _desktop.DiscardWallpaper())).AddTo(this);
             SelectCaptureSourceCommand = new ReactiveCommand();
             SelectCaptureSourceCommand.Subscribe(_ =>
             {
-                //
-                dialogService.ShowDialog(nameof(WindowPickerDialog), new DialogParameters(), result => { CaptureSource.Value = result.Parameters.GetValue<ICaptureSource>("CaptureSource"); });
+                dialogService.ShowDialog(nameof(WindowPickerDialog), new DialogParameters(), r =>
+                {
+                    if(r.Parameters.ContainsKey("CaptureSource"))
+                    CaptureSource.Value = r.Parameters.GetValue<ICaptureSource>("CaptureSource");
+                });
             }).AddTo(this);
             ClearSelectCommand = CaptureSource.Select(w => w != null).ToReactiveCommand();
             ClearSelectCommand.Subscribe(_ => CaptureSource.Value = null).AddTo(this);
