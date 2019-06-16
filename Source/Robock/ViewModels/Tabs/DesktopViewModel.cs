@@ -11,6 +11,7 @@ using Reactive.Bindings.Extensions;
 
 using Robock.Extensions;
 using Robock.Models;
+using Robock.Models.CaptureSources;
 using Robock.Models.Renderer;
 using Robock.Views.Dialogs;
 
@@ -21,12 +22,21 @@ namespace Robock.ViewModels.Tabs
         private const double Scale = 15;
 
         private readonly Desktop _desktop;
-        private readonly IDialogService _dialogService;
         private readonly double _offsetX;
         private readonly double _offsetY;
 
+        public string DesktopName => $"Desktop {_desktop.No}";
+        public double Width => _desktop.Width;
+        public double Height => _desktop.Height;
+        public string Resolution => $"{_desktop.Width}x{_desktop.Height}";
+        public double VirtualScreenX => (_offsetX + _desktop.X) / Scale;
+        public double VirtualScreenY => (_offsetY + _desktop.Y) / Scale;
+        public double VirtualScreenHeight => _desktop.Height / Scale;
+        public double VirtualScreenWidth => _desktop.Width / Scale;
+
         public ReactiveProperty<bool> IsSelected { get; }
-        public ReactiveProperty<WindowViewModel> SelectedWindow { get; }
+        public ReactiveProperty<ICaptureSource> CaptureSource { get; }
+        public ReadOnlyReactiveProperty<bool> IsCaptureSourceSelected { get; }
         public ReadOnlyReactiveProperty<string> CaptureSourceName { get; }
         public ReactiveProperty<double> PreviewHeight { get; set; }
         public ReactiveProperty<double> PreviewWidth { get; set; }
@@ -41,14 +51,6 @@ namespace Robock.ViewModels.Tabs
         public ReactiveCommand SelectCaptureSourceCommand { get; }
         public ReactiveCommand ClearSelectCommand { get; }
 
-        public string DesktopName => $"Desktop {_desktop.No}";
-        public double Width => _desktop.Width;
-        public double Height => _desktop.Height;
-        public string Resolution => $"{_desktop.Width}x{_desktop.Height}";
-        public double VirtualScreenX => (_offsetX + _desktop.X) / Scale;
-        public double VirtualScreenY => (_offsetY + _desktop.Y) / Scale;
-        public double VirtualScreenHeight => _desktop.Height / Scale;
-        public double VirtualScreenWidth => _desktop.Width / Scale;
         public ReadOnlyReactiveProperty<IRenderer> Renderer { get; }
         public ReadOnlyReactiveProperty<string> Wallpaper { get; }
         public ReadOnlyReactiveProperty<bool> IsSelectedWindow { get; }
@@ -57,9 +59,6 @@ namespace Robock.ViewModels.Tabs
             : base($":Desktop: Desktop {desktop.No}")
         {
             _desktop = desktop;
-            _dialogService = dialogService;
-
-            // 仮想スクリーン周りの計算
             _offsetX = (SystemParameters.VirtualScreenLeft < 0 ? -1 : 1) * SystemParameters.VirtualScreenLeft;
             _offsetY = (SystemParameters.VirtualScreenTop < 0 ? -1 : 1) * SystemParameters.VirtualScreenTop;
 
@@ -79,15 +78,15 @@ namespace Robock.ViewModels.Tabs
              .ToReactiveProperty().AddTo(this);
             Wallpaper = _desktop.ObserveProperty(w => w.Wallpaper).ToReadOnlyReactiveProperty().AddTo(this);
             IsSelected = new ReactiveProperty<bool>(desktop.IsPrimary);
-            SelectedWindow = new ReactiveProperty<WindowViewModel>();
-            CaptureSourceName = SelectedWindow.Select(w => w?.Title?.Value ?? "キャプチャーするウィンドウを選択してください").ToReadOnlyReactiveProperty().AddTo(this);
-            IsSelectedWindow = SelectedWindow.Select(w => w != null).ToReadOnlyReactiveProperty().AddTo(this);
-            Renderer = IsSelectedWindow.Do(_ => Renderer?.Value?.Dispose())
-                                       .Select(w => w ? (IRenderer) new BitBltRenderer(SelectedWindow.Value.Handle) : null)
-                                       .ToReadOnlyReactiveProperty().AddTo(this);
+            CaptureSource = new ReactiveProperty<ICaptureSource>();
+            IsCaptureSourceSelected = CaptureSource.Select(w => w != null).ToReadOnlyReactiveProperty().AddTo(this);
+            CaptureSourceName = CaptureSource.Select(w => w?.Name ?? "キャプチャーするウィンドウを選択してください").ToReadOnlyReactiveProperty().AddTo(this);
+            Renderer = IsCaptureSourceSelected.Do(_ => Renderer?.Value?.Dispose())
+                                              .Select(w => w ? (IRenderer) new BitBltRenderer(IntPtr.Zero) : null)
+                                              .ToReadOnlyReactiveProperty().AddTo(this);
             ApplyWallpaperCommand = new[]
             {
-                SelectedWindow.Select(w => w != null),
+                CaptureSource.Select(w => w != null),
                 desktop.ObserveProperty(w => w.IsConnecting).Select(w => !w)
             }.CombineLatest().Select(w => w.All(v => v)).ToReactiveCommand();
             ApplyWallpaperCommand.Subscribe(() =>
@@ -96,7 +95,7 @@ namespace Robock.ViewModels.Tabs
             }).AddTo(this);
             DiscardWallpaperCommand = new[]
             {
-                SelectedWindow.Select(w => w != null),
+                CaptureSource.Select(w => w != null),
                 desktop.ObserveProperty(w => w.IsConnecting)
             }.CombineLatest().Select(w => w.All(v => v)).ToReactiveCommand();
             DiscardWallpaperCommand.Subscribe(() => Task.Run(async () => await _desktop.DiscardWallpaper())).AddTo(this);
@@ -104,13 +103,10 @@ namespace Robock.ViewModels.Tabs
             SelectCaptureSourceCommand.Subscribe(_ =>
             {
                 //
-                _dialogService.ShowDialog(nameof(WindowPickerDialog), new DialogParameters(), result =>
-                {
-                    //
-                });
+                dialogService.ShowDialog(nameof(WindowPickerDialog), new DialogParameters(), result => { CaptureSource.Value = result.Parameters.GetValue<ICaptureSource>("CaptureSource"); });
             }).AddTo(this);
-            ClearSelectCommand = SelectedWindow.Select(w => w != null).ToReactiveCommand();
-            ClearSelectCommand.Subscribe(_ => SelectedWindow.Value = null).AddTo(this);
+            ClearSelectCommand = CaptureSource.Select(w => w != null).ToReactiveCommand();
+            ClearSelectCommand.Subscribe(_ => CaptureSource.Value = null).AddTo(this);
         }
     }
 }

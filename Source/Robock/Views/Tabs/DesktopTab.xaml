@@ -54,7 +54,7 @@
                     </Canvas.Clip>
                     <Thumb Canvas.Left="{Binding RenderLeft.Value, Mode=OneWayToSource}"
                            Canvas.Top="{Binding RenderTop.Value, Mode=OneWayToSource}"
-                           Visibility="{Binding IsSelectedWindow.Value, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                           Visibility="{Binding IsCaptureSourceSelected.Value, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <i:Interaction.Behaviors>
                             <behaviors:CanvasBindingBehavior Left="{Binding RenderLeft.Value, Mode=OneWay}" Top="{Binding RenderTop.Value, Mode=OneWay}" />
                             <behaviors:DraggableControlOnCanvasBehavior />
@@ -112,7 +112,9 @@
                                              Height="25"
                                              HorizontalAlignment="Stretch"
                                              IsEnabled="False"
-                                             Text="{Binding CaptureSourceName.Value, Mode=OneWay}" />
+                                             Text="{Binding CaptureSourceName.Value, Mode=OneWay}"
+                                             ToolTip="{Binding CaptureSourceName.Value, Mode=OneWay}"
+                                             ToolTipService.ShowOnDisabled="{Binding IsCaptureSourceSelected.Value, Mode=OneWay}" />
                         <Button Grid.Column="1"
                                 Height="25"
                                 Command="{Binding SelectCaptureSourceCommand}">
