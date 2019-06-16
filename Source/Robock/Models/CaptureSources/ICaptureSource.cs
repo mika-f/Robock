@@ -14,6 +14,8 @@ namespace Robock.Models.CaptureSources
 
         int Width { get; }
 
-        void RenderPreview(IntPtr hDest, Rect position, Rect available);
+        void RenderThumbnail(IntPtr hDest, Rect position, Rect available);
+
+        // void RenderPreview(IRenderer);
     }
 }

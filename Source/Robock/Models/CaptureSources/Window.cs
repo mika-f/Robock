@@ -48,7 +48,7 @@ namespace Robock.Models.CaptureSources
         public int Height { get; }
         public int Width { get; }
 
-        public void RenderPreview(IntPtr hDest, Rect position, Rect available)
+        public void RenderThumbnail(IntPtr hDest, Rect position, Rect available)
         {
             if (position.IsEmpty || available.IsEmpty || hDest == IntPtr.Zero)
                 return;

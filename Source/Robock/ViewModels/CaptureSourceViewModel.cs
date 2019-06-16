@@ -41,7 +41,7 @@ namespace Robock.ViewModels
         {
             if (WindowHandle == null || RenderPosition == null || DisplayPosition == null)
                 return;
-            CaptureSource.RenderPreview(WindowHandle.Value, RenderPosition.Value, DisplayPosition.Value);
+            CaptureSource.RenderThumbnail(WindowHandle.Value, RenderPosition.Value, DisplayPosition.Value);
         }
     }
 }
