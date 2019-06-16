@@ -35,7 +35,11 @@ namespace Robock.Models
             InitializeComObjects();
         }
 
-        public void Dispose() { }
+        public void Dispose()
+        {
+            foreach (var source in CaptureSources)
+                source.Dispose();
+        }
 
         public void FetchAll()
         {
