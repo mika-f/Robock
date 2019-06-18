@@ -32,10 +32,10 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="1"
-                           Margin="4,0,0,0"
+                           Margin="10,0,0,0"
                            VerticalAlignment="Center"
                            FontFamily="Meiryo UI"
-                           FontSize="16"
+                           FontSize="12"
                            Foreground="{DynamicResource ForegroundBrushKey}"
                            Text="{Binding Title, Mode=OneWay}"
                            TextTrimming="CharacterEllipsis" />
