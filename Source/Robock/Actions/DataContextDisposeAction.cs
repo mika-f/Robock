@@ -3,7 +3,7 @@ using System.Windows;
 
 using Microsoft.Xaml.Behaviors;
 
-namespace Robock.Shared.Actions
+namespace Robock.Actions
 {
     public class DataContextDisposeAction : TriggerAction<FrameworkElement>
     {

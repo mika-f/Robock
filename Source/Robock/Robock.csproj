@@ -69,6 +69,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Actions\DataContextDisposeAction.cs" />
     <Compile Include="Behaviors\AdjustControlSizeToParentBehavior.cs" />
     <Compile Include="Behaviors\AdjustRectSizeByParentControlBehavior.cs" />
     <Compile Include="Behaviors\BindingAbsolutePositionToViewModelBehavior.cs" />

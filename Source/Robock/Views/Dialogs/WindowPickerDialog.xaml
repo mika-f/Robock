@@ -1,7 +1,7 @@
 ﻿<UserControl x:Class="Robock.Views.Dialogs.WindowPickerDialog"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:actions="clr-namespace:Robock.Shared.Actions;assembly=Robock.Shared"
+             xmlns:actions="clr-namespace:Robock.Actions"
              xmlns:behaviors="clr-namespace:Robock.Behaviors"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
