@@ -83,7 +83,7 @@ namespace Robock.Models.Renderer
             if (_device == null)
                 return;
 
-            if (isNewSurface)
+            if (isNewSurface || _renderTargetView == null)
             {
                 Utilities.Dispose(ref _renderTargetView);
                 Device.ImmediateContext.OutputMerger.SetRenderTargets(null, (RenderTargetView) null);
