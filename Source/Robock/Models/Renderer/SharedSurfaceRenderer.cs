@@ -1,24 +1,41 @@
 ﻿using System;
 
 using Robock.Interop.Win32;
+using Robock.Models.CaptureSources;
 
 using SharpDX.Direct3D11;
 
 namespace Robock.Models.Renderer
 {
-    internal class SharedSurfaceRenderer : BaseRenderer
+    internal class SharedSurfaceRenderer : RendererBase
     {
-        private readonly IntPtr _hWnd;
+        private IntPtr _hWnd;
+        public override string Name => "DWM Shared Surface";
+        public override uint Priority => 3;
+        public override bool IsSupported => true;
+        public override bool HasOwnWindowPicker => false;
 
-        public SharedSurfaceRenderer(IntPtr hWnd)
+        public override void ConfigureCaptureSource(params object[] parameters)
         {
-            _hWnd = hWnd;
+            if (parameters.Length != 1)
+                throw new InvalidOperationException();
+            _hWnd = (IntPtr) parameters[0];
+        }
+
+        public override ICaptureSource ShowWindowPicker()
+        {
+            throw new InvalidOperationException();
         }
 
         protected override Texture2D TryGetNextFrameAsTexture2D()
         {
             NativeMethods.DwmGetDxSharedSurface(_hWnd, out var phSurface, out _, out _, out _, out _);
             return Device.OpenSharedResource<Texture2D>(phSurface);
+        }
+
+        protected override void ReleaseInternal()
+        {
+            _hWnd = IntPtr.Zero;
         }
     }
 }

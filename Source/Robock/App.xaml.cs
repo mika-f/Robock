@@ -8,6 +8,7 @@ using MetroRadiance.UI;
 using Prism.Ioc;
 using Prism.Unity;
 
+using Robock.Models;
 using Robock.Services;
 using Robock.Services.Interfaces;
 using Robock.ViewModels.Dialogs;
@@ -34,6 +35,7 @@ namespace Robock
         {
             containerRegistry.Register<IDpiService, DpiService>();
             containerRegistry.Register<IStatusService, StatusService>();
+            containerRegistry.RegisterSingleton<RenderManager>();
             containerRegistry.RegisterDialogWindow<MetroDialogWindow>();
             containerRegistry.RegisterDialog<WindowPickerDialog, WindowPickerDialogViewModel>(nameof(WindowPickerDialog));
         }

@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 
 using Robock.Interop.Win32;
+using Robock.Models.CaptureSources;
 
 using SharpDX;
 using SharpDX.Direct3D11;
@@ -11,22 +12,35 @@ using Rectangle = System.Drawing.Rectangle;
 
 namespace Robock.Models.Renderer
 {
-    internal class BitBltRenderer : BaseRenderer
+    internal class BitBltRenderer : RendererBase
     {
-        private readonly IntPtr _hWnd;
+        private IntPtr _hWnd;
+        public override string Name => "BitBlt";
+        public override uint Priority => 2;
+        public override bool IsSupported => true;
+        public override bool HasOwnWindowPicker => false;
 
-        public BitBltRenderer(IntPtr hWnd)
+        public override void ConfigureCaptureSource(params object[] parameters)
         {
-            _hWnd = hWnd;
+            if (parameters.Length != 1)
+                throw new InvalidOperationException();
+            _hWnd = (IntPtr) parameters[0];
+        }
+
+        public override ICaptureSource ShowWindowPicker()
+        {
+            throw new InvalidOperationException();
         }
 
         protected override Texture2D TryGetNextFrameAsTexture2D()
         {
+            if (_hWnd == IntPtr.Zero)
+                return null;
             var hdcSrc = NativeMethods.GetDCEx(_hWnd, IntPtr.Zero, DeviceContextValues.Window | DeviceContextValues.Cache | DeviceContextValues.LockWindowUpdate);
             var hdcDest = NativeMethods.CreateCompatibleDC(hdcSrc);
 
             NativeMethods.GetWindowRect(_hWnd, out var rect);
-            var(width, height) = (rect.right - rect.left, rect.bottom - rect.top);
+            var (width, height) = (rect.right - rect.left, rect.bottom - rect.top);
 
             var hBitmap = NativeMethods.CreateCompatibleBitmap(hdcSrc, width, height);
             var hOld = NativeMethods.SelectObject(hdcDest, hBitmap);
@@ -45,6 +59,11 @@ namespace Robock.Models.Renderer
             bitmap.UnlockBits(bits);
 
             return texture2d;
+        }
+
+        protected override void ReleaseInternal()
+        {
+            _hWnd = IntPtr.Zero;
         }
     }
 }

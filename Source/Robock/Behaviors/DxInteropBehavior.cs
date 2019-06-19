@@ -58,6 +58,7 @@ namespace Robock.Behaviors
             if (Parent != null)
                 Parent.SizeChanged -= ParentOnSizeChanged;
             CompositionTarget.Rendering -= CompositionTargetOnRendering;
+            Renderer?.Release();
             AssociatedObject.Dispose();
 
             base.OnDetaching();
@@ -102,15 +103,9 @@ namespace Robock.Behaviors
             var visibility = (Visibility) e.NewValue;
             behavior._isVisible = visibility == Visibility.Visible;
             if (behavior._isVisible)
-            {
-                behavior.Renderer?.Initialize();
                 CompositionTarget.Rendering += behavior.CompositionTargetOnRendering;
-            }
             else
-            {
                 CompositionTarget.Rendering -= behavior.CompositionTargetOnRendering;
-                behavior.Renderer?.Dispose();
-            }
         }
 
         #endregion
@@ -133,13 +128,11 @@ namespace Robock.Behaviors
             if (e.NewValue == null)
             {
                 CompositionTarget.Rendering -= behavior.CompositionTargetOnRendering;
-                behavior.Renderer?.Dispose();
             }
             else
             {
                 if (!behavior._isVisible)
                     return;
-                behavior.Renderer?.Initialize();
                 CompositionTarget.Rendering += behavior.CompositionTargetOnRendering;
             }
         }

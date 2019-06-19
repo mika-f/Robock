@@ -16,7 +16,7 @@ namespace Robock.Models.CaptureSources
 
         void RenderThumbnail(IntPtr hDest, Rect position, Rect available);
 
-        // void RenderPreview(IRenderer);
+        object[] RenderParameters();
 
         // Window 間で同じインスタンス共有できない (Dispose される)
         ICaptureSource Clone();

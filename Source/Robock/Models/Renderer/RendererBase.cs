@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Robock.Models.CaptureSources;
+
 using SharpDX;
 using SharpDX.D3DCompiler;
 using SharpDX.Direct3D;
@@ -13,7 +15,7 @@ using Resource = SharpDX.DXGI.Resource;
 
 namespace Robock.Models.Renderer
 {
-    internal abstract class BaseRenderer : IRenderer
+    internal abstract class RendererBase : IRenderer
     {
         private Device _device;
         private InputLayout _layout;
@@ -26,39 +28,33 @@ namespace Robock.Models.Renderer
 
         protected Device Device => _device;
 
-        public void Dispose()
-        {
-            Utilities.Dispose(ref _renderTargetView);
-            Utilities.Dispose(ref _shaderResourceView);
-            Utilities.Dispose(ref _texture2D);
-            Utilities.Dispose(ref _vertexes);
-            Utilities.Dispose(ref _layout);
-            Utilities.Dispose(ref _pixelShader);
-            Utilities.Dispose(ref _vertexShader);
+        public abstract string Name { get; }
+        public abstract uint Priority { get; }
+        public abstract bool IsSupported { get; }
+        public abstract bool HasOwnWindowPicker { get; }
 
-            _device.ImmediateContext.ClearState();
-            _device.ImmediateContext.Dispose();
-            Utilities.Dispose(ref _device);
-        }
+        public abstract void ConfigureCaptureSource(params object[] parameters);
 
-        public void Initialize()
+        public abstract ICaptureSource ShowWindowPicker();
+
+        public void InitializeRenderer()
         {
             var featureLevels = new[] { FeatureLevel.Level_12_1, FeatureLevel.Level_12_0, FeatureLevel.Level_11_1, FeatureLevel.Level_11_0 };
             _device = new Device(DriverType.Hardware, DeviceCreationFlags.BgraSupport, featureLevels);
 
             using var vertexShaderByteCode = ShaderBytecode.CompileFromFile("./Shader.fx", "VS", "vs_5_0");
-            _vertexShader = new VertexShader(_device, vertexShaderByteCode);
+            _vertexShader = new VertexShader(Device, vertexShaderByteCode);
 
             using var pixelShaderByteCode = ShaderBytecode.CompileFromFile("./Shader.fx", "PS", "ps_5_0");
-            _pixelShader = new PixelShader(_device, pixelShaderByteCode);
+            _pixelShader = new PixelShader(Device, pixelShaderByteCode);
 
-            _layout = new InputLayout(_device, vertexShaderByteCode, new[]
+            _layout = new InputLayout(Device, vertexShaderByteCode, new[]
             {
                 new InputElement("POSITION", 0, Format.R32G32B32_Float, 0, 0),
                 new InputElement("TEXCOORD", 0, Format.R32G32_Float, 12, 0)
             });
 
-            _vertexes = Buffer.Create(_device, BindFlags.VertexBuffer, new[]
+            _vertexes = Buffer.Create(Device, BindFlags.VertexBuffer, new[]
             {
                 new Vertex { Position = new RawVector3(-1.0f, 1.0f, 0.5f), TexCoord = new RawVector2(0.0f, 0.0f) },
                 new Vertex { Position = new RawVector3(1.0f, 1.0f, 0.5f), TexCoord = new RawVector2(1.0f, 0.0f) },
@@ -74,20 +70,23 @@ namespace Robock.Models.Renderer
                 Filter = Filter.MinMagMipLinear
             };
 
-            _device.ImmediateContext.InputAssembler.InputLayout = _layout;
-            _device.ImmediateContext.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleStrip;
-            _device.ImmediateContext.InputAssembler.SetVertexBuffers(0, new VertexBufferBinding(_vertexes, Utilities.SizeOf<Vertex>(), 0));
-            _device.ImmediateContext.VertexShader.Set(_vertexShader);
-            _device.ImmediateContext.PixelShader.SetSampler(0, new SamplerState(_device, samplerStateDescription));
-            _device.ImmediateContext.PixelShader.Set(_pixelShader);
+            Device.ImmediateContext.InputAssembler.InputLayout = _layout;
+            Device.ImmediateContext.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleStrip;
+            Device.ImmediateContext.InputAssembler.SetVertexBuffers(0, new VertexBufferBinding(_vertexes, Utilities.SizeOf<Vertex>(), 0));
+            Device.ImmediateContext.VertexShader.Set(_vertexShader);
+            Device.ImmediateContext.PixelShader.SetSampler(0, new SamplerState(Device, samplerStateDescription));
+            Device.ImmediateContext.PixelShader.Set(_pixelShader);
         }
 
         public void Render(IntPtr hSurface, bool isNewSurface)
         {
+            if (_device == null)
+                return;
+
             if (isNewSurface)
             {
                 Utilities.Dispose(ref _renderTargetView);
-                _device.ImmediateContext.OutputMerger.SetRenderTargets(null, (RenderTargetView) null);
+                Device.ImmediateContext.OutputMerger.SetRenderTargets(null, (RenderTargetView) null);
                 InitializeRenderTarget(hSurface);
             }
 
@@ -101,22 +100,43 @@ namespace Robock.Models.Renderer
                 Utilities.Dispose(ref _texture2D);
                 Utilities.Dispose(ref _shaderResourceView);
 
-                _texture2D = new Texture2D(_device, CreateTexture2DDescription(texture2d.Description.Width, texture2d.Description.Height));
-                _shaderResourceView = new ShaderResourceView(_device, _texture2D);
-                _device.ImmediateContext.PixelShader.SetShaderResource(0, _shaderResourceView);
+                _texture2D = new Texture2D(Device, CreateTexture2DDescription(texture2d.Description.Width, texture2d.Description.Height));
+                _shaderResourceView = new ShaderResourceView(Device, _texture2D);
+                Device.ImmediateContext.PixelShader.SetShaderResource(0, _shaderResourceView);
             }
 
-            _device.ImmediateContext.ClearRenderTargetView(_renderTargetView, new RawColor4(1, 1, 1, 1));
-            _device.ImmediateContext.CopyResource(texture2d, _texture2D);
+            Device.ImmediateContext.ClearRenderTargetView(_renderTargetView, new RawColor4(1, 1, 1, 1));
+            Device.ImmediateContext.CopyResource(texture2d, _texture2D);
 
-            _device.ImmediateContext.Draw(4, 0);
-            _device.ImmediateContext.Flush();
+            Device.ImmediateContext.Draw(4, 0);
+            Device.ImmediateContext.Flush();
         }
+
+        public void Release()
+        {
+            ReleaseInternal();
+
+            Utilities.Dispose(ref _renderTargetView);
+            Utilities.Dispose(ref _shaderResourceView);
+            Utilities.Dispose(ref _texture2D);
+            Utilities.Dispose(ref _vertexes);
+            Utilities.Dispose(ref _layout);
+            Utilities.Dispose(ref _pixelShader);
+            Utilities.Dispose(ref _vertexShader);
+
+            _device?.ImmediateContext?.ClearState();
+            _device?.ImmediateContext?.Dispose();
+            Utilities.Dispose(ref _device);
+        }
+
+        protected abstract Texture2D TryGetNextFrameAsTexture2D();
+
+        protected abstract void ReleaseInternal();
 
         private void InitializeRenderTarget(IntPtr hSurface)
         {
             using var resource = ComObject.QueryInterfaceOrNull<Resource>(hSurface);
-            using var texture2D = _device.OpenSharedResource<Texture2D>(resource.SharedHandle);
+            using var texture2D = Device.OpenSharedResource<Texture2D>(resource.SharedHandle);
 
             var renderTargetViewDescription = new RenderTargetViewDescription
             {
@@ -124,10 +144,10 @@ namespace Robock.Models.Renderer
                 Dimension = RenderTargetViewDimension.Texture2D,
                 Texture2D = { MipSlice = 0 }
             };
-            _renderTargetView = new RenderTargetView(_device, texture2D, renderTargetViewDescription);
+            _renderTargetView = new RenderTargetView(Device, texture2D, renderTargetViewDescription);
 
-            _device.ImmediateContext.Rasterizer.SetViewport(0, 0, texture2D.Description.Width, texture2D.Description.Height);
-            _device.ImmediateContext.OutputMerger.SetRenderTargets(_renderTargetView);
+            Device.ImmediateContext.Rasterizer.SetViewport(0, 0, texture2D.Description.Width, texture2D.Description.Height);
+            Device.ImmediateContext.OutputMerger.SetRenderTargets(_renderTargetView);
         }
 
         protected Texture2DDescription CreateTexture2DDescription(int width, int height)
@@ -145,7 +165,5 @@ namespace Robock.Models.Renderer
                 Usage = ResourceUsage.Default
             };
         }
-
-        protected abstract Texture2D TryGetNextFrameAsTexture2D();
     }
 }
