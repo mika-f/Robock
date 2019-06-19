@@ -1,14 +1,19 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Windows;
+
+using Windows.Graphics.Capture;
+
+using Prism.Mvvm;
 
 namespace Robock.Models.CaptureSources
 {
-    public class InteropWindow : ICaptureSource
+    public class InteropWindow : BindableBase, ICaptureSource
     {
-        public InteropWindow(string name)
+        private readonly GraphicsCaptureItem _captureItem;
+
+        public InteropWindow(GraphicsCaptureItem captureItem)
         {
-            Name = name;
+            _captureItem = captureItem;
         }
 
         public void Dispose()
@@ -16,9 +21,7 @@ namespace Robock.Models.CaptureSources
             // nothing to do
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public string Name { get; }
+        public string Name => _captureItem.DisplayName;
         public bool IsAvailablePreview => false;
         public int Height => 0;
         public int Width => 0;
@@ -30,12 +33,12 @@ namespace Robock.Models.CaptureSources
 
         public object[] RenderParameters()
         {
-            return new object[] { };
+            return new object[] { _captureItem };
         }
 
         public ICaptureSource Clone()
         {
-            return new InteropWindow(Name);
+            return new InteropWindow(_captureItem);
         }
     }
 }

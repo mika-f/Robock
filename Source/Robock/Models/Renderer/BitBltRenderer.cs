@@ -32,6 +32,11 @@ namespace Robock.Models.Renderer
             throw new InvalidOperationException();
         }
 
+        public override void ReleaseCaptureSource()
+        {
+            _hWnd = IntPtr.Zero;
+        }
+
         protected override Texture2D TryGetNextFrameAsTexture2D()
         {
             if (_hWnd == IntPtr.Zero)
@@ -59,11 +64,6 @@ namespace Robock.Models.Renderer
             bitmap.UnlockBits(bits);
 
             return texture2d;
-        }
-
-        protected override void ReleaseInternal()
-        {
-            _hWnd = IntPtr.Zero;
         }
     }
 }

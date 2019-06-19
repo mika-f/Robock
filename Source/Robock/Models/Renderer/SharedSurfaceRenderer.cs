@@ -27,15 +27,15 @@ namespace Robock.Models.Renderer
             throw new InvalidOperationException();
         }
 
+        public override void ReleaseCaptureSource()
+        {
+            _hWnd = IntPtr.Zero;
+        }
+
         protected override Texture2D TryGetNextFrameAsTexture2D()
         {
             NativeMethods.DwmGetDxSharedSurface(_hWnd, out var phSurface, out _, out _, out _, out _);
             return Device.OpenSharedResource<Texture2D>(phSurface);
-        }
-
-        protected override void ReleaseInternal()
-        {
-            _hWnd = IntPtr.Zero;
         }
     }
 }

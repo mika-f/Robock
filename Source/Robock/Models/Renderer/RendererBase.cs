@@ -112,9 +112,11 @@ namespace Robock.Models.Renderer
             Device.ImmediateContext.Flush();
         }
 
+        public abstract void ReleaseCaptureSource();
+
         public void Release()
         {
-            ReleaseInternal();
+            ReleaseCaptureSource();
 
             Utilities.Dispose(ref _renderTargetView);
             Utilities.Dispose(ref _shaderResourceView);
@@ -130,8 +132,6 @@ namespace Robock.Models.Renderer
         }
 
         protected abstract Texture2D TryGetNextFrameAsTexture2D();
-
-        protected abstract void ReleaseInternal();
 
         private void InitializeRenderTarget(IntPtr hSurface)
         {

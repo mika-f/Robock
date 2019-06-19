@@ -35,6 +35,10 @@ namespace Robock.Models.Renderer
 
         public override void ConfigureCaptureSource(params object[] parameters)
         {
+            if (parameters.Length != 1)
+                throw new InvalidOperationException();
+
+            _captureItem = parameters[0] as GraphicsCaptureItem;
             var hr = NativeMethods.CreateDirect3D11DeviceFromDXGIDevice(Device.NativePointer, out var pUnknown);
             if (hr != 0)
                 throw new InvalidOperationException();
@@ -57,8 +61,15 @@ namespace Robock.Models.Renderer
             var initializer = (IInitializeWithWindow) (object) capturePicker;
 
             initializer.Initialize(owner);
-            _captureItem = capturePicker.PickSingleItemAsync().AsTask().Result;
-            return _captureItem == null ? null : new InteropWindow(_captureItem.DisplayName);
+            var captureItem = capturePicker.PickSingleItemAsync().AsTask().Result;
+            return captureItem == null ? null : new InteropWindow(captureItem);
+        }
+
+        public override void ReleaseCaptureSource()
+        {
+            Utilities.Dispose(ref _captureSession);
+            Utilities.Dispose(ref _captureFramePool);
+            _captureItem = null;
         }
 
         protected override Texture2D TryGetNextFrameAsTexture2D()
@@ -76,13 +87,6 @@ namespace Robock.Models.Renderer
             Device.ImmediateContext.CopyResource(surfaceTexture, texture2d);
 
             return texture2d;
-        }
-
-        protected override void ReleaseInternal()
-        {
-            Utilities.Dispose(ref _captureSession);
-            Utilities.Dispose(ref _captureFramePool);
-            _captureItem = null;
         }
     }
 }

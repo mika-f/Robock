@@ -44,9 +44,14 @@ namespace Robock.Models.Renderer
         void InitializeRenderer();
 
         /// <summary>
-        ///     render capture surface to shared surface, last phase for rendering, called by DxInterop
+        ///     render capture surface to shared surface, 3rd phase for rendering, called by DxInterop
         /// </summary>
         void Render(IntPtr hSurface, bool isNewSurface);
+
+        /// <summary>
+        ///     releases capture source, last phase for rendering, called by ViewModel
+        /// </summary>
+        void ReleaseCaptureSource();
 
         /// <summary>
         ///     same as dispose, but the instance should be reusable
