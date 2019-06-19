@@ -70,7 +70,7 @@
                                             <dxinterop:D3D11Image>
                                                 <i:Interaction.Behaviors>
                                                     <behaviors:DxInteropBehavior Parent="{Binding RelativeSource={RelativeSource AncestorType=Border}}"
-                                                                                 Renderer="{Binding Renderer.Value, Mode=OneWay}"
+                                                                                 Renderer="{Binding SelectedRenderer.Value, Mode=OneWay}"
                                                                                  State="{Binding Path=Visibility, RelativeSource={RelativeSource AncestorType=Thumb}}" />
                                                 </i:Interaction.Behaviors>
                                             </dxinterop:D3D11Image>
@@ -251,8 +251,15 @@
                     <metro:PromptComboBox Grid.Row="0"
                                           Grid.Column="1"
                                           Height="25"
+                                          ItemsSource="{Binding Renderers, Mode=OneWay}"
                                           Prompt="描画形式を選択してください"
+                                          SelectedItem="{Binding SelectedRenderer.Value, Mode=TwoWay}"
                                           ToolTipService.ShowOnDisabled="True">
+                        <metro:PromptComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}" />
+                            </DataTemplate>
+                        </metro:PromptComboBox.ItemTemplate>
                         <metro:PromptComboBox.ToolTip>
                             <TextBlock>
                                 <!--    -->

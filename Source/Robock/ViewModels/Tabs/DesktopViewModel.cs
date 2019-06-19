@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -44,17 +45,16 @@ namespace Robock.ViewModels.Tabs
         public ReactiveProperty<double> RenderHeight { get; }
         public ReactiveProperty<double> RenderWidth { get; }
         public ReactiveProperty<double> RenderScale { get; }
+        public ObservableCollection<IRenderer> Renderers { get; }
+        public ReactiveProperty<IRenderer> SelectedRenderer { get; }
+        public ReadOnlyReactiveProperty<string> Wallpaper { get; }
 
         public ReactiveCommand ApplyWallpaperCommand { get; }
         public ReactiveCommand DiscardWallpaperCommand { get; }
         public ReactiveCommand SelectCaptureSourceCommand { get; }
         public ReactiveCommand ClearSelectCommand { get; }
 
-        public ReadOnlyReactiveProperty<IRenderer> Renderer { get; }
-        public ReadOnlyReactiveProperty<string> Wallpaper { get; }
-
-        public DesktopViewModel(Desktop desktop, IDialogService dialogService)
-            : base($":Desktop: Desktop {desktop.No}")
+        public DesktopViewModel(Desktop desktop, IDialogService dialogService, RenderManager renderManager) : base($":Desktop: Desktop {desktop.No}")
         {
             _desktop = desktop;
             _offsetX = (SystemParameters.VirtualScreenLeft < 0 ? -1 : 1) * SystemParameters.VirtualScreenLeft;
@@ -77,10 +77,13 @@ namespace Robock.ViewModels.Tabs
             Wallpaper = _desktop.ObserveProperty(w => w.Wallpaper).ToReadOnlyReactiveProperty().AddTo(this);
             IsSelected = new ReactiveProperty<bool>(desktop.IsPrimary);
             CaptureSource = new ReactiveProperty<ICaptureSource>();
+            CaptureSource.Zip(CaptureSource.Skip(1), (x, _) => x).Subscribe(_ => SelectedRenderer.Value?.ReleaseCaptureSource()).AddTo(this);
+            CaptureSource.Where(w => w != null).Subscribe(w => SelectedRenderer.Value.ConfigureCaptureSource(w.RenderParameters())).AddTo(this);
             IsCaptureSourceSelected = CaptureSource.Select(w => w != null).ToReadOnlyReactiveProperty().AddTo(this);
-            Renderer = IsCaptureSourceSelected.Do(_ => Renderer?.Value?.Dispose())
-                                              .Select(w => w ? (IRenderer) new BitBltRenderer(IntPtr.Zero) : null)
-                                              .ToReadOnlyReactiveProperty().AddTo(this);
+            Renderers = new ObservableCollection<IRenderer>(renderManager.Renderers);
+            SelectedRenderer = new ReactiveProperty<IRenderer>(renderManager.Renderers.First());
+            SelectedRenderer.Zip(SelectedRenderer.Skip(1), (x, _) => x).Subscribe(w => w?.Release()).AddTo(this);
+            SelectedRenderer.Subscribe(w => w?.InitializeRenderer()).AddTo(this);
             ApplyWallpaperCommand = new[]
             {
                 CaptureSource.Select(w => w != null),
@@ -96,14 +99,20 @@ namespace Robock.ViewModels.Tabs
                 desktop.ObserveProperty(w => w.IsConnecting)
             }.CombineLatest().Select(w => w.All(v => v)).ToReactiveCommand().AddTo(this);
             DiscardWallpaperCommand.Subscribe(() => Task.Run(async () => await _desktop.DiscardWallpaper())).AddTo(this);
-            SelectCaptureSourceCommand = new ReactiveCommand();
+            SelectCaptureSourceCommand = SelectedRenderer.Select(w => w != null).ToReactiveCommand();
             SelectCaptureSourceCommand.Subscribe(_ =>
             {
-                dialogService.ShowDialog(nameof(WindowPickerDialog), new DialogParameters(), r =>
-                {
-                    if (r.Parameters.ContainsKey("CaptureSource"))
-                        CaptureSource.Value = r.Parameters.GetValue<ICaptureSource>("CaptureSource");
-                });
+                // Logic では？
+                if (SelectedRenderer.Value.HasOwnWindowPicker)
+                    CaptureSource.Value = SelectedRenderer.Value.ShowWindowPicker();
+                else
+                    dialogService.ShowDialog(nameof(WindowPickerDialog), new DialogParameters(), r =>
+                    {
+                        if (r.Parameters.ContainsKey("CaptureSource"))
+                            CaptureSource.Value = r.Parameters.GetValue<ICaptureSource>("CaptureSource");
+                        else
+                            CaptureSource.Value = null;
+                    });
             }).AddTo(this);
             ClearSelectCommand = CaptureSource.Select(w => w != null).ToReactiveCommand();
             ClearSelectCommand.Subscribe(_ => CaptureSource.Value = null).AddTo(this);

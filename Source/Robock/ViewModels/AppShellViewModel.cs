@@ -22,7 +22,7 @@ namespace Robock.ViewModels
         public ReactiveCollection<TabViewModel> Tabs { get; }
         public VirtualScreenViewModel VirtualScreen { get; }
 
-        public AppShellViewModel(IDialogService dialogService, IDpiService dpiService, IStatusService statusService)
+        public AppShellViewModel(IDialogService dialogService, IDpiService dpiService, IStatusService statusService, RenderManager renderManager)
         {
             var desktopManager = new DesktopManager().AddTo(this);
 
@@ -41,7 +41,7 @@ namespace Robock.ViewModels
                 if (w.Action != NotifyCollectionChangedAction.Add || !(w.NewItems[0] is Desktop desktop))
                     return;
 
-                var viewModel = new DesktopViewModel(desktop, dialogService).AddTo(this);
+                var viewModel = new DesktopViewModel(desktop, dialogService, renderManager).AddTo(this);
                 Tabs.Insert(desktop.No - 1, viewModel);
                 VirtualScreen.Desktops.Insert(desktop.No - 1, viewModel);
                 if (desktop.IsPrimary)
