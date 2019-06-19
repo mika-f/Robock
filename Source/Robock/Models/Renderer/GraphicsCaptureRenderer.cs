@@ -39,6 +39,9 @@ namespace Robock.Models.Renderer
                 throw new InvalidOperationException();
 
             _captureItem = parameters[0] as GraphicsCaptureItem;
+            if (_captureItem == null)
+                throw new InvalidOperationException();
+
             var hr = NativeMethods.CreateDirect3D11DeviceFromDXGIDevice(Device.NativePointer, out var pUnknown);
             if (hr != 0)
                 throw new InvalidOperationException();

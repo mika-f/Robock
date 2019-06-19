@@ -83,7 +83,11 @@ namespace Robock.ViewModels.Tabs
             Renderers = new ObservableCollection<IRenderer>(renderManager.Renderers);
             SelectedRenderer = new ReactiveProperty<IRenderer>(renderManager.Renderers.First());
             SelectedRenderer.Zip(SelectedRenderer.Skip(1), (x, _) => x).Subscribe(w => w?.Release()).AddTo(this);
-            SelectedRenderer.Subscribe(w => w?.InitializeRenderer()).AddTo(this);
+            SelectedRenderer.Subscribe(w =>
+            {
+                CaptureSource.Value = null;
+                w?.InitializeRenderer();
+            }).AddTo(this);
             ApplyWallpaperCommand = new[]
             {
                 CaptureSource.Select(w => w != null),
