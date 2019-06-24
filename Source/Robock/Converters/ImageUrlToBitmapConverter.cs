@@ -21,6 +21,7 @@ namespace Robock.Converters
             bitmap.CacheOption = BitmapCacheOption.OnLoad;
             bitmap.CreateOptions = BitmapCreateOptions.None;
             bitmap.UriSource = new Uri(path);
+            bitmap.DecodePixelWidth = 960;
             bitmap.EndInit();
             bitmap.Freeze();
 
