@@ -80,6 +80,7 @@
     <Compile Include="Behaviors\ResetCanvasPositionOnVisibilityChangedBehavior.cs" />
     <Compile Include="Behaviors\ScrollToTopBehavior.cs" />
     <Compile Include="Converters\AbsoluteToRelativeConverter.cs" />
+    <Compile Include="Converters\ImageUrlToBitmapConverter.cs" />
     <Compile Include="Extensions\IDisposableExtensions.cs" />
     <Compile Include="Models\CaptureSourceManager.cs" />
     <Compile Include="Models\CaptureSources\ICaptureSource.cs" />
