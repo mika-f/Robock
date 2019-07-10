@@ -14,7 +14,7 @@ namespace Robock.Models
             {
                 Name = "CommonServiceLocator",
                 Url = "https://github.com/unitycontainer/commonservicelocator",
-                Body = License.MSPL
+                Body = string.Intern(License.MSPL)
             },
             new License
             {
@@ -62,74 +62,74 @@ to represent the company, product, or service to which they refer.**"
                 Name = "FontAwesome.Sharp",
                 Url = "https://github.com/awesome-inc/FontAwesome.Sharp",
                 Authors = new[] { "Awesome Incremented" },
-                Body = License.Apache
+                Body = string.Intern(License.Apache)
             },
             new License
             {
                 Name = "MetroRadiance (Forked)",
                 Url = "https://github.com/mika-f/MetroRadiance",
                 Authors = new[] { "Manato KAMEYA" },
-                Body = License.MIT.Replace("{yyyy}", "2014").Replace("{name of copyright owner}", "Manato KAMEYA")
+                Body = string.Intern(License.MIT.Replace("{yyyy}", "2014").Replace("{name of copyright owner}", "Manato KAMEYA"))
             },
             new License
             {
                 Name = "MetroRadiance.Chrome (Forked)",
                 Url = "https://github.com/mika-f/MetroRadiance",
                 Authors = new[] { "Manato KAMEYA" },
-                Body = License.MIT.Replace("{yyyy}", "2014").Replace("{name of copyright owner}", "Manato KAMEYA")
+                Body = string.Intern(License.MIT.Replace("{yyyy}", "2014").Replace("{name of copyright owner}", "Manato KAMEYA"))
             },
             new License
             {
                 Name = "MetroRadiance.Core (Forked)",
                 Url = "https://github.com/mika-f/MetroRadiance",
                 Authors = new[] { "Manato KAMEYA" },
-                Body = License.MIT.Replace("{yyyy}", "2014").Replace("{name of copyright owner}", "Manato KAMEYA")
+                Body = string.Intern(License.MIT.Replace("{yyyy}", "2014").Replace("{name of copyright owner}", "Manato KAMEYA"))
             },
             new License
             {
                 Name = "Microsoft.Practices.Unity",
                 Url = "https://github.com/unitycontainer/unity",
-                Body = License.ApacheMs
+                Body = string.Intern(License.ApacheMs)
             },
             new License
             {
                 Name = "Microsoft.Practices.Unity.Configuration",
                 Url = "https://github.com/unitycontainer/unity",
-                Body = License.ApacheMs
+                Body = string.Intern(License.ApacheMs)
             },
             new License
             {
                 Name = "Microsoft.Practices.Unity.RegistrationByConvention",
                 Url = "https://github.com/unitycontainer/unity",
-                Body = License.ApacheMs
+                Body = string.Intern(License.ApacheMs)
             },
             new License
             {
                 Name = "Prism",
                 Url = "https://github.com/PrismLibrary/Prism",
                 Authors = new[] { ".NET Foundation" },
-                Body = License.MIT.Replace("{yyyy}", "").Replace("{name of copyright owner}", ".NET Foundation")
+                Body = string.Intern(License.MIT.Replace("{yyyy}", "").Replace("{name of copyright owner}", ".NET Foundation"))
             },
             new License
             {
                 Name = "Prism.Unity.Wpf",
                 Url = "https://github.com/PrismLibrary/Prism",
                 Authors = new[] { ".NET Foundation" },
-                Body = License.MIT.Replace("{yyyy}", "").Replace("{name of copyright owner}", ".NET Foundation")
+                Body = string.Intern(License.MIT.Replace("{yyyy}", "").Replace("{name of copyright owner}", ".NET Foundation"))
             },
             new License
             {
                 Name = "Prism.Wpf",
                 Url = "https://github.com/PrismLibrary/Prism",
                 Authors = new[] { ".NET Foundation" },
-                Body = License.MIT.Replace("{yyyy}", "").Replace("{name of copyright owner}", ".NET Foundation")
+                Body = string.Intern(License.MIT.Replace("{yyyy}", "").Replace("{name of copyright owner}", ".NET Foundation"))
             },
             new License
             {
                 Name = "ReactiveProperty",
                 Url = "https://github.com/runceel/ReactiveProperty",
                 Authors = new[] { "neuecc", "xin9le", "okazuki" },
-                Body = License.MIT.Replace("{yyyy}", "2018").Replace("{name of copyright owner}", "neuecc, xin9le, okazuki")
+                Body = string.Intern(License.MIT.Replace("{yyyy}", "2018").Replace("{name of copyright owner}", "neuecc, xin9le, okazuki"))
             },
             new License
             {
@@ -157,14 +157,14 @@ and limitations under the License."
                 Name = "Microsoft.Wpf.Interop.DirectX",
                 Url = "https://github.com/Microsoft/WPFDXInterop",
                 Authors = new[] { "Microsoft" },
-                Body = License.MIT.Replace("{yyyy}", "2015").Replace("{name of copyright owner}", "Microsoft")
+                Body = string.Intern(License.MIT.Replace("{yyyy}", "2015").Replace("{name of copyright owner}", "Microsoft"))
             },
             new License
             {
                 Name = "VirtualDesktop (Forked)",
                 Url = "https://github.com/mika-f/VirtualDesktop",
                 Authors = new[] { "Manato KAMEYA" },
-                Body = License.MIT.Replace("{yyyy}", "2015").Replace("{name of copyright owner}", "Manato KAMEYA")
+                Body = string.Intern(License.MIT.Replace("{yyyy}", "2015").Replace("{name of copyright owner}", "Manato KAMEYA"))
             }
         }.OrderBy(w => w.Name).ToList().AsReadOnly();
 
