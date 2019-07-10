@@ -258,7 +258,7 @@
                                           ToolTipService.ShowOnDisabled="True">
                         <metro:PromptComboBox.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Name}" />
+                                <TextBlock Text="{Binding Name, Mode=OneTime}" />
                             </DataTemplate>
                         </metro:PromptComboBox.ItemTemplate>
                         <metro:PromptComboBox.ToolTip>
