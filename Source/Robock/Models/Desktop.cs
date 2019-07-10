@@ -49,7 +49,7 @@ namespace Robock.Models
             {
                 Query = new EventQuery($@"SELECT * FROM RegistryValueChangeEvent WHERE Hive = 'HKEY_USERS' AND KeyPath = '{identity.User.Value}\\Control Panel\\Desktop' AND ValueName = 'Wallpaper'")
             };
-            _watcher.EventArrived += (sender, e) => GetCurrentWallpaper();
+            _watcher.EventArrived += OnEventArrived;
             _watcher.Start();
 
             GetCurrentWallpaper();
@@ -67,9 +67,15 @@ namespace Robock.Models
             }
             finally
             {
+                _watcher.EventArrived -= OnEventArrived;
                 _watcher.Stop();
                 _watcher.Dispose();
             }
+        }
+
+        private void OnEventArrived(object sender, EventArrivedEventArgs _)
+        {
+            GetCurrentWallpaper();
         }
 
         public async Task Handshake()
