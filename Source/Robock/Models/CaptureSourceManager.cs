@@ -88,7 +88,7 @@ namespace Robock.Models
                 if (_blacklist.Contains(sb.ToString()))
                     return true;
 
-                sources.Add(new CaptureSources.Window(hWnd));
+                sources.Add(new Window(hWnd));
 
                 return true;
             }, IntPtr.Zero);

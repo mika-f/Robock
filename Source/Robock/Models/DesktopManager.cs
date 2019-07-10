@@ -24,7 +24,7 @@ namespace Robock.Models
 
         public void Initialize()
         {
-            foreach (var obj in Screen.AllScreens.Select((w, i) => new {Screen = w, Index = i}))
+            foreach (var obj in Screen.AllScreens.Select((w, i) => new { Screen = w, Index = i }))
                 Desktops.Add(new Desktop(obj.Screen, obj.Index + 1));
         }
     }
